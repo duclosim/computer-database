@@ -4,6 +4,8 @@
 .mtj.tmp/
 
 # Package Files #
+trainProjectComputerDatabase/bin/
+
 *.jar
 *.war
 *.ear
