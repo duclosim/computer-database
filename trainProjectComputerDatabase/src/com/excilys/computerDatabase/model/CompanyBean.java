@@ -1,13 +1,23 @@
 package com.excilys.computerDatabase.model;
 
 public class CompanyBean {
-	private int id;
+	private Long id;
 	private String name;
 	
-	public int getId() {
+	public CompanyBean() {
+		
+	}
+	
+	public CompanyBean(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {

@@ -1,11 +1,10 @@
 package com.excilys.computerDatabase.persistence;
 
+import java.util.List;
+
 import com.excilys.computerDatabase.model.CompanyBean;
 
-public class CompanyDAO {
-	public CompanyBean getById(int id) {
-		CompanyBean result = null;
-		// TODO
-		return result;
-	}
+public interface CompanyDAO {
+	public CompanyBean getById(long id);
+	public List<CompanyBean> getAll();
 }

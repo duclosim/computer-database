@@ -3,16 +3,29 @@ package com.excilys.computerDatabase.model;
 import java.time.LocalDateTime;
 
 public class ComputerBean {
-	private int id;
+	private Long id;
 	private String name;
 	private LocalDateTime introduced;
 	private LocalDateTime discontinued;
-	private int companyId;
+	private Long companyId;
 	
-	public int getId() {
+	public ComputerBean() {
+		
+	}
+	
+	public ComputerBean(Long id, String name, LocalDateTime introduced,
+			LocalDateTime discontinued, Long companyId) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyId = companyId;
+	}
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -33,10 +46,10 @@ public class ComputerBean {
 	public void setDiscontinued(LocalDateTime discontinued) {
 		this.discontinued = discontinued;
 	}
-	public int getCompanyId() {
+	public Long getCompanyId() {
 		return companyId;
 	}
-	public void setCompanyId(int companyId) {
+	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
 }
