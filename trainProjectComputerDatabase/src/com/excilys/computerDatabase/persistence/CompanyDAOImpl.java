@@ -41,7 +41,7 @@ public final class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public CompanyBean getById(long id) {
+	public CompanyBean getById(Long id) {
 		CompanyBean result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
 		ResultSet results;
@@ -51,8 +51,10 @@ public final class CompanyDAOImpl implements CompanyDAO {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setLong(1, id);
 			results = ps.executeQuery();
-			result = new CompanyBean(results.getLong(ID_COLUMN_LABEL), 
-					results.getString(NAME_COLUMN_LABEL));
+			if (results.next()) {
+				result = new CompanyBean(results.getLong(ID_COLUMN_LABEL),
+						results.getString(NAME_COLUMN_LABEL));
+			}
 		} catch (SQLException e) {
 			System.out.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();

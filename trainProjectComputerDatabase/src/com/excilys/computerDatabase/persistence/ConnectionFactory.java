@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
 	// URL de la source de données
-	private static final String URL = "jdbc:mysql://localhost:3306/computer-database-db";
+	private static final String URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	// login et mot de passe pour accéder à la base de données.
 	private static final String LOGIN = "admincdb";
 	private static final String PASS = "qwerty1234";

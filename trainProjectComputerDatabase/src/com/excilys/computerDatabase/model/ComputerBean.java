@@ -52,4 +52,11 @@ public class ComputerBean {
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
+
+	@Override
+	public String toString() {
+		return "ComputerBean [id=" + id + ", name=" + name + ", introduced="
+				+ introduced + ", discontinued=" + discontinued
+				+ ", companyId=" + companyId + "]";
+	}
 }

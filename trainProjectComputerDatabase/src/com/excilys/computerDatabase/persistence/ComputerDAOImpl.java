@@ -1,7 +1,6 @@
 package com.excilys.computerDatabase.persistence;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,7 +37,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public ComputerBean getById(long id) {
+	public ComputerBean getById(Long id) {
 		ComputerBean result = null;
 		String query = "SELECT * FROM computer WHERE id=?;";
 		ResultSet results;
@@ -50,17 +49,23 @@ public class ComputerDAOImpl implements ComputerDAO {
 			results = ps.executeQuery();
 			LocalDateTime introducedDate = null;
 			LocalDateTime discontinuedDate = null;
-			if (results.getTimestamp(INTRODUCED_COLUMN_LABEL) != null) {
-				introducedDate = results.getTimestamp(INTRODUCED_COLUMN_LABEL).toLocalDateTime();
+			Long companyId = null;
+			if (results.next()) {
+				if (results.getTimestamp(INTRODUCED_COLUMN_LABEL) != null) {
+					introducedDate = results.getTimestamp(INTRODUCED_COLUMN_LABEL).toLocalDateTime();
+				}
+				if (results.getTimestamp(DISCONTINUED_COLUMN_LABEL) != null) {
+					discontinuedDate = results.getTimestamp(DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
+				}
+				if (results.getLong(COMPANY_ID_COLUMN_LABEL) != 0) {
+					companyId = results.getLong(COMPANY_ID_COLUMN_LABEL);
+				}
+				result = new ComputerBean(results.getLong(ID_COLUMN_LABEL), 
+						results.getString(NAME_COLUMN_LABEL), 
+						introducedDate,
+						discontinuedDate,
+						companyId);
 			}
-			if (results.getTimestamp(DISCONTINUED_COLUMN_LABEL) != null) {
-				discontinuedDate = results.getTimestamp(DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
-			}
-			result = new ComputerBean(results.getLong(ID_COLUMN_LABEL), 
-					results.getString(NAME_COLUMN_LABEL), 
-					introducedDate,
-					discontinuedDate,
-					results.getLong(COMPANY_ID_COLUMN_LABEL));
 		} catch (SQLException e) {
 			System.out.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
@@ -84,17 +89,21 @@ public class ComputerDAOImpl implements ComputerDAO {
 			while (results.next()) {
 				LocalDateTime introducedDate = null;
 				LocalDateTime discontinuedDate = null;
+				Long companyId = null;
 				if (results.getTimestamp(INTRODUCED_COLUMN_LABEL) != null) {
 					introducedDate = results.getTimestamp(INTRODUCED_COLUMN_LABEL).toLocalDateTime();
 				}
 				if (results.getTimestamp(DISCONTINUED_COLUMN_LABEL) != null) {
 					discontinuedDate = results.getTimestamp(DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
 				}
+				if (results.getLong(COMPANY_ID_COLUMN_LABEL) != 0) {
+					companyId = results.getLong(COMPANY_ID_COLUMN_LABEL);
+				}
 				result.add(new ComputerBean(results.getLong(ID_COLUMN_LABEL), 
 						results.getString(NAME_COLUMN_LABEL), 
 						introducedDate,
 						discontinuedDate,
-						results.getLong(COMPANY_ID_COLUMN_LABEL)));
+						companyId));
 			}
 		} catch (SQLException e) {
 			System.out.println("Erreur : problème de lecture bdd");
@@ -110,22 +119,33 @@ public class ComputerDAOImpl implements ComputerDAO {
 		if (computerBean.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
-		String query = "INSERT INTO computer (?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?);";
+		String query = new StringBuilder("INSERT INTO computer (")
+		.append(NAME_COLUMN_LABEL)
+		.append(", ")
+		.append(INTRODUCED_COLUMN_LABEL)
+		.append(", ")
+		.append(DISCONTINUED_COLUMN_LABEL)
+		.append(", ")
+		.append(COMPANY_ID_COLUMN_LABEL)
+		.append(") VALUES (?, ?, ?, ?);")
+		.toString();
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			// Column names
 			int colNb = 0;
-			ps.setString(++colNb, NAME_COLUMN_LABEL);
-			ps.setString(++colNb, INTRODUCED_COLUMN_LABEL);
-			ps.setString(++colNb, DISCONTINUED_COLUMN_LABEL);
-			ps.setString(++colNb, COMPANY_ID_COLUMN_LABEL);
-			// Values
+			Timestamp introduced = null;
+			Timestamp discontinued = null;
+			if (computerBean.getIntroduced() != null) {
+				introduced = Timestamp.valueOf(computerBean.getIntroduced());
+			}
+			if (computerBean.getDiscontinued() != null) {
+				discontinued = Timestamp.valueOf(computerBean.getDiscontinued());
+			}
 			ps.setString(++colNb, computerBean.getName());
-			ps.setTimestamp(++colNb, Timestamp.valueOf(computerBean.getIntroduced()));
-			ps.setTimestamp(++colNb, Timestamp.valueOf(computerBean.getDiscontinued()));
+			ps.setTimestamp(++colNb, introduced);
+			ps.setTimestamp(++colNb, discontinued);
 			ps.setLong(++colNb, computerBean.getCompanyId());
-			ps.execute();
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
@@ -139,26 +159,39 @@ public class ComputerDAOImpl implements ComputerDAO {
 		if (computerBean.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
-		String query = "UPDATE computer SET ? = ?, ? = ?, ? = ?, ? = ?, ? = ?) WHERE id=?;";
+		String query = new StringBuilder("UPDATE computer SET ")
+			.append(NAME_COLUMN_LABEL)
+			.append("=?, ")
+			.append(INTRODUCED_COLUMN_LABEL)
+			.append("=?, ")
+			.append(DISCONTINUED_COLUMN_LABEL)
+			.append("=?, ")
+			.append(COMPANY_ID_COLUMN_LABEL)
+			.append("=? WHERE id = ?;")
+			.toString();
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			int colNb = 0;
+			Timestamp introduced = null;
+			Timestamp discontinued = null;
+			if (computerBean.getIntroduced() != null) {
+				introduced = Timestamp.valueOf(computerBean.getIntroduced());
+			}
+			if (computerBean.getDiscontinued() != null) {
+				discontinued = Timestamp.valueOf(computerBean.getDiscontinued());
+			}
 			// name
-			ps.setString(++colNb, NAME_COLUMN_LABEL);
 			ps.setString(++colNb, computerBean.getName());
 			// introduced date
-			ps.setString(++colNb, INTRODUCED_COLUMN_LABEL);
-			ps.setTimestamp(++colNb, Timestamp.valueOf(computerBean.getIntroduced()));
+			ps.setTimestamp(++colNb, introduced);
 			// discontinued date
-			ps.setString(++colNb, DISCONTINUED_COLUMN_LABEL);
-			ps.setTimestamp(++colNb, Timestamp.valueOf(computerBean.getDiscontinued()));
+			ps.setTimestamp(++colNb, discontinued);
 			// company id
-			ps.setString(++colNb, COMPANY_ID_COLUMN_LABEL);
 			ps.setLong(++colNb, computerBean.getCompanyId());
 			// id
 			ps.setLong(++colNb, computerBean.getId());
-			ps.execute();
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
@@ -169,11 +202,17 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void deleteComputer(ComputerBean computerBean) {
+		if (computerBean == null) {
+			throw new IllegalArgumentException("computerBean est à null.");
+		}
 		String query = "DELETE FROM computer WHERE id=?";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setLong(1, computerBean.getId());
+			if (computerBean.getId() != null) {
+				ps.setLong(1, computerBean.getId());
+				ps.executeUpdate();
+			}
 		} catch (SQLException e) {
 			System.out.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
