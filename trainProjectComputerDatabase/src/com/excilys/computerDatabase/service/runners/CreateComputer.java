@@ -42,7 +42,7 @@ public class CreateComputer implements CommandRunner {
 		} catch (NumberFormatException e) {
 			System.out.println("Nombre impossible à reconnaître.");
 		}
-		computerDAO.updateComputer(computerBean);
+		computerDAO.createComputer(computerBean);
 		//sc.close();
 	}
 

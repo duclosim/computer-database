@@ -8,12 +8,15 @@ import com.excilys.computerDatabase.persistence.CompanyDAO;
 import com.excilys.computerDatabase.persistence.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import com.excilys.computerDatabase.service.pages.PageContainer;
 
 public class Main {
+	@SuppressWarnings("unused")
 	public static void main(String args[]) {
 		CompanyDAO companyDAO = CompanyDAOImpl.getInstance();
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		// Company tests
+		/*
 		CompanyBean companyBean = companyDAO.getById(new Long(6));
 		System.out.println(companyBean);
 		for (CompanyBean bean : companyDAO.getAll()) {
@@ -49,5 +52,8 @@ public class Main {
 		for (ComputerBean bean : computerDAO.getAll()) {
 			System.out.println(bean);
 		}
+		*/
+		// PageContainer
+		PageContainer<ComputerBean> pages = new PageContainer<ComputerBean>(computerDAO.getAll());
 	}
 }

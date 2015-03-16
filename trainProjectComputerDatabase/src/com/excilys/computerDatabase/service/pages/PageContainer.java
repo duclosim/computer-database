@@ -16,10 +16,8 @@ public class PageContainer<T> {
 			++pageNb;
 		}
 		for(int k = 0; k < pageNb; k += NB_ITEM_BY_PAGE) {
-			pages.add(
-					new Page<T>(entities.subList(k, 
-							Integer.min(k + NB_ITEM_BY_PAGE, entities.size())))
-					);
+			int endIndex = Integer.min(k + NB_ITEM_BY_PAGE, entities.size());
+			pages.add(new Page<T>(entities.subList(k, endIndex)));
 		}
 	}
 	
