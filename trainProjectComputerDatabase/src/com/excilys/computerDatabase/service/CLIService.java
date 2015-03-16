@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class CLIService {
 	private static Map<String, CLICommands> map;
@@ -17,6 +18,7 @@ public class CLIService {
 		map.put("create_computer", CLICommands.CREATE_COMPUTER);
 		map.put("update_computer", CLICommands.UPDATE_COMPUTER);
 		map.put("delete_computer", CLICommands.DELETE_COMPUTER);
+		map.put("exit", CLICommands.EXIT);
 	}
 
 	/**
@@ -33,20 +35,22 @@ public class CLIService {
 		}
 		return CLIService.cliService;
 	}
-	
+
 	/**
-	 * 
+	 * Cette méthode interpète la chaîne écrite sur l'entrée standard 
+	 * 		et tente d'exécuter l'instruction correspondante.
 	 * @param command
 	 * @return true if the program is over.
 	 */
-	public static boolean interpretCommand(String command) {
+	public boolean interpretCommand(String command, Scanner sc) {
 		if (command == null) {
 			throw new IllegalArgumentException("command est à null.");
 		}
 		CLICommands cliCommands = map.get(command);
 		if (cliCommands != null) {
-			return cliCommands.runCommand();
+			return cliCommands.runCommand(sc);
 		}
+		System.out.println("Commande non reconnue.");
 		return false;
 	}
 }

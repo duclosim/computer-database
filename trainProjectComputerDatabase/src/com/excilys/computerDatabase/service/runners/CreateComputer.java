@@ -12,44 +12,38 @@ import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 public class CreateComputer implements CommandRunner {
 
 	@Override
-	public void runCommand() {
+	public void runCommand(Scanner sc) {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		ComputerBean computerBean = new ComputerBean();
 		System.out.println("Nom du nouvel ordinateur : ");
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
 		String args = sc.next();
 		if (!("").equals(args)) {
 			computerBean.setName(args);
 		}
-		System.out.println("Date d'introduction du nouvel ordinateur : ");
+		System.out.println("Date d'introduction du nouvel ordinateur (format 2007-12-03T10:15:30) : ");
 		args = sc.next();
-		if (!("").equals(args)) {
-			try {
-				computerBean.setIntroduced(LocalDateTime.parse(args));
-			} catch (DateTimeParseException e) {
-				System.out.println("Date impossible à reconnaître.");
-			}
+		try {
+			computerBean.setIntroduced(LocalDateTime.parse(args));
+		} catch (DateTimeParseException e) {
+			System.out.println("Date impossible à reconnaître.");
 		}
-		System.out.println("Date de sortie du nouvel ordinateur : ");
+		System.out.println("Date de sortie du nouvel ordinateur (format 2007-12-03T10:15:30) : ");
 		args = sc.next();
-		if (!("").equals(args)) {
-			try {
-				computerBean.setDiscontinued(LocalDateTime.parse(args));
-			} catch (DateTimeParseException e) {
-				System.out.println("Date impossible à reconnaître.");
-			}
+		try {
+			computerBean.setDiscontinued(LocalDateTime.parse(args));
+		} catch (DateTimeParseException e) {
+			System.out.println("Date impossible à reconnaître.");
 		}
 		System.out.println("Id d'entreprise du nouvel ordinateur : ");
 		args = sc.next();
-		if (!("").equals(args)) {
-			try {
-				computerBean.setCompanyId(Long.parseLong(args));
-			} catch (NumberFormatException e) {
-				System.out.println("Nombre impossible à reconnaître.");
-			}
-			computerDAO.updateComputer(computerBean);
+		try {
+			computerBean.setCompanyId(Long.parseLong(args));
+		} catch (NumberFormatException e) {
+			System.out.println("Nombre impossible à reconnaître.");
 		}
-		sc.close();
+		computerDAO.updateComputer(computerBean);
+		//sc.close();
 	}
 
 }

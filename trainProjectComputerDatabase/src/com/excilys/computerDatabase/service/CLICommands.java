@@ -1,14 +1,16 @@
 package com.excilys.computerDatabase.service;
 
+import java.util.Scanner;
+
 import com.excilys.computerDatabase.service.runners.*;
 
 public enum CLICommands {
-	GET_COMPANIES("get companies", false, new GetCompanies()),
-	GET_COMPUTERS("get computers", false, new GetComputers()),
-	DETAIL_COMPUTER("detail computer", false, new DetailComputer()),
-	CREATE_COMPUTER("create computer", false, new CreateComputer()),
-	UPDATE_COMPUTER("update computer", false, new UpdateComputer()),
-	DELETE_COMPUTER("delete computer", false, new DeleteComputer()),
+	GET_COMPANIES("get_companies", false, new GetCompanies()),
+	GET_COMPUTERS("get_computers", false, new GetComputers()),
+	DETAIL_COMPUTER("detail_computer", false, new DetailComputer()),
+	CREATE_COMPUTER("create_computer", false, new CreateComputer()),
+	UPDATE_COMPUTER("update_computer", false, new UpdateComputer()),
+	DELETE_COMPUTER("delete_computer", false, new DeleteComputer()),
 	EXIT("exit", true, new Exit());
 	
 	private String command;
@@ -33,8 +35,8 @@ public enum CLICommands {
 		return this.commandRunner;
 	}
 	
-	public boolean runCommand() {
-		getCommandRunner().runCommand();
+	public boolean runCommand(Scanner sc) {
+		getCommandRunner().runCommand(sc);
 		return getEndService();
 	}
 }

@@ -12,10 +12,10 @@ import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 public class UpdateComputer implements CommandRunner {
 
 	@Override
-	public void runCommand() {
+	public void runCommand(Scanner sc) {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
 		String args = sc.next();
 		try {
 			Long id = Long.parseLong(args);
@@ -27,7 +27,7 @@ public class UpdateComputer implements CommandRunner {
 			if (!("").equals(args)) {
 				computerBean.setName(args);
 			}
-			System.out.println("Nouvelle date d'introduction : ");
+			System.out.println("Nouvelle date d'introduction (format 2007-12-03T10:15:30) : ");
 			args = sc.next();
 			if (!("").equals(args)) {
 				try {
@@ -35,8 +35,10 @@ public class UpdateComputer implements CommandRunner {
 				} catch (DateTimeParseException e) {
 					System.out.println("Date impossible à reconnaître.");
 				}
+			} else {
+				computerBean.setIntroduced(null);
 			}
-			System.out.println("Nouvelle date de sortie : ");
+			System.out.println("Nouvelle date de sortie (format 2007-12-03T10:15:30) : ");
 			args = sc.next();
 			if (!("").equals(args)) {
 				try {
@@ -44,6 +46,8 @@ public class UpdateComputer implements CommandRunner {
 				} catch (DateTimeParseException e) {
 					System.out.println("Date impossible à reconnaître.");
 				}
+			} else {
+				computerBean.setDiscontinued(null);
 			}
 			System.out.println("Nouvel id d'entreprise : ");
 			args = sc.next();
@@ -53,12 +57,14 @@ public class UpdateComputer implements CommandRunner {
 				} catch (NumberFormatException e) {
 					System.out.println("Nombre impossible à reconnaître.");
 				}
+			} else {
+				computerBean.setCompanyId(null);
 			}
 			computerDAO.updateComputer(computerBean);
 		} catch (NumberFormatException e) {
 			System.out.println("Nombre impossible à reconnaître");
 		} finally {
-			sc.close();
+			//sc.close();
 		}
 	}
 
