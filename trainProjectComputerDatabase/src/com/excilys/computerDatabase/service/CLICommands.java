@@ -4,6 +4,12 @@ import java.util.Scanner;
 
 import com.excilys.computerDatabase.service.runners.*;
 
+/**
+ * Cette énumération représente les différentes commandes invoquables depuis
+ *   l'interface utilisateur.
+ * @author excilys
+ *
+ */
 public enum CLICommands {
 	GET_COMPANIES("get_companies", false, new GetCompanies()),
 	GET_COMPUTERS("get_computers", false, new GetComputers()),
@@ -35,6 +41,12 @@ public enum CLICommands {
 		return this.commandRunner;
 	}
 	
+	/**
+	 * Lance la commande possédée par cette instance de l'énumération.
+	 * @param sc Un scanner sur l'entrée lue, 
+	 *   qui sera utilisé par certaines commandes.
+	 * @return Un booléen indiquant si la commande appelée met fin au programme.
+	 */
 	public boolean runCommand(Scanner sc) {
 		getCommandRunner().runCommand(sc);
 		return getEndService();

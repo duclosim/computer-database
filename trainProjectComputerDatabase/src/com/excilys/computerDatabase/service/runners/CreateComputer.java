@@ -8,7 +8,11 @@ import com.excilys.computerDatabase.model.ComputerBean;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 
-
+/**
+ * Cette classe peut lancer la commande de création de nouveaux ordinateurs.
+ * @author excilys
+ *
+ */
 public class CreateComputer implements CommandRunner {
 
 	@Override
@@ -16,7 +20,6 @@ public class CreateComputer implements CommandRunner {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		ComputerBean computerBean = new ComputerBean();
 		System.out.println("Nom du nouvel ordinateur : ");
-		//Scanner sc = new Scanner(System.in);
 		String args = sc.next();
 		if (!("").equals(args)) {
 			computerBean.setName(args);
@@ -43,7 +46,6 @@ public class CreateComputer implements CommandRunner {
 			System.out.println("Nombre impossible à reconnaître.");
 		}
 		computerDAO.createComputer(computerBean);
-		//sc.close();
 	}
 
 }

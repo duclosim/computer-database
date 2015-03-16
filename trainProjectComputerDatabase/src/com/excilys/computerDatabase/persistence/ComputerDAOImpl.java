@@ -12,6 +12,11 @@ import java.util.List;
 
 import com.excilys.computerDatabase.model.ComputerBean;
 
+/**
+ * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.
+ * @author excilys
+ *
+ */
 public class ComputerDAOImpl implements ComputerDAO {
 	private static volatile ComputerDAOImpl computerDAOImpl = null;
 	
@@ -25,6 +30,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 		super();
 	}
 	
+	/**
+	 * Cette méthode retourne l'unique instance de cette classe.
+	 * @return L'instance unique de cette classe.
+	 */
 	public static final ComputerDAO getInstance() {
 		if (ComputerDAOImpl.computerDAOImpl == null) {
 			synchronized (ComputerDAOImpl.class) {

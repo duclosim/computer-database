@@ -1,5 +1,11 @@
 package com.excilys.computerDatabase.model;
 
+/**
+ * Cette classe contient les informations contenue dans une ligne de 
+ *   la table company.
+ * @author excilys
+ *
+ */
 public class CompanyBean {
 	private Long id;
 	private String name;

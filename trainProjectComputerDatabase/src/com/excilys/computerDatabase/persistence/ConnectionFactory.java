@@ -5,7 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Cette classe donne des instances de Connection.
+ * Cette classe donne des instances de Connection afin de se 
+ *   connecter à la base de données.
  * @author excilys
  *
  */
@@ -30,9 +31,11 @@ public class ConnectionFactory {
 	
 	/**
 	 * Retourne une connection à la base de données.
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @return L'instance de connexion à la base de données.
+	 * @throws ClassNotFoundException si on ne trouve pas le Driver 
+	 *   de la base de données.
+	 * @throws SQLException si on ne parvient pas à se connecter 
+	 *   à la base de données.
 	 */
 	public static final Connection getConnection() {
 		Connection connection = null;
@@ -46,6 +49,10 @@ public class ConnectionFactory {
 		return connection;
 	}
 	
+	/**
+	 * Ferme la connexion à la base de données.
+	 * @param connection La connexion à refermer.
+	 */
 	public static final void closeConnection(Connection connection) {
 		try {
 			connection.close();

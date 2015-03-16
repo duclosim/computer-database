@@ -9,6 +9,11 @@ import com.excilys.computerDatabase.persistence.CompanyDAOImpl;
 import com.excilys.computerDatabase.service.pages.Page;
 import com.excilys.computerDatabase.service.pages.PageContainer;
 
+/**
+ * Cette classe peut lancer la commande de listage des company.
+ * @author excilys
+ *
+ */
 public class GetCompanies implements CommandRunner {
 
 	@Override
@@ -24,13 +29,5 @@ public class GetCompanies implements CommandRunner {
 			endIndex = Integer.min(companies.size(), endIndex + PageContainer.NB_ITEM_BY_PAGE);
 			sc.nextLine();
 		}
-		/*
-		PageContainer<CompanyBean> pages = new PageContainer<CompanyBean>(companies);
-		while (pages.getCurrentPageNum() < pages.getMaxPageNum()) {
-			System.out.println(pages.getCurrentPage());
-			pages.goToNextPage();
-			sc.nextLine();
-		}
-		*/
 	}
 }

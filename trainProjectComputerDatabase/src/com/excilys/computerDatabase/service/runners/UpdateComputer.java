@@ -8,14 +8,18 @@ import com.excilys.computerDatabase.model.ComputerBean;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 
-
+/**
+ * Cette classe peut lancer la commande de mise à jour des 
+ *   informations d'un ordinateur.
+ * @author excilys
+ *
+ */
 public class UpdateComputer implements CommandRunner {
 
 	@Override
 	public void runCommand(Scanner sc) {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
-		//Scanner sc = new Scanner(System.in);
 		String args = sc.next();
 		try {
 			Long id = Long.parseLong(args);
@@ -64,7 +68,6 @@ public class UpdateComputer implements CommandRunner {
 		} catch (NumberFormatException e) {
 			System.out.println("Nombre impossible à reconnaître");
 		} finally {
-			//sc.close();
 		}
 	}
 

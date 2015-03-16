@@ -6,7 +6,11 @@ import com.excilys.computerDatabase.model.ComputerBean;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 
-
+/**
+ * Cette classe peut lancer la commande d'affichage des détails d'un ordinateur.
+ * @author excilys
+ *
+ */
 public class DetailComputer implements CommandRunner {
 
 	@Override
@@ -14,9 +18,7 @@ public class DetailComputer implements CommandRunner {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		try {
 			System.out.println("Entrez l'id de l'ordinateur recherché : ");
-			//Scanner sc = new Scanner(System.in);
 			String args = sc.next();
-			//sc.close();
 			Long computerId = Long.parseLong(args);
 			ComputerBean computerBean = computerDAO.getById(computerId);
 			System.out.println(computerBean);

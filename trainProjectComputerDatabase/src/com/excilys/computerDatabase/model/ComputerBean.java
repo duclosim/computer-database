@@ -2,6 +2,12 @@ package com.excilys.computerDatabase.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Cette classe contient les informations contenue dans une ligne de 
+ *   la table computer.
+ * @author excilys
+ *
+ */
 public class ComputerBean {
 	private Long id;
 	private String name;

@@ -3,6 +3,13 @@ package com.excilys.computerDatabase.service.pages;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cette classe représente une page contenant des objets pour les 
+ *   présenter sous une forme plus lisible.
+ * @author excilys
+ *
+ * @param <T> La classe des objets que doivent contenir les pages.
+ */
 public class Page<T> {
 	private List<T> entities;
 	

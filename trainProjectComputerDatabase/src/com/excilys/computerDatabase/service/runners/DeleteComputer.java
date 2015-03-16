@@ -6,7 +6,11 @@ import com.excilys.computerDatabase.model.ComputerBean;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 
-
+/**
+ * Cette classe peut lancer la commande de suppression d'ordinateurs.
+ * @author excilys
+ *
+ */
 public class DeleteComputer implements CommandRunner {
 
 	@Override
@@ -14,9 +18,7 @@ public class DeleteComputer implements CommandRunner {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		try {
 			System.out.println("Entrez l'id de l'ordinateur à supprimer : ");
-			//Scanner sc = new Scanner(System.in);
 			String args = sc.next();
-			//sc.close();
 			Long computerId = Long.parseLong(args);
 			ComputerBean computerBean = computerDAO.getById(computerId);
 			computerDAO.deleteComputer(computerBean);

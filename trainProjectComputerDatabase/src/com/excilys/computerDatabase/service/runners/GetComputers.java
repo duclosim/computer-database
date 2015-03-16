@@ -9,7 +9,11 @@ import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 import com.excilys.computerDatabase.service.pages.Page;
 import com.excilys.computerDatabase.service.pages.PageContainer;
 
-
+/**
+ * Cette classe peut lancer la commande de listage des ordinateurs.
+ * @author excilys
+ *
+ */
 public class GetComputers implements CommandRunner {
 
 	@Override

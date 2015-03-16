@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Cette classe représente l'interpréteur et invocateur de commandes.
+ * @author excilys
+ *
+ */
 public class CLIService {
 	private static Map<String, CLICommands> map;
 	
