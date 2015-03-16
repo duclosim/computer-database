@@ -6,7 +6,8 @@ import java.util.Scanner;
 import com.excilys.computerDatabase.model.ComputerBean;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
-import com.excilys.computerDatabase.service.Page;
+import com.excilys.computerDatabase.service.pages.Page;
+import com.excilys.computerDatabase.service.pages.PageContainer;
 
 
 public class GetComputers implements CommandRunner {
@@ -16,12 +17,12 @@ public class GetComputers implements CommandRunner {
 		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
 		List<ComputerBean> computers = computerDAO.getAll();
 		int startIndex = 0;
-		int endIndex = Integer.min(computers.size(), startIndex + NB_ITEM_BY_PAGE);
+		int endIndex = Integer.min(computers.size(), startIndex + PageContainer.NB_ITEM_BY_PAGE);
 		while (startIndex < computers.size()) {
 			Page<ComputerBean> page = new Page<ComputerBean>(computers.subList(startIndex, endIndex));
 			System.out.println(page);
 			startIndex = endIndex;
-			endIndex = Integer.min(computers.size(), endIndex + NB_ITEM_BY_PAGE);
+			endIndex = Integer.min(computers.size(), endIndex + PageContainer.NB_ITEM_BY_PAGE);
 			sc.nextLine();
 		}
 	}

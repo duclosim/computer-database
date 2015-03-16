@@ -23,12 +23,12 @@ public class UpdateComputer implements CommandRunner {
 			System.out.println("L'ordinateur à modifier est le suivant : ");
 			System.out.println(computerBean);
 			System.out.println("Nouveau nom : ");
-			args = sc.next();
+			args = sc.nextLine();
 			if (!("").equals(args)) {
 				computerBean.setName(args);
 			}
 			System.out.println("Nouvelle date d'introduction (format 2007-12-03T10:15:30) : ");
-			args = sc.next();
+			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
 					computerBean.setIntroduced(LocalDateTime.parse(args));
@@ -39,7 +39,7 @@ public class UpdateComputer implements CommandRunner {
 				computerBean.setIntroduced(null);
 			}
 			System.out.println("Nouvelle date de sortie (format 2007-12-03T10:15:30) : ");
-			args = sc.next();
+			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
 					computerBean.setDiscontinued(LocalDateTime.parse(args));
@@ -50,7 +50,7 @@ public class UpdateComputer implements CommandRunner {
 				computerBean.setDiscontinued(null);
 			}
 			System.out.println("Nouvel id d'entreprise : ");
-			args = sc.next();
+			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
 					computerBean.setCompanyId(Long.parseLong(args));
