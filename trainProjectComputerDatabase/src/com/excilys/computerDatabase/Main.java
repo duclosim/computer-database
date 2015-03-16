@@ -1,7 +1,6 @@
 package com.excilys.computerDatabase;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.excilys.computerDatabase.model.CompanyBean;
 import com.excilys.computerDatabase.model.ComputerBean;

@@ -11,12 +11,12 @@ public class CLIService {
 	private CLIService() {
 		super();
 		map = new HashMap<String, CLICommands>();
-		map.put("get companies", CLICommands.GET_COMPANIES);
-		map.put("get computers", CLICommands.GET_COMPUTERS);
-		map.put("detail computer", CLICommands.DETAIL_COMPUTER);
-		map.put("create computer", CLICommands.CREATE_COMPUTER);
-		map.put("update computer", CLICommands.UPDATE_COMPUTER);
-		map.put("delete computer", CLICommands.DELETE_COMPUTER);
+		map.put("get_companies", CLICommands.GET_COMPANIES);
+		map.put("get_computers", CLICommands.GET_COMPUTERS);
+		map.put("detail_computer", CLICommands.DETAIL_COMPUTER);
+		map.put("create_computer", CLICommands.CREATE_COMPUTER);
+		map.put("update_computer", CLICommands.UPDATE_COMPUTER);
+		map.put("delete_computer", CLICommands.DELETE_COMPUTER);
 	}
 
 	/**
@@ -45,10 +45,7 @@ public class CLIService {
 		}
 		CLICommands cliCommands = map.get(command);
 		if (cliCommands != null) {
-			if (cliCommands == CLICommands.EXIT) {
-				return true;
-			}
-			// TODO
+			return cliCommands.runCommand();
 		}
 		return false;
 	}
