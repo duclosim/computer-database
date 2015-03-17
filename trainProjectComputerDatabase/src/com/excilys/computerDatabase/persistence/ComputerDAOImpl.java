@@ -6,45 +6,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerDatabase.model.ComputerBean;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 /**
  * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.
  * @author excilys
  *
  */
-public class ComputerDAOImpl implements ComputerDAO {
-	private static volatile ComputerDAOImpl computerDAOImpl = null;
+public enum ComputerDAOImpl implements ComputerDAO {
+	INSTANCE;
 	
-	private static final String ID_COLUMN_LABEL = "id";
-	private static final String NAME_COLUMN_LABEL = "name";
-	private static final String INTRODUCED_COLUMN_LABEL = "introduced";
-	private static final String DISCONTINUED_COLUMN_LABEL = "discontinued";
-	private static final String COMPANY_ID_COLUMN_LABEL = "company_id";
+	public static final String ID_COLUMN_LABEL = "id";
+	public static final String NAME_COLUMN_LABEL = "name";
+	public static final String INTRODUCED_COLUMN_LABEL = "introduced";
+	public static final String DISCONTINUED_COLUMN_LABEL = "discontinued";
+	public static final String COMPANY_ID_COLUMN_LABEL = "company_id";
 	
-	private ComputerDAOImpl() {
-		super();
-	}
-	
-	/**
-	 * Cette méthode retourne l'unique instance de cette classe.
-	 * @return L'instance unique de cette classe.
-	 */
-	public static final ComputerDAO getInstance() {
-		if (ComputerDAOImpl.computerDAOImpl == null) {
-			synchronized (ComputerDAOImpl.class) {
-				if (ComputerDAOImpl.computerDAOImpl == null) {
-					ComputerDAOImpl.computerDAOImpl = new ComputerDAOImpl();
-				}
-			}
-		}
-		return ComputerDAOImpl.computerDAOImpl;
-	}
-
 	@Override
 	public ComputerBean getById(Long id) {
 		ComputerBean result = null;
@@ -56,28 +37,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setLong(1, id);
 			results = ps.executeQuery();
-			LocalDateTime introducedDate = null;
-			LocalDateTime discontinuedDate = null;
-			Long companyId = null;
 			if (results.next()) {
-				if (results.getTimestamp(INTRODUCED_COLUMN_LABEL) != null) {
-					introducedDate = results.getTimestamp(INTRODUCED_COLUMN_LABEL).toLocalDateTime();
-				}
-				if (results.getTimestamp(DISCONTINUED_COLUMN_LABEL) != null) {
-					discontinuedDate = results.getTimestamp(DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
-				}
-				if (results.getLong(COMPANY_ID_COLUMN_LABEL) != 0) {
-					companyId = results.getLong(COMPANY_ID_COLUMN_LABEL);
-				}
-				result = new ComputerBean(results.getLong(ID_COLUMN_LABEL), 
-						results.getString(NAME_COLUMN_LABEL), 
-						introducedDate,
-						discontinuedDate,
-						companyId);
+				result = ComputerMapper.mapComputer(results);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème de lecture bdd");
+			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
@@ -96,27 +62,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 			statement = con.createStatement();
 			results = statement.executeQuery(query);
 			while (results.next()) {
-				LocalDateTime introducedDate = null;
-				LocalDateTime discontinuedDate = null;
-				Long companyId = null;
-				if (results.getTimestamp(INTRODUCED_COLUMN_LABEL) != null) {
-					introducedDate = results.getTimestamp(INTRODUCED_COLUMN_LABEL).toLocalDateTime();
-				}
-				if (results.getTimestamp(DISCONTINUED_COLUMN_LABEL) != null) {
-					discontinuedDate = results.getTimestamp(DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
-				}
-				if (results.getLong(COMPANY_ID_COLUMN_LABEL) != 0) {
-					companyId = results.getLong(COMPANY_ID_COLUMN_LABEL);
-				}
-				result.add(new ComputerBean(results.getLong(ID_COLUMN_LABEL), 
-						results.getString(NAME_COLUMN_LABEL), 
-						introducedDate,
-						discontinuedDate,
-						companyId));
+				result.add(ComputerMapper.mapComputer(results));
 			}
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème de lecture bdd");
+			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
@@ -153,11 +104,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 			ps.setString(++colNb, computerBean.getName());
 			ps.setTimestamp(++colNb, introduced);
 			ps.setTimestamp(++colNb, discontinued);
-			ps.setLong(++colNb, computerBean.getCompanyId());
+			ps.setLong(++colNb, computerBean.getCompany().getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème d'écriture bdd");
+			System.err.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
@@ -197,13 +149,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 			// discontinued date
 			ps.setTimestamp(++colNb, discontinued);
 			// company id
-			ps.setLong(++colNb, computerBean.getCompanyId());
+			ps.setLong(++colNb, computerBean.getCompany().getId());
 			// id
 			ps.setLong(++colNb, computerBean.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème d'écriture bdd");
+			System.err.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
@@ -223,8 +176,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 				ps.executeUpdate();
 			}
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème d'écriture bdd");
+			System.err.println("Erreur : problème de suppression bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Suppression impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}

@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 import com.excilys.computerDatabase.model.ComputerBean;
+import com.excilys.computerDatabase.persistence.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 
@@ -18,7 +19,7 @@ public class UpdateComputer implements CommandRunner {
 
 	@Override
 	public void runCommand(Scanner sc) {
-		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
+		ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
 		String args = sc.next();
 		try {
@@ -37,7 +38,7 @@ public class UpdateComputer implements CommandRunner {
 				try {
 					computerBean.setIntroduced(LocalDateTime.parse(args));
 				} catch (DateTimeParseException e) {
-					System.out.println("Date impossible à reconnaître.");
+					System.err.println("Date impossible à reconnaître.");
 				}
 			} else {
 				computerBean.setIntroduced(null);
@@ -48,7 +49,7 @@ public class UpdateComputer implements CommandRunner {
 				try {
 					computerBean.setDiscontinued(LocalDateTime.parse(args));
 				} catch (DateTimeParseException e) {
-					System.out.println("Date impossible à reconnaître.");
+					System.err.println("Date impossible à reconnaître.");
 				}
 			} else {
 				computerBean.setDiscontinued(null);
@@ -57,16 +58,16 @@ public class UpdateComputer implements CommandRunner {
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
-					computerBean.setCompanyId(Long.parseLong(args));
+					computerBean.setCompany(CompanyDAOImpl.INSTANCE.getById(Long.parseLong(args)));
 				} catch (NumberFormatException e) {
-					System.out.println("Nombre impossible à reconnaître.");
+					System.err.println("Nombre impossible à reconnaître.");
 				}
 			} else {
-				computerBean.setCompanyId(null);
+				computerBean.setCompany(null);
 			}
 			computerDAO.updateComputer(computerBean);
 		} catch (NumberFormatException e) {
-			System.out.println("Nombre impossible à reconnaître");
+			System.err.println("Nombre impossible à reconnaître");
 		} finally {
 		}
 	}

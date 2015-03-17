@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.computerDatabase.model.ComputerBean;
+import com.excilys.computerDatabase.model.pages.Page;
+import com.excilys.computerDatabase.model.pages.PageContainer;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
-import com.excilys.computerDatabase.service.pages.Page;
-import com.excilys.computerDatabase.service.pages.PageContainer;
 
 /**
  * Cette classe peut lancer la commande de listage des ordinateurs.
@@ -18,7 +18,7 @@ public class GetComputers implements CommandRunner {
 
 	@Override
 	public void runCommand(Scanner sc) {
-		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
+		ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 		List<ComputerBean> computers = computerDAO.getAll();
 		int startIndex = 0;
 		int endIndex = Integer.min(computers.size(), startIndex + PageContainer.NB_ITEM_BY_PAGE);

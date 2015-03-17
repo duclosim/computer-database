@@ -12,9 +12,7 @@ import java.util.Scanner;
 public class CLIService {
 	private static Map<String, CLICommands> map;
 	
-	private static volatile CLIService cliService = null;
-	
-	private CLIService() {
+	public CLIService() {
 		super();
 		map = new HashMap<String, CLICommands>();
 		map.put("get_companies", CLICommands.GET_COMPANIES);
@@ -24,21 +22,6 @@ public class CLIService {
 		map.put("update_computer", CLICommands.UPDATE_COMPUTER);
 		map.put("delete_computer", CLICommands.DELETE_COMPUTER);
 		map.put("exit", CLICommands.EXIT);
-	}
-
-	/**
-	 * Cette méthode retourne l'unique instance de cette classe.
-	 * @return Une instance de CLIService.
-	 */
-	public static final CLIService getInstance() {
-		if (CLIService.cliService == null) {
-			synchronized (CLIService.class) {
-				if (CLIService.cliService == null) {
-					CLIService.cliService = new CLIService();
-				}
-			}
-		}
-		return CLIService.cliService;
 	}
 
 	/**

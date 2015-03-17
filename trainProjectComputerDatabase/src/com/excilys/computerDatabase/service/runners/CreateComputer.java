@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 import com.excilys.computerDatabase.model.ComputerBean;
+import com.excilys.computerDatabase.persistence.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.ComputerDAO;
 import com.excilys.computerDatabase.persistence.ComputerDAOImpl;
 
@@ -17,7 +18,7 @@ public class CreateComputer implements CommandRunner {
 
 	@Override
 	public void runCommand(Scanner sc) {
-		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
+		ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 		ComputerBean computerBean = new ComputerBean();
 		System.out.println("Nom du nouvel ordinateur : ");
 		String args = sc.next();
@@ -29,21 +30,21 @@ public class CreateComputer implements CommandRunner {
 		try {
 			computerBean.setIntroduced(LocalDateTime.parse(args));
 		} catch (DateTimeParseException e) {
-			System.out.println("Date impossible à reconnaître.");
+			System.err.println("Date impossible à reconnaître.");
 		}
 		System.out.println("Date de sortie du nouvel ordinateur (format 2007-12-03T10:15:30) : ");
 		args = sc.nextLine();
 		try {
 			computerBean.setDiscontinued(LocalDateTime.parse(args));
 		} catch (DateTimeParseException e) {
-			System.out.println("Date impossible à reconnaître.");
+			System.err.println("Date impossible à reconnaître.");
 		}
 		System.out.println("Id d'entreprise du nouvel ordinateur : ");
 		args = sc.nextLine();
 		try {
-			computerBean.setCompanyId(Long.parseLong(args));
+			computerBean.setCompany(CompanyDAOImpl.INSTANCE.getById(Long.parseLong(args)));
 		} catch (NumberFormatException e) {
-			System.out.println("Nombre impossible à reconnaître.");
+			System.err.println("Nombre impossible à reconnaître.");
 		}
 		computerDAO.createComputer(computerBean);
 	}

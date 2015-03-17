@@ -15,7 +15,7 @@ public class DeleteComputer implements CommandRunner {
 
 	@Override
 	public void runCommand(Scanner sc) {
-		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
+		ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 		try {
 			System.out.println("Entrez l'id de l'ordinateur à supprimer : ");
 			String args = sc.next();
@@ -24,7 +24,7 @@ public class DeleteComputer implements CommandRunner {
 			computerDAO.deleteComputer(computerBean);
 			System.out.println(computerBean + " a été supprimé avec succès.");
 		} catch (NumberFormatException e) {
-			System.out.println("L'id passé n'est pas un nombre.");
+			System.err.println("L'id passé n'est pas un nombre.");
 		}
 	}
 

@@ -9,36 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerDatabase.model.CompanyBean;
+import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 /**
  * Cette classe implémente CompanyDAO et utilise le design pattern Singleton.
  * @author excilys
  *
  */
-public final class CompanyDAOImpl implements CompanyDAO {
-	private static volatile CompanyDAOImpl companyDAOImpl = null;
+public enum CompanyDAOImpl implements CompanyDAO {
+	INSTANCE;
 	
-	private static final String ID_COLUMN_LABEL = "id";
-	private static final String NAME_COLUMN_LABEL = "name";
-	
-	private CompanyDAOImpl() {
-		super();
-	}
-
-	/**
-	 * Cette méthode retourne l'unique instance de cette classe.
-	 * @return Une instance de CompanyDAOImpl.
-	 */
-	public static final CompanyDAO getInstance() {
-		if (CompanyDAOImpl.companyDAOImpl == null) {
-			synchronized (CompanyDAOImpl.class) {
-				if (CompanyDAOImpl.companyDAOImpl == null) {
-					CompanyDAOImpl.companyDAOImpl = new CompanyDAOImpl();
-				}
-			}
-		}
-		return CompanyDAOImpl.companyDAOImpl;
-	}
+	public static final String ID_COLUMN_LABEL = "id";
+	public static final String NAME_COLUMN_LABEL = "name";
 
 	@Override
 	public CompanyBean getById(Long id) {
@@ -52,12 +34,12 @@ public final class CompanyDAOImpl implements CompanyDAO {
 			ps.setLong(1, id);
 			results = ps.executeQuery();
 			if (results.next()) {
-				result = new CompanyBean(results.getLong(ID_COLUMN_LABEL),
-						results.getString(NAME_COLUMN_LABEL));
+				result = CompanyMapper.mapCompany(results);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème de lecture bdd");
+			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
@@ -80,8 +62,9 @@ public final class CompanyDAOImpl implements CompanyDAO {
 						results.getString(NAME_COLUMN_LABEL)));
 			}
 		} catch (SQLException e) {
-			System.out.println("Erreur : problème de lecture bdd");
+			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}

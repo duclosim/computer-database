@@ -1,8 +1,13 @@
 package com.excilys.computerDatabase.persistence;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Cette classe donne des instances de Connection afin de se 
@@ -10,14 +15,12 @@ import java.sql.SQLException;
  * @author excilys
  *
  */
-public class ConnectionFactory {
-	// URL de la source de données
-	private static final String URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	// login et mot de passe pour accéder à la base de données.
-	private static final String LOGIN = "admincdb";
-	private static final String PASS = "qwerty1234";
+public enum ConnectionFactory {
+	INSTANCE;
 	
-	static {
+	private static final String PROPERTIES_FILE = "ressources/db.properties";
+
+	private ConnectionFactory() {
 		// Chargement du Driver et enregistrement auprès du DriverManager
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -26,8 +29,6 @@ public class ConnectionFactory {
 			e.printStackTrace();
 		}
 	}
-	
-	private ConnectionFactory() {}
 	
 	/**
 	 * Retourne une connection à la base de données.
@@ -38,15 +39,27 @@ public class ConnectionFactory {
 	 *   à la base de données.
 	 */
 	public static final Connection getConnection() {
-		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(URL, LOGIN, PASS);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			System.out.println("Erreur : connection à la base de "
-					+ "données impossible.");
+			Properties configProp = new Properties();
+			InputStream ips = new FileInputStream(PROPERTIES_FILE);
+			configProp.load(ips);
+			String url = configProp.getProperty("db.url");
+			String user = configProp.getProperty("db.username");
+			String password = configProp.getProperty("db.password");
+			return (Connection) DriverManager.getConnection(url, user, password);
+		} catch (FileNotFoundException e) {
+			System.err.println("Fichier de propriétés non trouvé.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas de fichier de propriété.");
+		} catch (IOException e) {
+			System.err.println("Fichier de propriétés non lisible.");
+			e.printStackTrace();
+			throw new IllegalStateException("Problème de connexion.");
+		} catch (SQLException e) {
+			System.err.println("Pas possible de se connecter à la bdd.");
+			e.printStackTrace();
+			throw new IllegalStateException("Problème de connexion.");
 		}
-		return connection;
 	}
 	
 	/**
@@ -57,7 +70,7 @@ public class ConnectionFactory {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			System.out.println("Erreur : impossible de fermer la "
+			System.err.println("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");
 			e.printStackTrace();
 		}

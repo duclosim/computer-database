@@ -15,7 +15,7 @@ public class DetailComputer implements CommandRunner {
 
 	@Override
 	public void runCommand(Scanner sc) {
-		ComputerDAO computerDAO = ComputerDAOImpl.getInstance();
+		ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 		try {
 			System.out.println("Entrez l'id de l'ordinateur recherché : ");
 			String args = sc.next();
@@ -23,7 +23,7 @@ public class DetailComputer implements CommandRunner {
 			ComputerBean computerBean = computerDAO.getById(computerId);
 			System.out.println(computerBean);
 		} catch (NumberFormatException e) {
-			System.out.println("L'id passé n'est pas un nombre.");
+			System.err.println("L'id passé n'est pas un nombre.");
 		}
 	}
 
