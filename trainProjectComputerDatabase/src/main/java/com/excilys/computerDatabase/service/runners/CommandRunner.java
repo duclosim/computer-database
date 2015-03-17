@@ -8,6 +8,7 @@ import java.util.Scanner;
  *
  */
 public interface CommandRunner {
+	public static final int MAX_ITEMS_BY_PAGE = 20;
 	/**
 	 * Cette méthode lance la commande implémentée.
 	 * @param sc Le Scanner qui permet de lire les entrées utilisateur.

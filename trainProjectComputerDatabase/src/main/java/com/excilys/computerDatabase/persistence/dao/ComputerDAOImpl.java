@@ -1,15 +1,16 @@
-package main.java.com.excilys.computerDatabase.persistence;
+package main.java.com.excilys.computerDatabase.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
+import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
 import main.java.com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 /**
@@ -34,11 +35,13 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setLong(1, id);
+			int paramIndex = 0;
+			ps.setLong(++paramIndex, id);
 			results = ps.executeQuery();
 			if (results.next()) {
 				result = ComputerMapper.mapComputer(results);
 			}
+			return result;
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
@@ -46,22 +49,24 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
-		return result;
 	}
 
-	public List<ComputerBean> getAll() {
+	public List<ComputerBean> getAll(int limit, int offset) {
 		Connection con = ConnectionFactory.getConnection();
 		List<ComputerBean> result = new ArrayList<ComputerBean>();
-		String query = "SELECT * FROM computer;";
+		String query = "SELECT * FROM computer LIMIT ? OFFSET ?;";
 		ResultSet results;
 		
-		Statement statement;
 		try {
-			statement = con.createStatement();
-			results = statement.executeQuery(query);
+			PreparedStatement ps = con.prepareStatement(query);
+			int paramIndex = 0;
+			ps.setLong(++paramIndex, limit);
+			ps.setLong(++paramIndex, offset);
+			results = ps.executeQuery();
 			while (results.next()) {
 				result.add(ComputerMapper.mapComputer(results));
 			}
+			return result;
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
@@ -69,11 +74,30 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
-		return result;
 	}
 
-	public void createComputer(ComputerBean computerBean) {
-		if (computerBean.getName() == null) {
+	@Override
+	public int countLines() {
+		Connection con = ConnectionFactory.getConnection();
+		String query = "SELECT COUNT(*) FROM computer;";
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ResultSet results = ps.executeQuery();
+			if (results.next()) {
+				return results.getInt(1);
+			}
+			return 0;
+		} catch (SQLException e) {
+			System.err.println("Erreur : problème de lecture bdd");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(con);
+		}
+	}
+
+	public void create(ComputerBean entity) {
+		if (entity.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
 		String query = new StringBuilder("INSERT INTO computer (")
@@ -92,16 +116,16 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			int colNb = 0;
 			Timestamp introduced = null;
 			Timestamp discontinued = null;
-			if (computerBean.getIntroduced() != null) {
-				introduced = Timestamp.valueOf(computerBean.getIntroduced());
+			if (entity.getIntroduced() != null) {
+				introduced = Timestamp.valueOf(entity.getIntroduced());
 			}
-			if (computerBean.getDiscontinued() != null) {
-				discontinued = Timestamp.valueOf(computerBean.getDiscontinued());
+			if (entity.getDiscontinued() != null) {
+				discontinued = Timestamp.valueOf(entity.getDiscontinued());
 			}
-			ps.setString(++colNb, computerBean.getName());
+			ps.setString(++colNb, entity.getName());
 			ps.setTimestamp(++colNb, introduced);
 			ps.setTimestamp(++colNb, discontinued);
-			ps.setLong(++colNb, computerBean.getCompany().getId());
+			ps.setLong(++colNb, entity.getCompany().getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème d'écriture bdd");
@@ -109,11 +133,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
-		}
+		}		
 	}
 
-	public void updateComputer(ComputerBean computerBean) {
-		if (computerBean.getName() == null) {
+	public void update(ComputerBean entity) {
+		if (entity.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
 		String query = new StringBuilder("UPDATE computer SET ")
@@ -132,22 +156,22 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			int colNb = 0;
 			Timestamp introduced = null;
 			Timestamp discontinued = null;
-			if (computerBean.getIntroduced() != null) {
-				introduced = Timestamp.valueOf(computerBean.getIntroduced());
+			if (entity.getIntroduced() != null) {
+				introduced = Timestamp.valueOf(entity.getIntroduced());
 			}
-			if (computerBean.getDiscontinued() != null) {
-				discontinued = Timestamp.valueOf(computerBean.getDiscontinued());
+			if (entity.getDiscontinued() != null) {
+				discontinued = Timestamp.valueOf(entity.getDiscontinued());
 			}
 			// name
-			ps.setString(++colNb, computerBean.getName());
+			ps.setString(++colNb, entity.getName());
 			// introduced date
 			ps.setTimestamp(++colNb, introduced);
 			// discontinued date
 			ps.setTimestamp(++colNb, discontinued);
 			// company id
-			ps.setLong(++colNb, computerBean.getCompany().getId());
+			ps.setLong(++colNb, entity.getCompany().getId());
 			// id
-			ps.setLong(++colNb, computerBean.getId());
+			ps.setLong(++colNb, entity.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème d'écriture bdd");
@@ -158,16 +182,16 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 	}
 
-	public void deleteComputer(ComputerBean computerBean) {
-		if (computerBean == null) {
+	public void delete(ComputerBean entity) {
+		if (entity == null) {
 			throw new IllegalArgumentException("computerBean est à null.");
 		}
 		String query = "DELETE FROM computer WHERE id=?";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			if (computerBean.getId() != null) {
-				ps.setLong(1, computerBean.getId());
+			if (entity.getId() != null) {
+				ps.setLong(1, entity.getId());
 				ps.executeUpdate();
 			}
 		} catch (SQLException e) {

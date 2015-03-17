@@ -2,38 +2,39 @@ package main.java.com.excilys.computerDatabase;
 
 import java.time.LocalDateTime;
 
-import main.java.com.excilys.computerDatabase.model.CompanyBean;
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
-import main.java.com.excilys.computerDatabase.model.pages.PageContainer;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAO;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import main.java.com.excilys.computerDatabase.model.pages.Page;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 public class Main {
-	@SuppressWarnings("unused")
 	public static void main(String args[]) {
+		int limit = 40;
+		int offset = 0;
 		CompanyDAO companyDAO = CompanyDAOImpl.INSTANCE;
 		ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 		// Company tests
 		CompanyBean companyBean = companyDAO.getById(new Long(6));
 		System.out.println(companyBean);
-		for (CompanyBean bean : companyDAO.getAll()) {
+		for (CompanyBean bean : companyDAO.getAll(limit, offset)) {
 			System.out.println(bean);
 		}
 		// Computer tests
-		for (ComputerBean bean : computerDAO.getAll()) {
+		for (ComputerBean bean : computerDAO.getAll(limit, offset)) {
 			System.out.println(bean);
 		}
 		// update
 		ComputerBean updatedBean = computerDAO.getById(new Long (576));
 		if (updatedBean != null) {
 			updatedBean.setDiscontinued(LocalDateTime.now());
-			computerDAO.updateComputer(updatedBean);
+			computerDAO.update(updatedBean);
 			updatedBean = computerDAO.getById(new Long (576));
 			System.out.println(updatedBean);
 			updatedBean.setDiscontinued(null);
-			computerDAO.updateComputer(updatedBean);
+			computerDAO.update(updatedBean);
 			updatedBean = computerDAO.getById(new Long (576));
 			System.out.println(updatedBean);
 		}
@@ -43,19 +44,25 @@ public class Main {
 		insertedBean.setIntroduced(LocalDateTime.now());
 		insertedBean.setDiscontinued(null);
 		insertedBean.setCompany(companyDAO.getById(new Long(36)));
-		computerDAO.createComputer(insertedBean);
-		for (ComputerBean bean : computerDAO.getAll()) {
+		computerDAO.create(insertedBean);
+		for (ComputerBean bean : computerDAO.getAll(limit, offset)) {
 			System.out.println(bean);
 		}
 		// delete
 		insertedBean = computerDAO.getById(new Long(575));
 		if (insertedBean != null) {
-			computerDAO.deleteComputer(insertedBean);
+			computerDAO.delete(insertedBean);
 		}
-		for (ComputerBean bean : computerDAO.getAll()) {
+		for (ComputerBean bean : computerDAO.getAll(limit, offset)) {
 			System.out.println(bean);
 		}
-		// PageContainer
-		PageContainer<ComputerBean> pages = new PageContainer<ComputerBean>(computerDAO.getAll());
+		// Page
+		Page<ComputerBean> page = new Page<ComputerBean>(computerDAO, limit, offset);
+		System.out.println(page + "\n");
+		page.goToNextPage();
+		page.goToNextPage();
+		System.out.println(page + "\n");
+		page.goToPreviousPage();
+		System.out.println(page);
 	}
 }

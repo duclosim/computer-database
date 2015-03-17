@@ -2,9 +2,9 @@ package main.java.com.excilys.computerDatabase.service.runners;
 
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 /**
  * Cette classe peut lancer la commande de suppression d'ordinateurs.
@@ -20,7 +20,7 @@ public class DeleteComputer implements CommandRunner {
 			String args = sc.next();
 			Long computerId = Long.parseLong(args);
 			ComputerBean computerBean = computerDAO.getById(computerId);
-			computerDAO.deleteComputer(computerBean);
+			computerDAO.delete(computerBean);
 			System.out.println(computerBean + " a été supprimé avec succès.");
 		} catch (NumberFormatException e) {
 			System.err.println("L'id passé n'est pas un nombre.");

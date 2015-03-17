@@ -18,7 +18,7 @@ import java.util.Properties;
 public enum ConnectionFactory {
 	INSTANCE;
 	
-	private static final String PROPERTIES_FILE = "ressources/db.properties";
+	private static final String PROPERTIES_FILE = "src/main/resources/db.properties";
 
 	private ConnectionFactory() {
 		// Chargement du Driver et enregistrement auprès du DriverManager

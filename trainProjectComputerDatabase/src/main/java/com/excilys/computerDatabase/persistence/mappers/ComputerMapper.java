@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import main.java.com.excilys.computerDatabase.model.CompanyBean;
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAO;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
 import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 public enum ComputerMapper {
 	INSTANCE;

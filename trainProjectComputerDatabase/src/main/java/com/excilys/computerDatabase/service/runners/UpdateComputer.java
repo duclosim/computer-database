@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 /**
  * Cette classe peut lancer la commande de mise à jour des 
@@ -64,7 +64,7 @@ public class UpdateComputer implements CommandRunner {
 			} else {
 				computerBean.setCompany(null);
 			}
-			computerDAO.updateComputer(computerBean);
+			computerDAO.update(computerBean);
 		} catch (NumberFormatException e) {
 			System.err.println("Nombre impossible à reconnaître");
 		} finally {

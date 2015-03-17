@@ -3,9 +3,9 @@ package main.java.com.excilys.computerDatabase.persistence.mappers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import main.java.com.excilys.computerDatabase.model.CompanyBean;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
 import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 
 public enum CompanyMapper {
 	INSTANCE;

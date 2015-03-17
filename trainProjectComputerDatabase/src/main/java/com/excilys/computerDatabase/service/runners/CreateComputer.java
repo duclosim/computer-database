@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 /**
  * Cette classe peut lancer la commande de création de nouveaux ordinateurs.
@@ -45,7 +45,7 @@ public class CreateComputer implements CommandRunner {
 		} catch (NumberFormatException e) {
 			System.err.println("Nombre impossible à reconnaître.");
 		}
-		computerDAO.createComputer(computerBean);
+		computerDAO.create(computerBean);
 	}
 
 }

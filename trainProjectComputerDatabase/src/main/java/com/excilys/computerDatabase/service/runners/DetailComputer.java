@@ -2,9 +2,9 @@ package main.java.com.excilys.computerDatabase.service.runners;
 
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.model.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.ComputerDAOImpl;
+import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 /**
  * Cette classe peut lancer la commande d'affichage des détails d'un ordinateur.
