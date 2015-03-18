@@ -38,7 +38,7 @@ public enum ConnectionFactory {
 	 * @throws SQLException si on ne parvient pas à se connecter 
 	 *   à la base de données.
 	 */
-	public static final Connection getConnection() {
+	public final Connection getConnection() {
 		try {
 			Properties configProp = new Properties();
 			InputStream ips = new FileInputStream(PROPERTIES_FILE);

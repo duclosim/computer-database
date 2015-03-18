@@ -1,5 +1,17 @@
 package test.java.com.excilys.computerDatabase.persistence;
 
-public class ConnectionFactoryTest {
+import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
 
+import org.junit.Test;
+
+public class ConnectionFactoryTest {
+	
+	@SuppressWarnings("static-access")
+	@Test
+	public void shouldGetTheUniqueInstance() {
+		// GIVEN
+		// WHEN
+		ConnectionFactory.INSTANCE.getConnection();
+		// THEN
+	}
 }

@@ -26,6 +26,15 @@ public class Page<T> {
 	 * @param limit
 	 */
 	public Page(CRUDDao<T> dao, int limit, int offset) {
+		if (dao == null) {
+			throw new IllegalArgumentException("dao est à null.");
+		}
+		if (limit <= 0) {
+			throw new IllegalArgumentException("limit est négatif ou nul");
+		}
+		if (offset < 0) {
+			throw new IllegalArgumentException("offset est négatif");
+		}
 		this.dao = dao;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
@@ -85,21 +94,23 @@ public class Page<T> {
 	 */
 	public void goToNextPage() {
 		if (getPageNum() != getLastPageNb()) {
-			++pageNum;
+			setPageNum(pageNum + 1);
 		}
-		refresh();
 	}
 	/**
 	 * Va à la page précédente si on y est pas déjà.
 	 */
 	public void goToPreviousPage() {
 		if (getPageNum() != 0) {
-			--pageNum;
+			setPageNum(pageNum - 1);
 		}
-		refresh();
 	}
 	
 	// OUTILS
+	/*
+	 * Cette méthode recharge les entités en raison de changements 
+	 *   de page ou du nombre d'objets par page.
+	 */
 	private void refresh() {
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
 		entities = new ArrayList<>(dao.getAll(getMaxNbItemsByPage(), offset));

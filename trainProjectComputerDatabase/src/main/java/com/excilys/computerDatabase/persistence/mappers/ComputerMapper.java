@@ -14,7 +14,10 @@ import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 public enum ComputerMapper {
 	INSTANCE;
 	
-	public static ComputerBean mapComputer(ResultSet results) {
+	public ComputerBean mapComputer(ResultSet results) {
+		if (results == null) {
+			throw new IllegalArgumentException("results est à null.");
+		}
 		CompanyDAO companyDAO = CompanyDAOImpl.INSTANCE;
 		ComputerBean computerBean = null;
 		LocalDateTime introducedDate = null;

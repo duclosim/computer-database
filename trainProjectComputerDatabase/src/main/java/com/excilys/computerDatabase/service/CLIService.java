@@ -10,18 +10,19 @@ import java.util.Scanner;
  *
  */
 public class CLIService {
-	private static Map<String, CLICommands> map;
+	private static Map<String, CLICommand> map;
+	private static final String UNKNOWN_COMMAND = "Commande non reconnue.";
 	
 	public CLIService() {
 		super();
-		map = new HashMap<String, CLICommands>();
-		map.put("get_companies", CLICommands.GET_COMPANIES);
-		map.put("get_computers", CLICommands.GET_COMPUTERS);
-		map.put("detail_computer", CLICommands.DETAIL_COMPUTER);
-		map.put("create_computer", CLICommands.CREATE_COMPUTER);
-		map.put("update_computer", CLICommands.UPDATE_COMPUTER);
-		map.put("delete_computer", CLICommands.DELETE_COMPUTER);
-		map.put("exit", CLICommands.EXIT);
+		map = new HashMap<String, CLICommand>();
+		map.put("get_companies", CLICommand.GET_COMPANIES);
+		map.put("get_computers", CLICommand.GET_COMPUTERS);
+		map.put("detail_computer", CLICommand.DETAIL_COMPUTER);
+		map.put("create_computer", CLICommand.CREATE_COMPUTER);
+		map.put("update_computer", CLICommand.UPDATE_COMPUTER);
+		map.put("delete_computer", CLICommand.DELETE_COMPUTER);
+		map.put("exit", CLICommand.EXIT);
 	}
 
 	/**
@@ -34,11 +35,14 @@ public class CLIService {
 		if (command == null) {
 			throw new IllegalArgumentException("command est à null.");
 		}
-		CLICommands cliCommands = map.get(command);
+		if (sc == null) {
+			throw new IllegalArgumentException("sc est à null.");
+		}
+		CLICommand cliCommands = map.get(command);
 		if (cliCommands != null) {
 			return cliCommands.runCommand(sc);
 		}
-		System.out.println("Commande non reconnue.");
+		System.out.println(UNKNOWN_COMMAND);
 		return false;
 	}
 }

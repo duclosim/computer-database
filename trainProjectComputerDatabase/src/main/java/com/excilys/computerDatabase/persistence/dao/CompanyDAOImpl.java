@@ -28,14 +28,14 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		CompanyBean result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
 		ResultSet results;
-		Connection con = ConnectionFactory.getConnection();
+		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setLong(1, id);
 			results = ps.executeQuery();
 			if (results.next()) {
-				result = CompanyMapper.mapCompany(results);
+				result = CompanyMapper.INSTANCE.mapCompany(results);
 			}
 			return result;
 		} catch (SQLException e) {
@@ -48,7 +48,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	}
 	
 	public List<CompanyBean> getAll(int limit, int offset) {
-		Connection con = ConnectionFactory.getConnection();
+		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		List<CompanyBean> result = new ArrayList<CompanyBean>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
 		ResultSet results;
@@ -60,8 +60,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			ps.setLong(++paramIndex, offset);
 			results = ps.executeQuery();
 			while (results.next()) {
-				result.add(new CompanyBean(results.getLong(ID_COLUMN_LABEL), 
-						results.getString(NAME_COLUMN_LABEL)));
+				result.add(CompanyMapper.INSTANCE.mapCompany(results));
 			}
 			return result;
 		} catch (SQLException e) {
@@ -75,7 +74,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public int countLines() {
-		Connection con = ConnectionFactory.getConnection();
+		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		String query = "SELECT COUNT(*) FROM company;";
 		try {
 			PreparedStatement ps = con.prepareStatement(query);

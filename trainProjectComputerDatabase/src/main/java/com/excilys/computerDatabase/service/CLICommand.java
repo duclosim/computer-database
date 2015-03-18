@@ -17,7 +17,7 @@ import main.java.com.excilys.computerDatabase.service.runners.UpdateComputer;
  * @author excilys
  *
  */
-public enum CLICommands {
+public enum CLICommand {
 	GET_COMPANIES("get_companies", false, new GetCompanies()),
 	GET_COMPUTERS("get_computers", false, new GetComputers()),
 	DETAIL_COMPUTER("detail_computer", false, new DetailComputer()),
@@ -30,7 +30,7 @@ public enum CLICommands {
 	private boolean endService;
 	private CommandRunner commandRunner;
 	
-	CLICommands(String command, boolean endService, CommandRunner commandRunner) {
+	CLICommand(String command, boolean endService, CommandRunner commandRunner) {
 		this.command = command;
 		this.endService = endService;
 		this.commandRunner = commandRunner;
@@ -55,6 +55,9 @@ public enum CLICommands {
 	 * @return Un booléen indiquant si la commande appelée met fin au programme.
 	 */
 	public boolean runCommand(Scanner sc) {
+		if (sc == null) {
+			throw new IllegalArgumentException("sc est à null.");
+		}
 		getCommandRunner().runCommand(sc);
 		return getEndService();
 	}

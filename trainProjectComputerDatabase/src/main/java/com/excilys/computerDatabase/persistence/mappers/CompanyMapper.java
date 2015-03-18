@@ -10,7 +10,10 @@ import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 public enum CompanyMapper {
 	INSTANCE;
 
-	public static CompanyBean mapCompany(ResultSet results) {
+	public CompanyBean mapCompany(ResultSet results) {
+		if (results == null) {
+			throw new IllegalArgumentException("results est à null.");
+		}
 		CompanyBean companyBean = null;
 		try {
 			companyBean = new CompanyBean(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
