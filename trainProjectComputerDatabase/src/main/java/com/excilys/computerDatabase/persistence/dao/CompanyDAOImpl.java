@@ -11,7 +11,6 @@ import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
 import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
 import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
 import main.java.com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Cette classe implémente CompanyDAO et utilise le design pattern Singleton.
@@ -93,17 +92,17 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	}
 
 	public void create(CompanyBean entity) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 		
 	}
 
 	public void update(CompanyBean entity) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 		
 	}
 
 	public void delete(CompanyBean entity) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 		
 	}
 }

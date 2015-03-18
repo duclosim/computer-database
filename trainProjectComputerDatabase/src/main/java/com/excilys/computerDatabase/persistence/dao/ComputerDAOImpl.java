@@ -147,19 +147,22 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		if (entity.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
-		String query = new StringBuilder("UPDATE computer SET ")
+		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		try {
+			StringBuilder query = new StringBuilder("UPDATE computer SET ")
 			.append(NAME_COLUMN_LABEL)
 			.append("=?, ")
 			.append(INTRODUCED_COLUMN_LABEL)
 			.append("=?, ")
 			.append(DISCONTINUED_COLUMN_LABEL)
-			.append("=?, ")
-			.append(COMPANY_ID_COLUMN_LABEL)
-			.append("=? WHERE id = ?;")
-			.toString();
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
-		try {
-			PreparedStatement ps = con.prepareStatement(query);
+			.append("=?");
+			if (entity.getCompany() != null) {
+				query.append(", ")
+				.append(COMPANY_ID_COLUMN_LABEL)
+				.append("=?");
+			}
+			query.append(" WHERE id = ?;");
+			PreparedStatement ps = con.prepareStatement(query.toString());
 			int colNb = 0;
 			Timestamp introduced = null;
 			Timestamp discontinued = null;
@@ -176,7 +179,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			// discontinued date
 			ps.setTimestamp(++colNb, discontinued);
 			// company id
-			ps.setLong(++colNb, entity.getCompany().getId());
+			if (entity.getCompany() != null) {
+				ps.setLong(++colNb, entity.getCompany().getId());
+			}
 			// id
 			ps.setLong(++colNb, entity.getId());
 			ps.executeUpdate();

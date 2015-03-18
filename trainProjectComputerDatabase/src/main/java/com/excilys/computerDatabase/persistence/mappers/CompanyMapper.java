@@ -14,9 +14,8 @@ public enum CompanyMapper {
 		if (results == null) {
 			throw new IllegalArgumentException("results est à null.");
 		}
-		CompanyBean companyBean = null;
 		try {
-			companyBean = new CompanyBean(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
+			CompanyBean companyBean = new CompanyBean(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
 					results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 			return companyBean;
 		} catch (SQLException e) {

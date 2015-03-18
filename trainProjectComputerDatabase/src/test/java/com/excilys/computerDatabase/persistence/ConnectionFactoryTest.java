@@ -6,12 +6,19 @@ import org.junit.Test;
 
 public class ConnectionFactoryTest {
 	
-	@SuppressWarnings("static-access")
 	@Test
 	public void shouldGetTheUniqueInstance() {
 		// GIVEN
 		// WHEN
 		ConnectionFactory.INSTANCE.getConnection();
+		// THEN
+	}
+	
+	@Test
+	public void shouldCloseTheUniqueInstance() {
+		// GIVEN
+		// WHEN
+		ConnectionFactory.closeConnection(ConnectionFactory.INSTANCE.getConnection());
 		// THEN
 	}
 }

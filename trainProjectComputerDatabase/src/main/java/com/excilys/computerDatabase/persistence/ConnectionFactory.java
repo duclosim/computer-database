@@ -25,7 +25,7 @@ public enum ConnectionFactory {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.err.println("Pas possible de charger le driver jdbc.");
 			e.printStackTrace();
 		}
 	}
