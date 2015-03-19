@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
 import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
 import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
@@ -19,11 +22,14 @@ import main.java.com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
  */
 public enum CompanyDAOImpl implements CompanyDAO {
 	INSTANCE;
+
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
 	
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
 
 	public CompanyBean getById(Long id) {
+		LOG.trace("getById(" + id + ")");
 		CompanyBean result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
 		ResultSet results;
@@ -40,6 +46,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -47,6 +54,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	}
 	
 	public List<CompanyBean> getAll(int limit, int offset) {
+		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		List<CompanyBean> result = new ArrayList<CompanyBean>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
@@ -65,6 +73,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -73,6 +82,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public int countLines() {
+		LOG.trace("countLine()");
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		String query = "SELECT COUNT(*) FROM company;";
 		try {
@@ -85,6 +95,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);

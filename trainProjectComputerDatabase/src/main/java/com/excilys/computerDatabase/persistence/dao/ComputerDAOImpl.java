@@ -9,6 +9,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
 import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
 import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
@@ -22,6 +25,8 @@ import main.java.com.excilys.computerDatabase.persistence.mappers.ComputerMapper
 public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;
 	
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
+	
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
 	public static final String INTRODUCED_COLUMN_LABEL = "introduced";
@@ -29,6 +34,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public static final String COMPANY_ID_COLUMN_LABEL = "company_id";
 	
 	public ComputerBean getById(Long id) {
+		LOG.trace("getById(" + id + ")");
 		ComputerBean result = null;
 		String query = "SELECT * FROM computer WHERE id=?;";
 		ResultSet results;
@@ -46,6 +52,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -53,6 +60,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public List<ComputerBean> getAll(int limit, int offset) {
+		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		List<ComputerBean> result = new ArrayList<ComputerBean>();
 		String query = "SELECT * FROM computer LIMIT ? OFFSET ?;";
@@ -71,6 +79,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -79,6 +88,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public int countLines() {
+		LOG.trace("countLine()");
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		String query = "SELECT COUNT(*) FROM computer;";
 		try {
@@ -91,6 +101,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de lecture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -98,6 +109,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public void create(ComputerBean entity) {
+		LOG.trace("create(" + entity + ")");
 		if (entity.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
@@ -137,6 +149,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -144,6 +157,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public void update(ComputerBean entity) {
+		LOG.trace("update(" + entity + ")");
 		if (entity.getName() == null) {
 			throw new IllegalArgumentException("computer.name est à null.");
 		}
@@ -188,6 +202,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème d'écriture bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
@@ -195,6 +210,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public void delete(ComputerBean entity) {
+		LOG.trace("delete(" + entity + ")");
 		if (entity == null) {
 			throw new IllegalArgumentException("computerBean est à null.");
 		}
@@ -209,6 +225,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			System.err.println("Erreur : problème de suppression bdd");
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 			throw new PersistenceException("Suppression impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(con);
