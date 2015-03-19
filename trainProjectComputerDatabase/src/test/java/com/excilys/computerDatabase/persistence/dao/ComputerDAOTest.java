@@ -1,4 +1,4 @@
-package test.java.com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
-import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
-import main.java.com.excilys.computerDatabase.persistence.dao.CRUDDao;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.CRUDDao;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,15 +1,15 @@
-package main.java.com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.service;
 
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.service.runners.CommandRunner;
-import main.java.com.excilys.computerDatabase.service.runners.CreateComputer;
-import main.java.com.excilys.computerDatabase.service.runners.DeleteComputer;
-import main.java.com.excilys.computerDatabase.service.runners.DetailComputer;
-import main.java.com.excilys.computerDatabase.service.runners.Exit;
-import main.java.com.excilys.computerDatabase.service.runners.GetCompanies;
-import main.java.com.excilys.computerDatabase.service.runners.GetComputers;
-import main.java.com.excilys.computerDatabase.service.runners.UpdateComputer;
+import com.excilys.computerDatabase.service.runners.CommandRunner;
+import com.excilys.computerDatabase.service.runners.CreateComputer;
+import com.excilys.computerDatabase.service.runners.DeleteComputer;
+import com.excilys.computerDatabase.service.runners.DetailComputer;
+import com.excilys.computerDatabase.service.runners.Exit;
+import com.excilys.computerDatabase.service.runners.GetCompanies;
+import com.excilys.computerDatabase.service.runners.GetComputers;
+import com.excilys.computerDatabase.service.runners.UpdateComputer;
 
 /**
  * Cette énumération représente les différentes commandes invoquables depuis

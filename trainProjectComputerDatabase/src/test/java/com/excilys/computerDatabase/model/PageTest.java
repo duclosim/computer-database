@@ -1,12 +1,12 @@
-package test.java.com.excilys.computerDatabase.model.pages;
+package com.excilys.computerDatabase.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
-import main.java.com.excilys.computerDatabase.model.pages.Page;
-import main.java.com.excilys.computerDatabase.persistence.dao.CRUDDao;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.model.Page;
+import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.persistence.dao.CRUDDao;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 
 import org.junit.Assert;
 import org.junit.Rule;

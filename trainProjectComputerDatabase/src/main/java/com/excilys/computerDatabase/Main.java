@@ -1,14 +1,14 @@
-package main.java.com.excilys.computerDatabase;
+package com.excilys.computerDatabase;
 
 import java.time.LocalDateTime;
 
-import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
-import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
-import main.java.com.excilys.computerDatabase.model.pages.Page;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAO;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.model.Page;
+import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 public class Main {
 	public static void main(String args[]) {

@@ -1,6 +1,6 @@
-package test.java.com.excilys.computerDatabase.persistence;
+package com.excilys.computerDatabase.persistence;
 
-import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
 
 import org.junit.Test;
 

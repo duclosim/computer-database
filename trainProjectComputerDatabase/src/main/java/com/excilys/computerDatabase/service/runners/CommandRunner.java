@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerDatabase.service.runners;
+package com.excilys.computerDatabase.service.runners;
 
 import java.util.Scanner;
 

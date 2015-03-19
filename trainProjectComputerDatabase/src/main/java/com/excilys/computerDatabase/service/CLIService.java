@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.service;
 
 import java.util.HashMap;
 import java.util.Map;

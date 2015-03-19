@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerDatabase.model;
+package com.excilys.computerDatabase.model;
 
 import java.util.regex.Pattern;
 
@@ -11,7 +11,7 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si la date est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidDate(String date) {
-		// TODO
+		// TODO écrire le test
 		return false;
 	}
 

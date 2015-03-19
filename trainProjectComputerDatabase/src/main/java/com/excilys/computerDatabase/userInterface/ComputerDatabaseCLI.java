@@ -1,8 +1,8 @@
-package main.java.com.excilys.computerDatabase.userInterface;
+package com.excilys.computerDatabase.userInterface;
 
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.service.CLIService;
+import com.excilys.computerDatabase.service.CLIService;
 
 /**
  * Cette classe lit les commandes entrées en ligne de commande et les exécute.

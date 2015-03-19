@@ -1,13 +1,13 @@
-package main.java.com.excilys.computerDatabase.service.runners;
+package com.excilys.computerDatabase.service.runners;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import main.java.com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 /**
  * Cette classe peut lancer la commande de création de nouveaux ordinateurs.

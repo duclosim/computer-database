@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerDatabase.model.beans;
+package com.excilys.computerDatabase.model.beans;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 

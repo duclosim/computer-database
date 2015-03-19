@@ -1,10 +1,10 @@
-package test.java.com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.service;
 
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.service.CLICommand;
-import main.java.com.excilys.computerDatabase.service.runners.CommandRunner;
-import main.java.com.excilys.computerDatabase.service.runners.GetCompanies;
+import com.excilys.computerDatabase.service.CLICommand;
+import com.excilys.computerDatabase.service.runners.CommandRunner;
+import com.excilys.computerDatabase.service.runners.GetCompanies;
 
 import org.junit.Assert;
 import org.junit.Rule;

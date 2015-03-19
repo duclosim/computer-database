@@ -1,10 +1,10 @@
-package test.java.com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.service.CLIService;
+import com.excilys.computerDatabase.service.CLIService;
 
 import org.junit.After;
 import org.junit.Assert;

@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.dao;
 
 import java.util.List;
 

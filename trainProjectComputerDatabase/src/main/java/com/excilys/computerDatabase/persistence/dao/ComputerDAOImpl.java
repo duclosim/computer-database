@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +12,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.ConnectionFactory;
-import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
-import main.java.com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 /**
  * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.

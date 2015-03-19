@@ -1,11 +1,11 @@
-package main.java.com.excilys.computerDatabase.service.runners;
+package com.excilys.computerDatabase.service.runners;
 
 import java.util.Scanner;
 
-import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
-import main.java.com.excilys.computerDatabase.model.pages.Page;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAO;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.model.Page;
+import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 
 /**
  * Cette classe peut lancer la commande de listage des company.

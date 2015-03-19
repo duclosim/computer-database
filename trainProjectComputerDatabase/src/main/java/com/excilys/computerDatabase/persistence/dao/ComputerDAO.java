@@ -1,6 +1,6 @@
-package main.java.com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.dao;
 
-import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.model.beans.ComputerBean;
 
 /**
  * Cette interface rassemble des méthodes d'accès à la table computer.

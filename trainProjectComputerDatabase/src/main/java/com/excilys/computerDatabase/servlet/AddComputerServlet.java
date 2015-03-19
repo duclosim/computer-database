@@ -1,60 +1,88 @@
-package main.java.com.excilys.computerDatabase.servlet;
+package com.excilys.computerDatabase.servlet;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.java.com.excilys.computerDatabase.model.UserInputsValidator;
-import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
-import main.java.com.excilys.computerDatabase.model.beans.ComputerBean;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.model.UserInputsValidator;
+import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.persistence.dao.CRUDDao;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
 public class AddComputerServlet extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 6902766188799864148L;
 	
 	@Override
+	public void init(ServletConfig config) throws ServletException {
+		
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		StringBuilder errorMessage = new StringBuilder("");
+		CRUDDao<CompanyBean> companyDao = CompanyDAOImpl.INSTANCE;
+		CRUDDao<ComputerBean> computerDao = ComputerDAOImpl.INSTANCE;
 		ComputerBean computerBean = new ComputerBean();
+		CompanyBean companyBean = null;
 		String name = req.getParameter("computerName");
 		String introducedDate = req.getParameter("introduced");
 		String discontinuedDate = req.getParameter("discontinued");
 		String companyIdStr = req.getParameter("companyId");
-		CompanyBean companyBean = null;
 		
 		if ((name == null) || (name.trim().isEmpty())) {
-			System.out.println("Nom non valide.");
+			errorMessage.append("Nom non valide.\n");
 			name = null;
 		}
 		if ((introducedDate != null) && (!UserInputsValidator.isValidDate(introducedDate))) {
-			System.out.println("Date d'introduction non valide.");
+			errorMessage.append("Date d'introduction non valide.\n");
 			introducedDate = null;
 		}
 		if ((discontinuedDate != null) && (!UserInputsValidator.isValidDate(discontinuedDate))) {
-			System.out.println("Date de sortie non valide.");
+			errorMessage.append("Date de sortie non valide.\n");
 			discontinuedDate = null;
 		}
 		if ((companyIdStr != null) && (!UserInputsValidator.isValidNumber(companyIdStr))) {
-			System.out.println("Numéro de companie non valide.");
+			errorMessage.append("Numéro de companie non valide.\n");
 			companyIdStr = null;
 		} else {
-			Long companyIdLg = Long.parseLong(companyIdStr);
-			companyBean = CompanyDAOImpl.INSTANCE.getById(companyIdLg);
+			try {
+				Long companyIdLg = Long.parseLong(companyIdStr);
+				companyBean = companyDao.getById(companyIdLg);
+			} catch (NumberFormatException e) {
+				System.err.println("Nombre impossible à parser en Long.");
+				e.printStackTrace();
+				throw new IllegalArgumentException("Erreur parsing.");
+			}
 			if (companyBean == null) {
-				System.out.println("Le numéro de companie est correct mais ne correspond à aucune entrée.");
+				errorMessage.append("Le numéro de companie est correct mais ne correspond à aucune entrée.\n");
 			}
 		}
-		
+		if (name == null) {
+			req.setAttribute("errorMessage", errorMessage);
+			getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
+		}
 		computerBean.setName(name);
-		computerBean.setIntroduced(LocalDateTime.parse(introducedDate));
-		computerBean.setDiscontinued(LocalDateTime.parse(discontinuedDate));
+		try {
+			computerBean.setIntroduced(LocalDateTime.parse(introducedDate));
+			computerBean.setDiscontinued(LocalDateTime.parse(discontinuedDate));
+		} catch (DateTimeParseException e) {
+			System.err.println("Dates impossible à parser.");
+			e.printStackTrace();
+			throw new IllegalArgumentException("Erreur parsing.");
+		}
 		computerBean.setCompany(companyBean);
 		
-
+		computerDao.create(computerBean);
+		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
 	}
 }

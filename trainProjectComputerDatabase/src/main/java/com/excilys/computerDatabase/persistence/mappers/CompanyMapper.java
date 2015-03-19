@@ -1,11 +1,11 @@
-package main.java.com.excilys.computerDatabase.persistence.mappers;
+package com.excilys.computerDatabase.persistence.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import main.java.com.excilys.computerDatabase.model.beans.CompanyBean;
-import main.java.com.excilys.computerDatabase.persistence.PersistenceException;
-import main.java.com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 
 public enum CompanyMapper {
 	INSTANCE;

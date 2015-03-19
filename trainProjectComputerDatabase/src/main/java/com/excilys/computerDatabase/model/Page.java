@@ -1,9 +1,9 @@
-package main.java.com.excilys.computerDatabase.model.pages;
+package com.excilys.computerDatabase.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.excilys.computerDatabase.persistence.dao.CRUDDao;
+import com.excilys.computerDatabase.persistence.dao.CRUDDao;
 
 /**
  * Cette classe représente une page contenant des objets pour les 
@@ -13,11 +13,22 @@ import main.java.com.excilys.computerDatabase.persistence.dao.CRUDDao;
  * @param <T> La classe des objets que doivent contenir les pages.
  */
 public class Page<T> {
+	private static final int DEFAULT_LIMIT = 10;
+	private static final int DEFAULT_OFFSET = 0;
+	
 	private CRUDDao<T> dao;
 	private List<T> entities;
 	private int maxNbItemsByPage;
 	private int pageNum;
 	private int lastPageNb;
+	
+	/**
+	 * 
+	 * @param dao
+	 */
+	public Page(CRUDDao<T> dao) {
+		this(dao, DEFAULT_LIMIT, DEFAULT_OFFSET);
+	}
 	
 	/**
 	 * 
