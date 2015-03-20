@@ -53,6 +53,30 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		}
 	}
 	
+	public List<CompanyBean> getAll() {
+		LOG.trace("getAll()");
+		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		List<CompanyBean> result = new ArrayList<CompanyBean>();
+		String query = "SELECT * FROM company;";
+		ResultSet results;
+		
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(CompanyMapper.INSTANCE.mapCompany(results));
+			}
+			return result;
+		} catch (SQLException e) {
+			System.err.println("Erreur : problème de lecture bdd");
+			e.printStackTrace();
+			LOG.error(e.getMessage());
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(con);
+		}
+	}
+	
 	public List<CompanyBean> getAll(int limit, int offset) {
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		Connection con = ConnectionFactory.INSTANCE.getConnection();

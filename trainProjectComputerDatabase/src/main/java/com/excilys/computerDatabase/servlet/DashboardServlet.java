@@ -26,16 +26,32 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			throws ServletException, IOException {
 		try {
 			String numParam = req.getParameter("pageNum");
+			String maxItemPageParam = req.getParameter("itemByPage");
+			StringBuilder sb = new StringBuilder("");
 			int newPageNum = 1;
+			int newItemByPage = 10;
 			if ((numParam != null) && (!UserInputsValidator.isValidNumber(numParam))) {
-				req.setAttribute("errorMessage", new String("Numéro de page invalide."));
+				sb.append("Numéro de page invalide.\n");
+			}
+			if ((maxItemPageParam != null) && (!UserInputsValidator.isValidNumber(maxItemPageParam))) {
+				sb.append("Nombre d'objets par page invalide.\n");
+			}
+			if (!sb.toString().isEmpty()) {
+				req.setAttribute("errorMessage", sb.toString());
 				this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
+				return;
 			}
 			if (numParam != null) {
 				newPageNum = Integer.parseInt(numParam);
 			}
+			if (maxItemPageParam != null) {
+				newItemByPage = Integer.parseInt(maxItemPageParam);
+			}
+			// Construction de la Page.
 			page = new Page<ComputerBean>(dao);
 			page.setPageNum(newPageNum);
+			page.setMaxNbItemsByPage(newItemByPage);
+			// Passage des paramètres de la page dans la requête.
 			req.setAttribute("curPage", page.getPageNum());
 			req.setAttribute("maxPage", page.getLastPageNb());
 			req.setAttribute("entities", page.getEntities());

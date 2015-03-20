@@ -21,6 +21,9 @@
 			<a class="navbar-brand" href="dashboard"> Application -
 				Computer Database </a>
 		</div>
+		<c:if test="!${empty errorMessage}">
+			<c:out value="${errorMessage}" />
+		</c:if>
 	</header>
 
 	<section id="main">
@@ -75,7 +78,9 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick="">${item.name}</a></td>
+							<td><a href="<c:url value="editComputer">
+								<c:param name="beanId" value="${item.id}"/>
+							</c:url>" onclick="">${item.name}</a></td>
 							<td>${item.introduced}</td>
 							<td>${item.discontinued}</td>
 							<td>${item.company.name}</td>
@@ -123,28 +128,17 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-<!--
-				<button type="button" class="btn btn-default">
-					<a href="<c:url value="dashboard">
-								<c:param name="pageNum" value="10"/>
-							</c:url>">10</a></button>
-				<button type="button" class="btn btn-default">
-					<a href="<c:url value="dashboard">
-								<c:param name="pageNum" value="50"/>
-							</c:url>">50</a></button>
-				<button type="button" class="btn btn-default">
-					<a href="<c:url value="dashboard">
-								<c:param name="pageNum" value="100"/>
-							</c:url>">100</a></button>
--->
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<form action="" method="GET">
+					<input type="hidden" name="pageNum" value="${curPage}">
+					<button type="submit" name="itemByPage" class="btn btn-default" value="10">10</button>
+					<button type="submit" name="itemByPage" class="btn btn-default" value="50">50</button>
+					<button type="submit" name="itemByPage" class="btn btn-default" value="100">100</button>
+				</form>
 			</div>
 		</div>
 	</footer>
-	<script src="static/js/jquery.min.js"></script>
-	<script src="static/js/bootstrap.min.js"></script>
-	<script src="static/js/dashboard.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/dashboard.js"></script>
 </body>
 </html>

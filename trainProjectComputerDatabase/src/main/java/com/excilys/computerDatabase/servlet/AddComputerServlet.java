@@ -25,6 +25,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		req.setAttribute("companies", CompanyDAOImpl.INSTANCE.getAll());
 		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 	}
 	
@@ -58,8 +59,10 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 			companyIdStr = null;
 		} else {
 			try {
-				Long companyIdLg = Long.parseLong(companyIdStr);
-				companyBean = companyDao.getById(companyIdLg);
+				if (companyIdStr != null) {
+					Long companyIdLg = Long.parseLong(companyIdStr);
+					companyBean = companyDao.getById(companyIdLg);
+				}
 			} catch (NumberFormatException e) {
 				System.err.println("Nombre impossible à parser en Long.");
 				e.printStackTrace();
@@ -75,8 +78,12 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		}
 		computerBean.setName(name);
 		try {
-			computerBean.setIntroduced(LocalDateTime.parse(introducedDate));
-			computerBean.setDiscontinued(LocalDateTime.parse(discontinuedDate));
+			if (introducedDate != null) {
+				computerBean.setIntroduced(LocalDateTime.parse(introducedDate));
+			}
+			if (discontinuedDate != null) {
+				computerBean.setDiscontinued(LocalDateTime.parse(discontinuedDate));
+			}
 		} catch (DateTimeParseException e) {
 			System.err.println("Dates impossible à parser.");
 			e.printStackTrace();
