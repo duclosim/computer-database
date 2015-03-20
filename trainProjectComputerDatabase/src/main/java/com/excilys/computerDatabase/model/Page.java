@@ -21,7 +21,8 @@ public class Page<T> {
 	private int maxNbItemsByPage;
 	private int pageNum;
 	private int lastPageNb;
-	
+	private int totalNbEntities;
+
 	/**
 	 * 
 	 * @param dao
@@ -49,6 +50,7 @@ public class Page<T> {
 		this.dao = dao;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
+		totalNbEntities = dao.countLines();
 		refresh();
 	}
 
@@ -75,6 +77,10 @@ public class Page<T> {
 	 */
 	public int getPageNum() {
 		return pageNum;
+	}
+	
+	public int getTotalNbEntities() {
+		return totalNbEntities;
 	}
 
 	// COMMANDES

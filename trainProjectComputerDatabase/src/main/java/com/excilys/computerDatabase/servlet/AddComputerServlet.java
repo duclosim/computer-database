@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,12 +18,14 @@ import com.excilys.computerDatabase.persistence.dao.CRUDDao;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 
+@WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 6902766188799864148L;
 	
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-		
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -69,7 +71,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		}
 		if (name == null) {
 			req.setAttribute("errorMessage", errorMessage);
-			getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
+			getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 		}
 		computerBean.setName(name);
 		try {
@@ -83,6 +85,6 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		computerBean.setCompany(companyBean);
 		
 		computerDao.create(computerBean);
-		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req, resp);
+		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 	}
 }

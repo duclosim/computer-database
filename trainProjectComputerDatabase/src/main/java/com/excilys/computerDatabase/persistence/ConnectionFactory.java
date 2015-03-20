@@ -1,13 +1,13 @@
 package com.excilys.computerDatabase.persistence;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import com.mysql.jdbc.Driver;
 
 /**
  * Cette classe donne des instances de Connection afin de se 
@@ -18,15 +18,31 @@ import java.util.Properties;
 public enum ConnectionFactory {
 	INSTANCE;
 	
-	private static final String PROPERTIES_FILE = "src/main/resources/db.properties";
+	private static final String PROPERTIES_FILE = "./db.properties";
+	private String url;
+	private String user;
+	private String password;
 
 	private ConnectionFactory() {
 		// Chargement du Driver et enregistrement auprès du DriverManager
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			System.err.println("Pas possible de charger le driver jdbc.");
+			Driver driver = new com.mysql.jdbc.Driver();
+			DriverManager.registerDriver(driver);
+			Properties configProp = new Properties();
+			ClassLoader cls = Thread.currentThread().getContextClassLoader();
+			InputStream ips = cls.getResourceAsStream(PROPERTIES_FILE);
+			configProp.load(ips);
+			url = configProp.getProperty("db.url");
+			user = configProp.getProperty("db.username");
+			password = configProp.getProperty("db.password");
+		} catch (SQLException e) {
+			System.err.println("Pas possible de se connecter à la bdd.");
 			e.printStackTrace();
+			throw new IllegalStateException("Problème de connexion.");
+		} catch (IOException e) {
+			System.err.println("Fichier de propriétés non trouvé.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas de fichier de propriété.");
 		}
 	}
 	
@@ -40,21 +56,7 @@ public enum ConnectionFactory {
 	 */
 	public final Connection getConnection() {
 		try {
-			Properties configProp = new Properties();
-			InputStream ips = new FileInputStream(PROPERTIES_FILE);
-			configProp.load(ips);
-			String url = configProp.getProperty("db.url");
-			String user = configProp.getProperty("db.username");
-			String password = configProp.getProperty("db.password");
 			return (Connection) DriverManager.getConnection(url, user, password);
-		} catch (FileNotFoundException e) {
-			System.err.println("Fichier de propriétés non trouvé.");
-			e.printStackTrace();
-			throw new IllegalStateException("Pas de fichier de propriété.");
-		} catch (IOException e) {
-			System.err.println("Fichier de propriétés non lisible.");
-			e.printStackTrace();
-			throw new IllegalStateException("Problème de connexion.");
 		} catch (SQLException e) {
 			System.err.println("Pas possible de se connecter à la bdd.");
 			e.printStackTrace();
