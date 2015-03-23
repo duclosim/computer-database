@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="p" %>
     
 <!DOCTYPE html>
 <html>
@@ -92,50 +93,9 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center">
-			<ul class="pagination">
-				<c:choose>
-					<c:when test="${curPage > 1}">
-						<li><a href="<c:url value="dashboard">
-								<c:param name="pageNum" value="${curPage - 1}"/>
-							</c:url>" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-						</a></li>
-					</c:when>
-					<c:otherwise>
-						<li><a href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-						</a></li>
-					</c:otherwise>
-				</c:choose>
-			
-				<c:forEach var="i" begin="1" end="${maxPage}" step="1">
-				    	<a href="<c:url value="dashboard">
-							<c:param name="pageNum" value="${i}"/>
-						</c:url>">${i}</a>
-				</c:forEach>
-				
-				<c:choose>
-					<c:when test="${curPage < maxPage}">
-						<li><a href="<c:url value="dashboard">
-								<c:param name="pageNum" value="${curPage + 1}"/>
-							</c:url>" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</c:when>
-					<c:otherwise>
-						<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<form action="" method="GET">
-					<input type="hidden" name="pageNum" value="${curPage}">
-					<button type="submit" name="itemByPage" class="btn btn-default" value="10">10</button>
-					<button type="submit" name="itemByPage" class="btn btn-default" value="50">50</button>
-					<button type="submit" name="itemByPage" class="btn btn-default" value="100">100</button>
-				</form>
-			</div>
-		</div>
+		<p:paging curPage="${curPage}" maxPage="${maxPage}" 
+			itemByPage="${itemByPage}" startPage="${startPage}" 
+			endPage="${endPage}"/>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

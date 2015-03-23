@@ -13,7 +13,10 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si la date est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidDate(String date) {
-		boolean result = isValidString(date);
+		if (!isValidString(date)) {
+			return false;
+		}
+		boolean result = true;
 		result &= Pattern.matches(DATE_REGEX, date);
 		int day = 0;
 		int month = 0;
@@ -28,11 +31,30 @@ public class UserInputsValidator {
 		if (st.hasMoreTokens()) {
 			day = Integer.parseInt(st.nextToken());
 		}
-		if ((day == 0) || (month == 0) || (year == 0)) {
+		if ((day <= 0) || (month > 12) || (month <= 0) || (year <= 0)) {
 			return false;
 		}
-		
-		// TODO
+		switch (month) {
+		case 4: case 6:
+        case 9: case 11 :
+			result &= (day <= 30);
+			break;
+		case 2 :
+			if (isBissextileYear(year)) {
+				result &= (day <= 29);
+			} else {
+				result &= (day <= 28);
+			}
+			break;
+        case 1: case 3: case 5:
+        case 7: case 8: case 10:
+        case 12:
+			result &= (day <= 31);
+			break;
+		default :
+			result = false;
+			break;
+		}
 		return result;
 	}
 	

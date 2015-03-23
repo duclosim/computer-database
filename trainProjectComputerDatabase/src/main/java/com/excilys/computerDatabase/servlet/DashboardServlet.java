@@ -25,7 +25,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
-			String numParam = req.getParameter("pageNum");
+			String numParam = req.getParameter("curPage");
 			String maxItemPageParam = req.getParameter("itemByPage");
 			StringBuilder sb = new StringBuilder("");
 			int newPageNum = 1;
@@ -48,7 +48,9 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 				newItemByPage = Integer.parseInt(maxItemPageParam);
 			}
 			// Construction de la Page.
-			page = new Page<ComputerBean>(dao);
+			if (page == null) {
+				page = new Page<ComputerBean>(dao);
+			}
 			page.setPageNum(newPageNum);
 			page.setMaxNbItemsByPage(newItemByPage);
 			// Passage des paramètres de la page dans la requête.
@@ -56,6 +58,9 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			req.setAttribute("maxPage", page.getLastPageNb());
 			req.setAttribute("entities", page.getEntities());
 			req.setAttribute("nbLines", page.getTotalNbEntities());
+			req.setAttribute("itemByPage", page.getMaxNbItemsByPage());
+			req.setAttribute("startPage", page.getStartingPage());
+			req.setAttribute("endPage", page.getFinishingPage());
 			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 		} catch (NumberFormatException e) {
 			System.err.println("Erreur de parse du numéro de page.");

@@ -35,26 +35,33 @@
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" id="computerName"
 									name="computerName"
-									placeholder="Computer name" value="${computerName}">
+									placeholder="Computer name" value="${computerBean.name}">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
 									name="introduced"
-									placeholder="Introduced date" value="${introduced}">
+									placeholder="Introduced date" value="${computerBean.introduced}">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
 									name="discontinued"
-									placeholder="Discontinued date" value="${discontinued}">
+									placeholder="Discontinued date" value="${computerBean.discontinued}">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label>
 								<select name="companyId"
 									class="form-control" id="companyId">
 									<c:forEach var="company" items="${companies}">
-										<option value="${company.id}">${company.name}</option>
+										<c:choose>
+											<c:when test="${company.id == computerBean.company.id}">
+												<option selected="selected" value="${company.id}">${company.name}</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${company.id}">${company.name}</option>
+											</c:otherwise>
+										</c:choose>
 									</c:forEach>
 								</select>
 							</div>

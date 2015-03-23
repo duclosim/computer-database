@@ -15,6 +15,7 @@ import com.excilys.computerDatabase.persistence.dao.CRUDDao;
 public class Page<T> {
 	private static final int DEFAULT_LIMIT = 10;
 	private static final int DEFAULT_OFFSET = 0;
+	private static final int WIDTH = 3;
 	
 	private CRUDDao<T> dao;
 	private List<T> entities;
@@ -81,6 +82,12 @@ public class Page<T> {
 	
 	public int getTotalNbEntities() {
 		return totalNbEntities;
+	}
+	public int getStartingPage() {
+		return Integer.max(1, getPageNum() - WIDTH);
+	}
+	public int getFinishingPage() {
+		return Integer.min(getLastPageNb(), getPageNum() + WIDTH);
 	}
 
 	// COMMANDES

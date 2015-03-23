@@ -8,15 +8,15 @@
 	<display-name>Computer Database</display-name>
 	<error-page>
 	  <error-code>403</error-code>
-	  <location>/views/403.html</location>
+	  <location>/403</location>
 	</error-page>
 	<error-page>
 	  <error-code>404</error-code>
-	  <location>/views/404.html</location>
+	  <location>/404</location>
 	</error-page>
 	<error-page>
 	  <error-code>500</error-code>
-	  <location>/views/500.html</location>
+	  <location>/500</location>
 	</error-page>
 	<welcome-file-list>
         <welcome-file>dashboard</welcome-file>
