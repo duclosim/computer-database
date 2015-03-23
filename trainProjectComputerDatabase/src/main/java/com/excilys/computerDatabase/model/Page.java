@@ -13,9 +13,10 @@ import com.excilys.computerDatabase.persistence.dao.CRUDDao;
  * @param <T> La classe des objets que doivent contenir les pages.
  */
 public class Page<T> {
-	private static final int DEFAULT_LIMIT = 10;
+	public static final int DEFAULT_LIMIT = 10;
 	private static final int DEFAULT_OFFSET = 0;
 	private static final int WIDTH = 3;
+	public static final int DEFAULT_PAGE_NUM = 1;
 	
 	private CRUDDao<T> dao;
 	private List<T> entities;
@@ -141,6 +142,9 @@ public class Page<T> {
 		lastPageNb = (dao.countLines() - offset) / getMaxNbItemsByPage() + 1;
 		if (entities.size() % getMaxNbItemsByPage() != 0) {
 			++lastPageNb;
+		}
+		if (pageNum > lastPageNb) {
+			setPageNum(lastPageNb);
 		}
 	}
 	

@@ -24,27 +24,30 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">id: ${beanId}</div>
+					<div class="label label-default pull-right">id: ${computerBean.id}</div>
 					<h1>Edit Computer</h1>
-					<c:if test="!${empty errorMessage}">
+					<c:if test="${!empty errorMessage}">
 						<c:out value="${errorMessage}" />
+					</c:if>
+					<c:if test="${!empty validMessage}">
+						<c:out value="${validMessage}" />
 					</c:if>
 					<form action="editComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
+								<label for="computerName">Computer name (required)</label> <input
 									type="text" class="form-control" id="computerName"
 									name="computerName"
 									placeholder="Computer name" value="${computerBean.name}">
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
+								<label for="introduced">Introduced date (yyyy-mm-dd)</label> <input
 									type="date" class="form-control" id="introduced"
 									name="introduced"
 									placeholder="Introduced date" value="${computerBean.introduced}">
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
+								<label for="discontinued">Discontinued date (yyyy-mm-dd)</label> <input
 									type="date" class="form-control" id="discontinued"
 									name="discontinued"
 									placeholder="Discontinued date" value="${computerBean.discontinued}">

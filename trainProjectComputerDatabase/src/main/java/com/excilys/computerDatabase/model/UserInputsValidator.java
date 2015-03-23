@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 public class UserInputsValidator {
-	private static final String NUMBER_REGEX = "[1-9][0-9]*";
+	private static final String NUMBER_REGEX = "[0-9]*";
 	private static final String DATE_REGEX = "[1-2][0-9]{3}-[0-1][1-9]-[0-3][0-9]";
 	
 	/**
@@ -22,14 +22,27 @@ public class UserInputsValidator {
 		int month = 0;
 		int year = 0;
 		StringTokenizer st = new StringTokenizer(date, "-");
+		String token = null;
 		if (st.hasMoreTokens()) {
-			year = Integer.parseInt(st.nextToken());
+			token = st.nextToken();
+			if (!isValidNumber(token)) {
+				return false;
+			}
+			year = Integer.parseInt(token);
 		}
 		if (st.hasMoreTokens()) {
-			month = Integer.parseInt(st.nextToken());
+			token = st.nextToken();
+			if (!isValidNumber(token)) {
+				return false;
+			}
+			month = Integer.parseInt(token);
 		}
 		if (st.hasMoreTokens()) {
-			day = Integer.parseInt(st.nextToken());
+			token = st.nextToken();
+			if (!isValidNumber(token)) {
+				return false;
+			}
+			day = Integer.parseInt(token);
 		}
 		if ((day <= 0) || (month > 12) || (month <= 0) || (year <= 0)) {
 			return false;
@@ -72,6 +85,6 @@ public class UserInputsValidator {
 	}
 	
 	public static boolean isValidString(String string) {
-		return ((string == null) || (string.trim().isEmpty()));
+		return ((string != null) && (!string.trim().isEmpty()));
 	}
 }

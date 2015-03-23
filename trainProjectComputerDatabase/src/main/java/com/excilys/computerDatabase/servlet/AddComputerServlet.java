@@ -73,7 +73,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 			}
 		}
 		if (name == null) {
-			req.setAttribute("errorMessage", errorMessage);
+			req.setAttribute("errorMessage", errorMessage.toString());
 			getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 		}
 		computerBean.setName(name);
@@ -92,6 +92,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		computerBean.setCompany(companyBean);
 		
 		computerDao.create(computerBean);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
+		req.setAttribute("validMessage", "Computer successfully updated : " + computerBean.toString());
+		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 	}
 }

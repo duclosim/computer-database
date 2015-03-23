@@ -93,7 +93,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<p:paging curPage="${curPage}" maxPage="${maxPage}" 
+		<p:paging pageNum="${pageNum}" maxPage="${maxPage}" 
 			itemByPage="${itemByPage}" startPage="${startPage}" 
 			endPage="${endPage}"/>
 	</footer>

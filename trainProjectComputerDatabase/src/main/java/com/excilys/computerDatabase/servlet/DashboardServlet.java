@@ -21,15 +21,20 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 	private CRUDDao<ComputerBean> dao= ComputerDAOImpl.INSTANCE;
 	private Page<ComputerBean> page;
 	
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
-			String numParam = req.getParameter("curPage");
+			String numParam = req.getParameter("pageNum");
 			String maxItemPageParam = req.getParameter("itemByPage");
 			StringBuilder sb = new StringBuilder("");
-			int newPageNum = 1;
-			int newItemByPage = 10;
+			int newPageNum = Page.DEFAULT_PAGE_NUM;
+			int newItemByPage = Page.DEFAULT_LIMIT;
+			// Construction de la Page.
+			if (page == null) {
+				page = new Page<ComputerBean>(dao);
+			}
 			if ((numParam != null) && (!UserInputsValidator.isValidNumber(numParam))) {
 				sb.append("Numéro de page invalide.\n");
 			}
@@ -47,14 +52,10 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			if (maxItemPageParam != null) {
 				newItemByPage = Integer.parseInt(maxItemPageParam);
 			}
-			// Construction de la Page.
-			if (page == null) {
-				page = new Page<ComputerBean>(dao);
-			}
 			page.setPageNum(newPageNum);
 			page.setMaxNbItemsByPage(newItemByPage);
 			// Passage des paramètres de la page dans la requête.
-			req.setAttribute("curPage", page.getPageNum());
+			req.setAttribute("pageNum", page.getPageNum());
 			req.setAttribute("maxPage", page.getLastPageNb());
 			req.setAttribute("entities", page.getEntities());
 			req.setAttribute("nbLines", page.getTotalNbEntities());
@@ -63,7 +64,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			req.setAttribute("endPage", page.getFinishingPage());
 			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 		} catch (NumberFormatException e) {
-			System.err.println("Erreur de parse du numéro de page.");
+			System.err.println("Erreur de parsing du numéro de page.");
 			e.printStackTrace();
 			throw new IllegalArgumentException("Pas de numéro de page valide");
 		}

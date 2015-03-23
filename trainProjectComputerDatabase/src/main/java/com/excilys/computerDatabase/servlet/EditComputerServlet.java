@@ -104,6 +104,8 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 		bean.setCompany(companyBean);
 		
 		computerDao.update(bean);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
+		req.setAttribute("validMessage", "Computer successfully updated.");
+		req.setAttribute("computerBean", bean);
+		getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(req, resp);
 	}
 }
