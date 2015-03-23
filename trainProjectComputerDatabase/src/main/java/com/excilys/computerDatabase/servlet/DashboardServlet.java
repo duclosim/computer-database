@@ -21,7 +21,6 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 	private CRUDDao<ComputerBean> dao= ComputerDAOImpl.INSTANCE;
 	private Page<ComputerBean> page;
 	
-	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {

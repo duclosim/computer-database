@@ -139,10 +139,7 @@ public class Page<T> {
 	private void refresh() {
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
 		entities = new ArrayList<>(dao.getAll(getMaxNbItemsByPage(), offset));
-		lastPageNb = (dao.countLines() - offset) / getMaxNbItemsByPage() + 1;
-		if (entities.size() % getMaxNbItemsByPage() != 0) {
-			++lastPageNb;
-		}
+		lastPageNb = dao.countLines() / getMaxNbItemsByPage() + 1;
 		if (pageNum > lastPageNb) {
 			setPageNum(lastPageNb);
 		}
