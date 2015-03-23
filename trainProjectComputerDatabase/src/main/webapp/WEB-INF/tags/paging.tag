@@ -24,10 +24,20 @@
 		</c:if>
 
 		<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-			<li><a href="<c:url value="dashboard">
+			<c:choose>
+				<c:when test="${pageNum == i}">
+					<li class="active"><a href="<c:url value="dashboard">
 						<c:param name="pageNum" value="${i}"/>
 						<c:param name="itemByPage" value="${itemByPage}"/>
 					</c:url>">${i}</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="<c:url value="dashboard">
+						<c:param name="pageNum" value="${i}"/>
+						<c:param name="itemByPage" value="${itemByPage}"/>
+					</c:url>">${i}</a></li>
+				</c:otherwise>
+			</c:choose>
 		</c:forEach>
 
 		<c:if test="${pageNum < maxPage}">
