@@ -29,7 +29,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle"><c:out value="${nbLines}" /></h1>
+			<h1 id="homeTitle"><c:out value="${page.totalNbEntities}" /></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -75,7 +75,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach var="item" items="${entities}">
+					<c:forEach var="item" items="${page.entities}">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
@@ -93,8 +93,8 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<p:paging pageNum="${pageNum}" maxPage="${maxPage}" 
-			itemByPage="${itemByPage}" startPage="${startPage}" 
+		<p:paging pageNum="${page.pageNum}" maxPage="${page.lastPageNb}" 
+			itemByPage="${page.maxNbItemsByPage}" startPage="${startPage}" 
 			endPage="${endPage}"/>
 	</footer>
 	<script src="js/jquery.min.js"></script>

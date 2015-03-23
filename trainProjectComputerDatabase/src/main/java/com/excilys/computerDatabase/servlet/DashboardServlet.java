@@ -55,11 +55,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			page.setPageNum(newPageNum);
 			page.setMaxNbItemsByPage(newItemByPage);
 			// Passage des paramètres de la page dans la requête.
-			req.setAttribute("pageNum", page.getPageNum());
-			req.setAttribute("maxPage", page.getLastPageNb());
-			req.setAttribute("entities", page.getEntities());
-			req.setAttribute("nbLines", page.getTotalNbEntities());
-			req.setAttribute("itemByPage", page.getMaxNbItemsByPage());
+			req.setAttribute("page", page);
 			req.setAttribute("startPage", page.getStartingPage());
 			req.setAttribute("endPage", page.getFinishingPage());
 			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
