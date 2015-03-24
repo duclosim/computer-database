@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.service.CLIService;
+import com.excilys.computerDatabase.service.cli.CLIService;
 
 import org.junit.After;
 import org.junit.Assert;

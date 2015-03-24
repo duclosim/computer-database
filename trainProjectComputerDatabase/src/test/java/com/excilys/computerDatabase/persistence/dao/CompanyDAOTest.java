@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
@@ -21,9 +21,9 @@ public class CompanyDAOTest {
 	@Test
 	public void getByIdShouldReturnABean() {
 		// Given
-		CompanyBean bean;
+		Company bean;
 		Long id = new Long(10);
-		CompanyBean expectedBean;
+		Company expectedBean;
 		String query = "SELECT * FROM company WHERE id=?;";
 		ResultSet results;
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
@@ -35,7 +35,7 @@ public class CompanyDAOTest {
 			if (results.next()) {
 				expectedBean = CompanyMapper.INSTANCE.mapCompany(results);
 				// When
-				bean = CompanyDAOImpl.INSTANCE.getById(id);
+				bean = CompanyDAOImpl.INSTANCE.getById(id, con);
 				// Then
 				Assert.assertNotNull("Erreur sur le bean.", bean);
 				Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
@@ -52,7 +52,7 @@ public class CompanyDAOTest {
 	@Test
 	public void getAllShouldReturnMultipleBeans() {
 		// Given
-		List<CompanyBean> expectedBeans = new ArrayList<>();
+		List<Company> expectedBeans = new ArrayList<>();
 		int limit = 15;
 		int offset = 5;
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
@@ -68,9 +68,9 @@ public class CompanyDAOTest {
 			while (results.next()) {
 				expectedBeans.add(CompanyMapper.INSTANCE.mapCompany(results));
 			}
-			List<CompanyBean> bean;
+			List<Company> bean;
 			// When
-			bean = CompanyDAOImpl.INSTANCE.getAll(limit, offset);
+			bean = CompanyDAOImpl.INSTANCE.getAll(limit, offset, con);
 			// Then
 			Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
 		} catch (SQLException e) {
@@ -94,7 +94,7 @@ public class CompanyDAOTest {
 			if (results.next()) {
 				int expectedSize = results.getInt(1);
 				// When
-				nbLines = CompanyDAOImpl.INSTANCE.countLines();
+				nbLines = CompanyDAOImpl.INSTANCE.countLines(con);
 				// Then
 				Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 			}

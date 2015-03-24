@@ -3,7 +3,7 @@ package com.excilys.computerDatabase.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerDatabase.persistence.dao.CRUDDao;
+import com.excilys.computerDatabase.service.PageableService;
 
 /**
  * Cette classe représente une page contenant des objets pour les 
@@ -18,7 +18,7 @@ public class Page<T> {
 	private static final int WIDTH = 3;
 	public static final int DEFAULT_PAGE_NUM = 1;
 	
-	private CRUDDao<T> dao;
+	private PageableService<T> service;
 	private List<T> entities;
 	private int maxNbItemsByPage;
 	private int pageNum;
@@ -27,21 +27,21 @@ public class Page<T> {
 
 	/**
 	 * 
-	 * @param dao
+	 * @param service
 	 */
-	public Page(CRUDDao<T> dao) {
-		this(dao, DEFAULT_LIMIT, DEFAULT_OFFSET);
+	public Page(PageableService<T> service) {
+		this(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 	}
 	
 	/**
 	 * 
-	 * @param dao
+	 * @param service
 	 * @param offset
 	 * @param limit
 	 */
-	public Page(CRUDDao<T> dao, int limit, int offset) {
-		if (dao == null) {
-			throw new IllegalArgumentException("dao est à null.");
+	public Page(PageableService<T> service, int limit, int offset) {
+		if (service == null) {
+			throw new IllegalArgumentException("service est à null.");
 		}
 		if (limit <= 0) {
 			throw new IllegalArgumentException("limit est négatif ou nul");
@@ -49,16 +49,16 @@ public class Page<T> {
 		if (offset < 0) {
 			throw new IllegalArgumentException("offset est négatif");
 		}
-		this.dao = dao;
+		this.service = service;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
-		totalNbEntities = dao.countLines();
+		totalNbEntities = service.countLines();
 		refresh();
 	}
 
 	// REQUETES
-	public CRUDDao<T> getDao() {
-		return dao;
+	public PageableService<T> getDao() {
+		return service;
 	}
 	public List<T> getEntities() {
 		return entities;
@@ -138,8 +138,8 @@ public class Page<T> {
 	 */
 	private void refresh() {
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
-		entities = new ArrayList<>(dao.getAll(getMaxNbItemsByPage(), offset));
-		lastPageNb = dao.countLines() / getMaxNbItemsByPage() + 1;
+		entities = new ArrayList<>(service.getAll(getMaxNbItemsByPage(), offset));
+		lastPageNb = service.countLines() / getMaxNbItemsByPage() + 1;
 		if (pageNum > lastPageNb) {
 			setPageNum(lastPageNb);
 		}

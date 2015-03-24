@@ -7,42 +7,54 @@
   <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   
+  <properties>
+  	<slf4j-version>1.7.10</slf4j-version>
+  	<logback-version>1.1.2</logback-version>
+  	<mysql-driver-version>5.1.34</mysql-driver-version>
+  	<junit-version>4.12</junit-version>
+  	<mockito-version>1.9.5</mockito-version>
+  	<javax-servlet-version>3.0.1</javax-servlet-version>
+  	<jstl-version>1.2</jstl-version>
+  </properties>
+  
   <dependencies>
   	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
-		<version>1.7.10</version>
+		<version>${slf4j-version}</version>
 	</dependency>
   	<dependency>
 		<groupId>ch.qos.logback</groupId>
 		<artifactId>logback-classic</artifactId>
-		<version>1.1.2</version>
+		<version>${logback-version}</version>
 	</dependency>
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
-		<version>5.1.34</version>
+		<version>${mysql-driver-version}</version>
 	</dependency>
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
-		<version>4.12</version>
+		<version>${junit-version}</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.mockito</groupId>
 		<artifactId>mockito-all</artifactId>
-		<version>1.9.5</version>
+		<version>${mockito-version}</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>javax.servlet</groupId>
 		<artifactId>javax.servlet-api</artifactId>
-		<version>3.0.1</version>
+		<version>${javax-servlet-version}</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>jstl</groupId>
 		<artifactId>jstl</artifactId>
-		<version>1.2</version>
+		<version>${jstl-version}</version>
 	</dependency>
 	
   </dependencies>

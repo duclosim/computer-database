@@ -10,9 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerDatabase.model.beans.CompanyBean;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 /**
@@ -28,116 +26,84 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
 
-	public CompanyBean getById(Long id) {
+	@Override
+	public Company getById(Long id, Connection con) throws SQLException {
 		LOG.trace("getById(" + id + ")");
-		CompanyBean result = null;
+		Company result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
-		ResultSet results;
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
-		
-		try {
-			PreparedStatement ps = con.prepareStatement(query);
-			ps.setLong(1, id);
-			results = ps.executeQuery();
-			if (results.next()) {
-				result = CompanyMapper.INSTANCE.mapCompany(results);
-			}
-			return result;
-		} catch (SQLException e) {
-			System.err.println("Erreur : problème de lecture bdd");
-			e.printStackTrace();
-			LOG.error(e.getMessage());
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.closeConnection(con);
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setLong(1, id);
+		ResultSet results = ps.executeQuery();
+		if (results.next()) {
+			result = CompanyMapper.INSTANCE.mapCompany(results);
 		}
+		ps.close();
+		return result;
 	}
 	
-	public List<CompanyBean> getAll() {
-		LOG.trace("getAll()");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
-		List<CompanyBean> result = new ArrayList<CompanyBean>();
-		String query = "SELECT * FROM company;";
-		ResultSet results;
-		
-		try {
-			PreparedStatement ps = con.prepareStatement(query);
-			results = ps.executeQuery();
-			while (results.next()) {
-				result.add(CompanyMapper.INSTANCE.mapCompany(results));
-			}
-			return result;
-		} catch (SQLException e) {
-			System.err.println("Erreur : problème de lecture bdd");
-			e.printStackTrace();
-			LOG.error(e.getMessage());
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.closeConnection(con);
-		}
-	}
-	
-	public List<CompanyBean> getAll(int limit, int offset) {
+	@Override
+	public List<Company> getAll(int limit, int offset, Connection con) throws SQLException {
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
-		List<CompanyBean> result = new ArrayList<CompanyBean>();
+		List<Company> result = new ArrayList<Company>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
-		ResultSet results;
-		
-		try {
-			PreparedStatement ps = con.prepareStatement(query);
-			int paramIndex = 0;
-			ps.setLong(++paramIndex, limit);
-			ps.setLong(++paramIndex, offset);
-			results = ps.executeQuery();
-			while (results.next()) {
-				result.add(CompanyMapper.INSTANCE.mapCompany(results));
-			}
-			return result;
-		} catch (SQLException e) {
-			System.err.println("Erreur : problème de lecture bdd");
-			e.printStackTrace();
-			LOG.error(e.getMessage());
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.closeConnection(con);
+		PreparedStatement ps = con.prepareStatement(query);
+		int paramIndex = 0;
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
+		ResultSet results = ps.executeQuery();
+		while (results.next()) {
+			result.add(CompanyMapper.INSTANCE.mapCompany(results));
 		}
+		ps.close();
+		return result;
+	}
+	
+	@Override
+	public List<Company> getAll(Connection con) throws SQLException {
+		LOG.trace("getAll()");
+		List<Company> result = new ArrayList<Company>();
+		String query = "SELECT * FROM company;";
+		PreparedStatement ps = con.prepareStatement(query);
+		ResultSet results = ps.executeQuery();
+		while (results.next()) {
+			result.add(CompanyMapper.INSTANCE.mapCompany(results));
+		}
+		ps.close();
+		return result;
 	}
 
 	@Override
-	public int countLines() {
+	public int countLines(Connection con) throws SQLException {
 		LOG.trace("countLine()");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		String query = "SELECT COUNT(*) FROM company;";
-		try {
-			PreparedStatement ps = con.prepareStatement(query);
-			ResultSet results = ps.executeQuery();
-			if (results.next()) {
-				return results.getInt(1);
-			}
-			return 0;
-		} catch (SQLException e) {
-			System.err.println("Erreur : problème de lecture bdd");
-			e.printStackTrace();
-			LOG.error(e.getMessage());
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.closeConnection(con);
+		PreparedStatement ps = con.prepareStatement(query);
+		ResultSet results = ps.executeQuery();
+		if (results.next()) {
+			return results.getInt(1);
 		}
+		ps.close();
+		return 0;
 	}
 
-	public void create(CompanyBean entity) {
+	@Override
+	public void create(Company entity, Connection con) {
 		throw new UnsupportedOperationException();
 		
 	}
 
-	public void update(CompanyBean entity) {
+	@Override
+	public void update(Company entity, Connection con) {
 		throw new UnsupportedOperationException();
 		
 	}
 
-	public void delete(CompanyBean entity) {
-		throw new UnsupportedOperationException();
-		
+	@Override
+	public void delete(Company entity, Connection con) throws SQLException {
+		LOG.trace("delete(" + entity + ")");
+		String deleteCompanyQuery = "DELETE FROM company WHERE id=?";
+		PreparedStatement delCompaniesStatement = con.prepareStatement(deleteCompanyQuery);
+		delCompaniesStatement.setLong(1, entity.getId());
+		delCompaniesStatement.executeUpdate();
+		delCompaniesStatement.close();
 	}
 }

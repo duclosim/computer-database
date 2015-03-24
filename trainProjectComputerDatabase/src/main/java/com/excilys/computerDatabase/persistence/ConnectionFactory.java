@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import com.mysql.jdbc.Driver;
@@ -71,6 +73,31 @@ public enum ConnectionFactory {
 	public static final void closeConnection(Connection connection) {
 		try {
 			connection.close();
+		} catch (SQLException e) {
+			System.err.println("Erreur : impossible de fermer la "
+					+ "connection à la base de données.");
+			e.printStackTrace();
+		}
+	}
+	
+	public static final void closeConnectionAndStatement(Connection connection, 
+			Statement statement) {
+		try {
+			connection.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.err.println("Erreur : impossible de fermer la "
+					+ "connection à la base de données.");
+			e.printStackTrace();
+		}
+	}
+	
+	public static final void closeConnectionAndStatementAndResults(Connection connection, 
+			Statement statement, ResultSet results) {
+		try {
+			connection.close();
+			statement.close();
+			results.close();
 		} catch (SQLException e) {
 			System.err.println("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");

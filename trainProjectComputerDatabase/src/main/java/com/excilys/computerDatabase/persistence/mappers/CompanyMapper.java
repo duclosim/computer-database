@@ -3,19 +3,19 @@ package com.excilys.computerDatabase.persistence.mappers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 
 public enum CompanyMapper {
 	INSTANCE;
 
-	public CompanyBean mapCompany(ResultSet results) {
+	public Company mapCompany(ResultSet results) {
 		if (results == null) {
 			throw new IllegalArgumentException("results est à null.");
 		}
 		try {
-			CompanyBean companyBean = new CompanyBean(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
+			Company companyBean = new Company(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
 					results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 			return companyBean;
 		} catch (SQLException e) {

@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import com.excilys.computerDatabase.model.beans.CompanyBean;
-import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
@@ -39,17 +39,18 @@ public class ComputerMapperTest {
 	public void mapComputerShouldSetProperties() {
 		// Given
 		CompanyDAO companyDAO = CompanyDAOImpl.INSTANCE;
-		ComputerBean result = null;
+		Computer result = null;
 		LocalDateTime introducedDate = null;
 		LocalDateTime discontinuedDate = null;
-		CompanyBean company = null;
+		Company company = null;
 		
 		Long id = new Long(400);
 		String query = "SELECT * FROM computer WHERE id=" + id + ";";
-		ResultSet results;
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		ResultSet results = null;
+		PreparedStatement ps = null;
+		Connection connection = ConnectionFactory.INSTANCE.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(query);
+			ps = connection.prepareStatement(query);
 			results = ps.executeQuery();
 			if (results.next()) {
 				if (results.getTimestamp(ComputerDAOImpl.INTRODUCED_COLUMN_LABEL) != null) {
@@ -59,9 +60,9 @@ public class ComputerMapperTest {
 					discontinuedDate = results.getTimestamp(ComputerDAOImpl.DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
 				}
 				if (results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL) != 0) {
-					company = companyDAO.getById(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL));
+					company = companyDAO.getById(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL), connection);
 				}
-				ComputerBean expectedBean = new ComputerBean(results.getLong(ComputerDAOImpl.ID_COLUMN_LABEL), 
+				Computer expectedBean = new Computer(results.getLong(ComputerDAOImpl.ID_COLUMN_LABEL), 
 						results.getString(ComputerDAOImpl.NAME_COLUMN_LABEL), 
 						introducedDate,
 						discontinuedDate,
@@ -75,6 +76,8 @@ public class ComputerMapperTest {
 			System.err.println("Erreur de lecture d'une colonne");
 			e.printStackTrace();
 			throw new PersistenceException("Problème de lecture colonne");
+		} finally {
+			ConnectionFactory.closeConnectionAndStatementAndResults(connection, ps, results);
 		}
 	}
 

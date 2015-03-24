@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.excilys.computerDatabase.model.beans.CompanyBean;
+import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
@@ -34,7 +34,7 @@ public class CompanyMapperTest {
 	@Test
 	public void mapCompanyShouldSetProperties() {
 		// Given
-		CompanyBean result = null;
+		Company result = null;
 		Long id = new Long(1);
 		String query = "SELECT * FROM company WHERE id=" + id + ";";
 		ResultSet results;
@@ -43,7 +43,7 @@ public class CompanyMapperTest {
 			PreparedStatement ps = con.prepareStatement(query);
 			results = ps.executeQuery();
 			if (results.next()) {
-				CompanyBean expectedBean = new CompanyBean(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
+				Company expectedBean = new Company(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
 						results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 				// When
 				result = CompanyMapper.INSTANCE.mapCompany(results);

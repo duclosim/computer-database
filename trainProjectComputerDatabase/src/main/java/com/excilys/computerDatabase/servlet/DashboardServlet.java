@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.model.beans.ComputerBean;
-import com.excilys.computerDatabase.persistence.dao.CRUDDao;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = -5526661127455358108L;
-	private CRUDDao<ComputerBean> dao= ComputerDAOImpl.INSTANCE;
-	private Page<ComputerBean> page;
+	private ComputerService service = ComputerServiceImpl.INSTANCE;
+	private Page<Computer> page;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,7 +32,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			int newItemByPage = Page.DEFAULT_LIMIT;
 			// Construction de la Page.
 			if (page == null) {
-				page = new Page<ComputerBean>(dao);
+				page = new Page<Computer>(service);
 			}
 			if ((numParam != null) && (!UserInputsValidator.isValidNumber(numParam))) {
 				sb.append("Numéro de page invalide.\n");

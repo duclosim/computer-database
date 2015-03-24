@@ -12,26 +12,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.model.beans.CompanyBean;
-import com.excilys.computerDatabase.model.beans.ComputerBean;
-import com.excilys.computerDatabase.persistence.dao.CRUDDao;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.CompanyServiceImpl;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
 
 @WebServlet("/editComputer")
 public class EditComputerServlet extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 423648038487626720L;
-	private ComputerBean bean;
+	
+	CompanyService companyService = CompanyServiceImpl.INSTANCE;
+	ComputerService computerService = ComputerServiceImpl.INSTANCE;
+	private Computer bean;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.setAttribute("companies", CompanyDAOImpl.INSTANCE.getAll());
+		req.setAttribute("companies", companyService.getAll());
 		String beanIdStr = req.getParameter("beanId");
 		if ((beanIdStr != null) && (!beanIdStr.trim().isEmpty())) {
 			try {
 				Long id = Long.parseLong(beanIdStr);
-				bean = ComputerDAOImpl.INSTANCE.getById(id);
+				bean = computerService.getById(id);
 				req.setAttribute("computerBean", bean);
 			} catch (NumberFormatException e) {
 				System.err.println("Nombre impossible à parser en Long.");
@@ -46,9 +50,7 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		StringBuilder errorMessage = new StringBuilder("");
-		CRUDDao<CompanyBean> companyDao = CompanyDAOImpl.INSTANCE;
-		CRUDDao<ComputerBean> computerDao = ComputerDAOImpl.INSTANCE;
-		CompanyBean companyBean = null;
+		Company companyBean = null;
 		String name = req.getParameter("computerName");
 		String introducedDate = req.getParameter("introduced");
 		String discontinuedDate = req.getParameter("discontinued");
@@ -73,7 +75,7 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 			try {
 				if (companyIdStr != null) {
 					Long companyIdLg = Long.parseLong(companyIdStr);
-					companyBean = companyDao.getById(companyIdLg);
+					companyBean = companyService.getById(companyIdLg);
 				}
 			} catch (NumberFormatException e) {
 				System.err.println("Nombre impossible à parser en Long.");
@@ -103,7 +105,7 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 		}
 		bean.setCompany(companyBean);
 		
-		computerDao.update(bean);
+		computerService.update(bean);
 		req.setAttribute("validMessage", "Computer successfully updated.");
 		req.setAttribute("computerBean", bean);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(req, resp);

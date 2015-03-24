@@ -12,20 +12,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.model.beans.CompanyBean;
-import com.excilys.computerDatabase.model.beans.ComputerBean;
-import com.excilys.computerDatabase.persistence.dao.CRUDDao;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.CompanyServiceImpl;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
 
 @WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 6902766188799864148L;
 	
+	CompanyService companyService = CompanyServiceImpl.INSTANCE;
+	ComputerService computerService = ComputerServiceImpl.INSTANCE;
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.setAttribute("companies", CompanyDAOImpl.INSTANCE.getAll());
+		req.setAttribute("companies", companyService.getAll());
 		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 	}
 	
@@ -33,10 +37,8 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		StringBuilder errorMessage = new StringBuilder("");
-		CRUDDao<CompanyBean> companyDao = CompanyDAOImpl.INSTANCE;
-		CRUDDao<ComputerBean> computerDao = ComputerDAOImpl.INSTANCE;
-		ComputerBean computerBean = new ComputerBean();
-		CompanyBean companyBean = null;
+		Computer computerBean = new Computer();
+		Company companyBean = null;
 		String name = req.getParameter("computerName");
 		String introducedDate = req.getParameter("introduced");
 		String discontinuedDate = req.getParameter("discontinued");
@@ -61,7 +63,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 			try {
 				if (companyIdStr != null) {
 					Long companyIdLg = Long.parseLong(companyIdStr);
-					companyBean = companyDao.getById(companyIdLg);
+					companyBean = companyService.getById(companyIdLg);
 				}
 			} catch (NumberFormatException e) {
 				System.err.println("Nombre impossible à parser en Long.");
@@ -91,7 +93,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		}
 		computerBean.setCompany(companyBean);
 		
-		computerDao.create(computerBean);
+		computerService.create(computerBean);
 		req.setAttribute("validMessage", "Computer successfully updated : " + computerBean.toString());
 		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 	}

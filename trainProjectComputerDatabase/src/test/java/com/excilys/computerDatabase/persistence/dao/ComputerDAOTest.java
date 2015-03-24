@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerDatabase.model.beans.ComputerBean;
+import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CRUDDao;
@@ -24,9 +24,9 @@ public class ComputerDAOTest {
 	@Test
 	public void getByIdShouldReturnABean() {
 		// Given
-		ComputerBean bean;
+		Computer bean;
 		Long id = new Long(10);
-		ComputerBean expectedBean;
+		Computer expectedBean;
 		String query = "SELECT * FROM computer WHERE id=?;";
 		ResultSet results;
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
@@ -38,7 +38,7 @@ public class ComputerDAOTest {
 			if (results.next()) {
 				expectedBean = ComputerMapper.INSTANCE.mapComputer(results);
 				// When
-				bean = ComputerDAOImpl.INSTANCE.getById(id);
+				bean = ComputerDAOImpl.INSTANCE.getById(id, con);
 				// Then
 				Assert.assertNotNull("Erreur sur le bean.", bean);
 				Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
@@ -55,7 +55,7 @@ public class ComputerDAOTest {
 	@Test
 	public void getAllShouldReturnMultipleBeans() {
 		// Given
-		List<ComputerBean> expectedBeans = new ArrayList<>();
+		List<Computer> expectedBeans = new ArrayList<>();
 		int limit = 15;
 		int offset = 5;
 		String query = "SELECT * FROM computer LIMIT ? OFFSET ?;";
@@ -71,9 +71,9 @@ public class ComputerDAOTest {
 			while (results.next()) {
 				expectedBeans.add(ComputerMapper.INSTANCE.mapComputer(results));
 			}
-			List<ComputerBean> bean;
+			List<Computer> bean;
 			// When
-			bean = ComputerDAOImpl.INSTANCE.getAll(limit, offset);
+			bean = ComputerDAOImpl.INSTANCE.getAll(limit, offset, con);
 			// Then
 			Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
 		} catch (SQLException e) {
@@ -98,7 +98,7 @@ public class ComputerDAOTest {
 			if (results.next()) {
 				int expectedSize = results.getInt(1);
 				// When
-				nbLines = ComputerDAOImpl.INSTANCE.countLines();
+				nbLines = ComputerDAOImpl.INSTANCE.countLines(con);
 				// Then
 				Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 			}
@@ -115,57 +115,85 @@ public class ComputerDAOTest {
 	@Test
 	public void createShouldAddABeanToTheDatabase() {
 		// Given
-		CRUDDao<ComputerBean> dao = ComputerDAOImpl.INSTANCE;
-		ComputerBean bean = new ComputerBean();
+		CRUDDao<Computer> dao = ComputerDAOImpl.INSTANCE;
+		Connection connection = ConnectionFactory.INSTANCE.getConnection();
+		Computer bean = new Computer();
 		Long companyId = new Long(10);
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
 		LocalDateTime time = null;
 		bean.setIntroduced(time);
 		bean.setDiscontinued(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId));
-		// When
-		dao.create(bean);
-		ComputerBean expectedBean = dao.getById(bean.getId());
-		// Then
-		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
+		try {
+			bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, connection));
+			// When
+			dao.create(bean, connection);
+			Computer expectedBean = dao.getById(bean.getId(), connection);
+			// Then
+			Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
+		} catch (SQLException e) {
+			System.err.println("Erreur : problème de lecture bdd");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(connection);
+		}
 	}
 	
 	@Test
 	public void updateShouldAlterABeanFromTheDatabase() {
 		// Given
-		CRUDDao<ComputerBean> dao = ComputerDAOImpl.INSTANCE;
+		CRUDDao<Computer> dao = ComputerDAOImpl.INSTANCE;
+		Connection connection = ConnectionFactory.INSTANCE.getConnection();
 		Long id = new Long(10);
-		ComputerBean bean = dao.getById(id);
-		ComputerBean expectedBean = dao.getById(id);
-		String name = "new " + bean.getName();
-		bean.setName(name);
-		expectedBean.setName(name);
-		// When
-		dao.update(bean);
-		bean = dao.getById(id);
-		// Then
-		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
+		Computer bean;
+		try {
+			bean = dao.getById(id, connection);
+			Computer expectedBean = dao.getById(id, connection);
+			String name = "new " + bean.getName();
+			bean.setName(name);
+			expectedBean.setName(name);
+			// When
+			dao.update(bean, connection);
+			bean = dao.getById(id, connection);
+			// Then
+			Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
+		} catch (SQLException e) {
+			System.err.println("Erreur : problème de lecture bdd");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(connection);
+		}
 	}
 	
 	@Test
 	public void deleteShouldRemoveABeanFromTheDatabase() {
 		// Given
-		CRUDDao<ComputerBean> dao = ComputerDAOImpl.INSTANCE;
-		ComputerBean bean = new ComputerBean();
+		CRUDDao<Computer> dao = ComputerDAOImpl.INSTANCE;
+		Connection connection = ConnectionFactory.INSTANCE.getConnection();
+		Computer bean = new Computer();
 		Long companyId = new Long(10);
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
 		LocalDateTime time = null;
 		bean.setIntroduced(time);
 		bean.setDiscontinued(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId));
-		dao.create(bean);
-		// When
-		dao.delete(bean);
-		bean = dao.getById(bean.getId());
-		// Then
-		Assert.assertNull("Erreur sur le bean", bean);
+		try {
+			bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, connection));
+			dao.create(bean, connection);
+			// When
+			dao.delete(bean, connection);
+			bean = dao.getById(bean.getId(), connection);
+			// Then
+			Assert.assertNull("Erreur sur le bean", bean);
+		} catch (SQLException e) {
+			System.err.println("Erreur : problème de lecture bdd");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(connection);
+		}
 		
 	}
 
