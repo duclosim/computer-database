@@ -86,23 +86,26 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public void create(Company entity, Connection con) {
+	public void create(Company company, Connection con) {
 		throw new UnsupportedOperationException();
 		
 	}
 
 	@Override
-	public void update(Company entity, Connection con) {
+	public void update(Company company, Connection con) {
 		throw new UnsupportedOperationException();
 		
 	}
 
 	@Override
-	public void delete(Company entity, Connection con) throws SQLException {
-		LOG.trace("delete(" + entity + ")");
+	public void delete(Company company, Connection con) throws SQLException {
+		if (company == null) {
+			throw new IllegalArgumentException("company est à null.");
+		}
+		LOG.trace("delete(" + company + ")");
 		String deleteCompanyQuery = "DELETE FROM company WHERE id=?";
 		PreparedStatement delCompaniesStatement = con.prepareStatement(deleteCompanyQuery);
-		delCompaniesStatement.setLong(1, entity.getId());
+		delCompaniesStatement.setLong(1, company.getId());
 		delCompaniesStatement.executeUpdate();
 		delCompaniesStatement.close();
 	}

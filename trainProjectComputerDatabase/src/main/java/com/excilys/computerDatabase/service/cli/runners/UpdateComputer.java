@@ -1,13 +1,11 @@
 package com.excilys.computerDatabase.service.cli.runners;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 /**
  * Cette classe peut lancer la commande de mise à jour des 
@@ -23,48 +21,48 @@ public class UpdateComputer implements CommandRunner {
 		String args = sc.next();
 		try {
 			Long id = Long.parseLong(args);
-			Computer computerBean = computerService.getById(id);
+			ComputerDTO computer = computerService.getById(id);
 			System.out.println("L'ordinateur à modifier est le suivant : ");
-			System.out.println(computerBean);
+			System.out.println(computer);
 			System.out.println("Nouveau nom : ");
 			args = sc.nextLine();
 			if (!("").equals(args)) {
-				computerBean.setName(args);
+				computer.setName(args);
 			}
 			System.out.println("Nouvelle date d'introduction (format 2007-12-03T10:15:30) : ");
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
-					computerBean.setIntroduced(LocalDateTime.parse(args));
+					computer.setIntroducedDate(args);
 				} catch (DateTimeParseException e) {
 					System.err.println("Date impossible à reconnaître.");
 				}
 			} else {
-				computerBean.setIntroduced(null);
+				computer.setIntroducedDate(null);
 			}
 			System.out.println("Nouvelle date de sortie (format 2007-12-03T10:15:30) : ");
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
-					computerBean.setDiscontinued(LocalDateTime.parse(args));
+					computer.setDiscontinuedDate(args);
 				} catch (DateTimeParseException e) {
 					System.err.println("Date impossible à reconnaître.");
 				}
 			} else {
-				computerBean.setDiscontinued(null);
+				computer.setDiscontinuedDate(null);
 			}
 			System.out.println("Nouvel id d'entreprise : ");
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
-					computerBean.setCompany(CompanyServiceImpl.INSTANCE.getById(Long.parseLong(args)));
+					computer.setCompanyId(args);
 				} catch (NumberFormatException e) {
 					System.err.println("Nombre impossible à reconnaître.");
 				}
 			} else {
-				computerBean.setCompany(null);
+				computer.setCompanyId(null);
 			}
-			computerService.update(computerBean);
+			computerService.update(computer);
 		} catch (NumberFormatException e) {
 			System.err.println("Nombre impossible à reconnaître");
 		} finally {

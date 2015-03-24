@@ -2,13 +2,17 @@ package com.excilys.computerDatabase.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import com.excilys.computerDatabase.service.dto.ComputerDTOMapper;
 
 /**
  * 
@@ -19,21 +23,20 @@ public enum ComputerServiceImpl implements ComputerService {
 	INSTANCE;
 	
 	private ComputerDAO dao;
+	private ComputerDTOMapper dtoMapper;
 	
 	private ComputerServiceImpl() {
 		dao = ComputerDAOImpl.INSTANCE;
+		dtoMapper = ComputerDTOMapper.INSTANCE;
 	}
 	
 	@Override
-	public Computer getById(Long id) {
-		if (id == null) {
-			throw new IllegalArgumentException("id est à null.");
-		}
+	public ComputerDTO getById(Long id) {
 		Connection connection = null;
-		Computer result = null;
+		ComputerDTO result = null;
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.getById(id, connection);
+			result = dtoMapper.BeanToDTO(dao.getById(id, connection));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
@@ -44,18 +47,15 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public List<Computer> getAll(int limit, int offset) {
-		if (limit <= 0) {
-			throw new IllegalArgumentException("limit est négatif ou nul.");
-		}
-		if (offset < 0) {
-			throw new IllegalArgumentException("offset est négatif.");
-		}
+	public List<ComputerDTO> getAll(int limit, int offset) {
 		Connection connection = null;
-		List<Computer> result = null;
+		List<ComputerDTO> result = new ArrayList<>();
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.getAll(limit, offset, connection);
+			List<Computer> list = dao.getAll(limit, offset, connection);
+			for (Computer computer : list) {
+				result.add(dtoMapper.BeanToDTO(computer));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
@@ -82,14 +82,12 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void create(Computer computer) {
-		if (computer == null) {
-			throw new IllegalArgumentException("computer est à null.");
-		}
+	public void create(ComputerDTO computer) {
+		checkComputerDTO(computer);
 		Connection connection = null;
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			dao.create(computer, connection);
+			dao.create(dtoMapper.DTOToBean(computer), connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
@@ -100,14 +98,12 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void update(Computer computer) {
-		if (computer == null) {
-			throw new IllegalArgumentException("computer est à null.");
-		}
+	public void update(ComputerDTO computer) {
+		checkComputerDTO(computer);
 		Connection connection = null;
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			dao.update(computer, connection);
+			dao.update(dtoMapper.DTOToBean(computer), connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
@@ -117,19 +113,43 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void delete(Computer computer) {
-		if (computer == null) {
-			throw new IllegalArgumentException("computer est à null.");
-		}
+	public void delete(ComputerDTO computer) {
+		checkComputerDTO(computer);
 		Connection connection = null;
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			dao.delete(computer, connection);
+			dao.delete(dtoMapper.DTOToBean(computer), connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
 		} finally {
 			ConnectionFactory.closeConnection(connection);
+		}
+	}
+	
+	private void checkComputerDTO(ComputerDTO computer) {
+		if (computer == null) {
+			throw new IllegalArgumentException("computer est à null.");
+		}
+		String name = computer.getName();
+		String introducedDate = computer.getIntroducedDate();
+		String discontinuedDate = computer.getDiscontinuedDate();
+		String companyIdStr = computer.getCompanyId();
+		// Test de l'objet.
+		if ((name == null) || (name.trim().isEmpty())) {
+			throw new IllegalArgumentException("Nom non valide.\n");
+		}
+		if ((introducedDate != null) 
+				&& (!UserInputsValidator.isValidDate(introducedDate))) {
+			throw new IllegalArgumentException("Date d'introduction non valide.\n");
+		}
+		if ((discontinuedDate != null) 
+				&& (!UserInputsValidator.isValidDate(discontinuedDate))) {
+			throw new IllegalArgumentException("Date de sortie non valide.\n");
+		}
+		if ((companyIdStr != null) 
+				&& (!UserInputsValidator.isValidNumber(companyIdStr))) {
+			throw new IllegalArgumentException("Numéro de companie non valide.\n");
 		}
 	}
 }

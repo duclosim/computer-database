@@ -25,9 +25,6 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<c:if test="${!empty errorMessage}">
-						<c:out value="${errorMessage}" />
-					</c:if>
 					<c:if test="${!empty validMessage}">
 						<c:out value="${validMessage}" />
 					</c:if>

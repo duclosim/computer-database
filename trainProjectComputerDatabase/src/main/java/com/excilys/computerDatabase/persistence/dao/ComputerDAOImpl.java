@@ -47,6 +47,12 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public List<Computer> getAll(int limit, int offset, Connection con) throws SQLException {
+		if (limit <= 0) {
+			throw new IllegalArgumentException("limit est négatif ou nul.");
+		}
+		if (offset < 0) {
+			throw new IllegalArgumentException("offset est négatif.");
+		}
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		List<Computer> result = new ArrayList<Computer>();
 		String query = "SELECT * FROM computer LIMIT ? OFFSET ?;";
@@ -76,6 +82,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public void create(Computer computer, Connection con) throws SQLException {
+		if (computer == null) {
+			throw new IllegalArgumentException("computer est à null.");
+		}
 		LOG.trace("create(" + computer + ")");
 		String query = new StringBuilder("INSERT INTO computer (")
 		.append(NAME_COLUMN_LABEL)
@@ -112,6 +121,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public void update(Computer computer, Connection con) throws SQLException {
+		if (computer == null) {
+			throw new IllegalArgumentException("computer est à null.");
+		}
 		LOG.trace("update(" + computer + ")");
 		StringBuilder query = new StringBuilder("UPDATE computer SET ")
 		.append(NAME_COLUMN_LABEL)
@@ -153,6 +165,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public void delete(Computer computer, Connection con) throws SQLException {
+		if (computer == null) {
+			throw new IllegalArgumentException("computer est à null.");
+		}
 		LOG.trace("delete(" + computer + ")");
 		String query = "DELETE FROM computer WHERE id=?";
 		PreparedStatement ps = con.prepareStatement(query);

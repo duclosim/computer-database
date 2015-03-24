@@ -93,9 +93,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<p:paging pageNum="${page.pageNum}" maxPage="${page.lastPageNb}" 
-			itemByPage="${page.maxNbItemsByPage}" startPage="${startPage}" 
-			endPage="${endPage}"/>
+		<p:paging page="${page}"/>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

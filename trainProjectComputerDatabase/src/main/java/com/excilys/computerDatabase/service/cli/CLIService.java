@@ -21,6 +21,7 @@ public class CLIService {
 		map.put("detail_computer", CLICommand.DETAIL_COMPUTER);
 		map.put("create_computer", CLICommand.CREATE_COMPUTER);
 		map.put("update_computer", CLICommand.UPDATE_COMPUTER);
+		map.put("delete_companies", CLICommand.DELETE_COMPANIES);
 		map.put("delete_computer", CLICommand.DELETE_COMPUTER);
 		map.put("exit", CLICommand.EXIT);
 	}

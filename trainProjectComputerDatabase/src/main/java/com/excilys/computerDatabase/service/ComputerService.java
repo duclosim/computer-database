@@ -1,35 +1,35 @@
 package com.excilys.computerDatabase.service;
 
-import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 /**
  * 
  * @author excilys
  *
  */
-public interface ComputerService extends PageableService<Computer> {
+public interface ComputerService extends PageableService<ComputerDTO> {
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	Computer getById(Long id);
+	ComputerDTO getById(Long id);
 	
 	/**
 	 * 
 	 * @param computer
 	 */
-	void create(Computer computer);
+	void create(ComputerDTO computer);
 	
 	/**
 	 * 
 	 * @param computer
 	 */
-	void update(Computer computer);
+	void update(ComputerDTO computer);
 	
 	/**
 	 * 
 	 * @param computer
 	 */
-	void delete(Computer computer);
+	void delete(ComputerDTO computer);
 }
