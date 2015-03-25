@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,17 +7,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
-import org.junit.Assert;
-import org.junit.Test;
+public class CompanyServiceTest {
+	// TODO écrire tests
 
-public class CompanyDAOTest {
-	
 	@Test
 	public void getByIdShouldReturnABean() {
 		// Given
@@ -81,11 +82,6 @@ public class CompanyDAOTest {
 			ConnectionFactory.closeConnection(con);
 		}
 	}
-	
-	@Test
-	public void getByNameShouldReturnABean() {
-		// TODO écrire test
-	}
 
 	@Test
 	public void countLinesShouldReturnTheNumberOfRowsInTheDatabase() {
@@ -110,10 +106,5 @@ public class CompanyDAOTest {
 		} finally {
 			ConnectionFactory.closeConnection(con);
 		}
-	}
-	
-	@Test
-	public void deleteCompanyShouldDeleteCompanyAndRelatedComputers() {
-		// TODO écrire test
 	}
 }

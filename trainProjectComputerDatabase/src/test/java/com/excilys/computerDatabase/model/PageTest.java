@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.page.NavigationPage;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.CompanyServiceImpl;
 
@@ -32,7 +33,7 @@ public class PageTest {
 			++expectedLastPageNb;
 		}
 		// WHEN
-		Page<Company> page = new Page<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		NavigationPage<Company> page = new NavigationPage<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 		// THEN
 		Assert.assertEquals("Erreur sur le numéro de la dernière page.", expectedLastPageNb, page.getLastPageNb());
 		Assert.assertEquals("Erreur sur le numéro de la page courante.", expectedCurrentPageNum, page.getPageNum());
@@ -45,7 +46,7 @@ public class PageTest {
 		CompanyService service = null;
 		thrown.expect(IllegalArgumentException.class);
 		// WHEN
-		new Page<Company>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		new NavigationPage<Company>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 		// THEN
 	}
 	
@@ -56,7 +57,7 @@ public class PageTest {
 		CompanyService service = CompanyServiceImpl.INSTANCE;
 		thrown.expect(IllegalArgumentException.class);
 		// WHEN
-		new Page<Company>(service, limit, DEFAULT_OFFSET);
+		new NavigationPage<Company>(service, limit, DEFAULT_OFFSET);
 		// THEN
 	}
 	
@@ -67,7 +68,7 @@ public class PageTest {
 		CompanyService service = CompanyServiceImpl.INSTANCE;
 		thrown.expect(IllegalArgumentException.class);
 		// WHEN
-		new Page<Company>(service, limit, DEFAULT_OFFSET);
+		new NavigationPage<Company>(service, limit, DEFAULT_OFFSET);
 		// THEN
 	}
 	
@@ -78,7 +79,7 @@ public class PageTest {
 		CompanyService service = CompanyServiceImpl.INSTANCE;
 		thrown.expect(IllegalArgumentException.class);
 		// WHEN
-		new Page<Company>(service, DEFAULT_LIMIT, offset);
+		new NavigationPage<Company>(service, DEFAULT_LIMIT, offset);
 		// THEN
 	}
 	
@@ -86,7 +87,7 @@ public class PageTest {
 	public void changingMaxItemByPageShouldSetTheLastPageNbAndCurrentPageNumAndEntities() {
 		// GIVEN
 		CompanyService service = CompanyServiceImpl.INSTANCE;
-		Page<Company> page = new Page<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		NavigationPage<Company> page = new NavigationPage<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 		
 		int newLimit = 10;
 		int newOffset = (page.getPageNum() - 1) * newLimit;
@@ -108,7 +109,7 @@ public class PageTest {
 	public void changingMaxItemByPageShouldThrowAnIllegalArgumentExceptionForMaxNegative() {
 		// GIVEN
 		CompanyService service = CompanyServiceImpl.INSTANCE;
-		Page<Company> page = new Page<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		NavigationPage<Company> page = new NavigationPage<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 
 		int newLimit = -1;
 		thrown.expect(IllegalArgumentException.class);
@@ -121,7 +122,7 @@ public class PageTest {
 	public void changingPageNumShouldSetTheLastPageNbAndCurrentPageNumAndEntities() {
 		// GIVEN
 		CompanyService service = CompanyServiceImpl.INSTANCE;
-		Page<Company> page = new Page<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		NavigationPage<Company> page = new NavigationPage<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 
 		int newPageNum = 2;
 		int newOffset = (newPageNum - 1) * DEFAULT_LIMIT;
@@ -142,7 +143,7 @@ public class PageTest {
 	public void changingPageNumShouldThrowAnIllegalArgumentExceptionForPageNumNegative() {
 		// GIVEN
 		CompanyService service = CompanyServiceImpl.INSTANCE;
-		Page<Company> page = new Page<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		NavigationPage<Company> page = new NavigationPage<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 
 		int newPageNum = -1;
 		thrown.expect(IllegalArgumentException.class);
@@ -155,7 +156,7 @@ public class PageTest {
 	public void changingPageNumShouldThrowAnIllegalArgumentExceptionForPageNumToHigh() {
 		// GIVEN
 		CompanyService service = CompanyServiceImpl.INSTANCE;
-		Page<Company> page = new Page<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		NavigationPage<Company> page = new NavigationPage<>(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 
 		int newPageNum = page.getLastPageNb() + 1;
 		thrown.expect(IllegalArgumentException.class);

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.service.cli;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
