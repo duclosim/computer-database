@@ -47,25 +47,25 @@ public enum ComputerServiceImpl implements ComputerService {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 		return result;
 	}
 
 	@Override
-	public List<ComputerDTO> getByName(String name) {
+	public List<ComputerDTO> getByNameOrCompanyName(String name) {
 		LOG.trace("getByName(" + name + ")");
 		Connection connection = null;
 		List<ComputerDTO> result = null;
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dtoMapper.BeansToDTOs((dao.getByName(name, connection)));
+			result = dtoMapper.BeansToDTOs(dao.getByNameOrCompanyName(name, connection));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 		return result;
 	}
@@ -82,7 +82,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 		return result;
 	}
@@ -99,7 +99,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 		return result;
 	}
@@ -116,7 +116,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 
 	}
@@ -133,7 +133,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 	}
 
@@ -149,7 +149,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			e.printStackTrace();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 	}
 	

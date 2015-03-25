@@ -18,7 +18,7 @@ public class ConnectionFactoryTest {
 	public void shouldCloseTheUniqueInstance() {
 		// GIVEN
 		// WHEN
-		ConnectionFactory.closeConnection(ConnectionFactory.INSTANCE.getConnection());
+		ConnectionFactory.INSTANCE.closeConnection(ConnectionFactory.INSTANCE.getConnection());
 		// THEN
 	}
 }

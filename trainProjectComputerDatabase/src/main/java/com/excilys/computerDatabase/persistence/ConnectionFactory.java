@@ -75,7 +75,7 @@ public enum ConnectionFactory {
 	 * Ferme la connexion à la base de données.
 	 * @param connection La connexion à refermer.
 	 */
-	public static final void closeConnection(Connection connection) {
+	public final void closeConnection(Connection connection) {
 		LOG.trace("closeConnection(" + connection + ")");
 		try {
 			connection.close();
@@ -86,7 +86,7 @@ public enum ConnectionFactory {
 		}
 	}
 	
-	public static final void closeConnectionAndStatement(Connection connection, 
+	public final void closeConnectionAndStatement(Connection connection, 
 			Statement statement) {
 		LOG.trace("closeConnection(" + connection + ", " + statement + ")");
 		try {
@@ -99,7 +99,7 @@ public enum ConnectionFactory {
 		}
 	}
 	
-	public static final void closeConnectionAndStatementAndResults(Connection connection, 
+	public final void closeConnectionAndStatementAndResults(Connection connection, 
 			Statement statement, ResultSet results) {
 		LOG.trace("closeConnection(" 
 			+ connection + ", " 

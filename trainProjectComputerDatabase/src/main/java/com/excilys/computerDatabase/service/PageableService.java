@@ -11,13 +11,13 @@ public interface PageableService<T> {
 	 * @return
 	 */
 	T getById(Long id);
-	
+
 	/**
 	 * 
 	 * @param name
 	 * @return
 	 */
-	List<T> getByName(String name);
+	List<T> getByNameOrCompanyName(String name);
 	
 	/**
 	 * Cette méthode retourne tout le contenu de la table 

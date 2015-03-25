@@ -67,7 +67,7 @@ public class NavigationPage<T> {
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
 		totalNbEntities = service.countLines();
-		refresh();
+		stdRefresh();
 	}
 
 	// REQUETES
@@ -111,6 +111,13 @@ public class NavigationPage<T> {
 
 	// COMMANDES
 	/**
+	 * 
+	 * @param entities
+	 */
+	public void setEntities(List<T> entities) {
+		this.entities = entities;
+	}
+	/**
 	 * Modifie le nombre d'entités contenues dans une seule page.
 	 * @param maxNbItemsByPage
 	 */
@@ -121,7 +128,7 @@ public class NavigationPage<T> {
 			throw new IllegalArgumentException("maxNbItemsByPage est négatif.");
 		}
 		this.maxNbItemsByPage = maxNbItemsByPage;
-		refresh();
+		stdRefresh();
 	}
 	/**
 	 * Se déplace de la page en cours vers une nouvelle page.
@@ -134,7 +141,7 @@ public class NavigationPage<T> {
 			throw new IllegalArgumentException("pageNum est hors-limites.");
 		}
 		this.pageNum = pageNum;
-		refresh();
+		stdRefresh();
 	}
 	/**
 	 * Va à la prochaine page si on y est pas déjà.
@@ -160,14 +167,27 @@ public class NavigationPage<T> {
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	public void refresh() {
-		LOG.trace("refresh()");
+	public void stdRefresh() {
+		LOG.trace("stdRefresh()");
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
 		entities = new ArrayList<>(service.getAll(getMaxNbItemsByPage(), offset));
 		lastPageNb = service.countLines() / getMaxNbItemsByPage() + 1;
 		if (pageNum > lastPageNb) {
 			setPageNum(lastPageNb);
 		}
+	}
+	
+	public void nameBasedRefresh(String name) {
+		LOG.trace("filteredRefresh()");
+		entities = new ArrayList<>(service.getByNameOrCompanyName(name));
+		lastPageNb = service.countLines() / getMaxNbItemsByPage() + 1;
+		if (pageNum > lastPageNb) {
+			setPageNum(lastPageNb);
+		}
+	}
+	
+	public void orderedBasedRefresh() {
+		// TODO trier sur critères
 	}
 	
 	@Override

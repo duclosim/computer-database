@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class ComputerMapperTest {
+	private ComputerMapper computerMapper = ComputerMapper.INSTANCE;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -31,7 +32,7 @@ public class ComputerMapperTest {
 		ResultSet resultSet = null;
 		thrown.expect(IllegalArgumentException.class);
 		// When
-		ComputerMapper.INSTANCE.mapComputer(resultSet);
+		computerMapper.mapComputer(resultSet);
 		// Then
 	}
 
@@ -68,7 +69,7 @@ public class ComputerMapperTest {
 						discontinuedDate,
 						company);
 				// When
-				result = ComputerMapper.INSTANCE.mapComputer(results);
+				result = computerMapper.mapComputer(results);
 				// Then
 				Assert.assertEquals("Erreur sur le bean",  expectedBean, result);
 			}
@@ -77,7 +78,7 @@ public class ComputerMapperTest {
 			e.printStackTrace();
 			throw new PersistenceException("Problème de lecture colonne");
 		} finally {
-			ConnectionFactory.closeConnectionAndStatementAndResults(connection, ps, results);
+			ConnectionFactory.INSTANCE.closeConnectionAndStatementAndResults(connection, ps, results);
 		}
 	}
 

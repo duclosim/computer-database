@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class CompanyMapperTest {
+	
+	CompanyMapper companyMapper = CompanyMapper.INSTANCE;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -27,7 +29,7 @@ public class CompanyMapperTest {
 		ResultSet resultSet = null;
 		thrown.expect(IllegalArgumentException.class);
 		// When
-		CompanyMapper.INSTANCE.mapCompany(resultSet);
+		companyMapper.mapCompany(resultSet);
 		// Then
 	}
 
@@ -46,7 +48,7 @@ public class CompanyMapperTest {
 				Company expectedBean = new Company(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
 						results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 				// When
-				result = CompanyMapper.INSTANCE.mapCompany(results);
+				result = companyMapper.mapCompany(results);
 				// Then
 				Assert.assertEquals("Erreur sur le bean.", expectedBean, result);
 			}
@@ -55,7 +57,7 @@ public class CompanyMapperTest {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.closeConnection(con);
+			ConnectionFactory.INSTANCE.closeConnection(con);
 		}
 	}
 }

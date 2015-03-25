@@ -58,8 +58,12 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			if (maxItemPageParam != null) {
 				newItemByPage = Integer.parseInt(maxItemPageParam);
 			}
-			page.setPageNum(newPageNum);
-			page.setMaxNbItemsByPage(newItemByPage);
+			if (page.getPageNum() != newPageNum) {
+				page.setPageNum(newPageNum);
+			}
+			if (page.getMaxNbItemsByPage() != newItemByPage) {
+				page.setMaxNbItemsByPage(newItemByPage);
+			}
 			// Passage des paramètres de la page dans la requête.
 			req.setAttribute("page", page);
 			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
@@ -88,7 +92,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			deleteDTO.setId(st.nextToken());
 			service.delete(deleteDTO);
 		}
-		page.refresh();
+		page.stdRefresh();
 		req.setAttribute("page", page);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 	}

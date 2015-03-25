@@ -25,11 +25,12 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
 	
-	public static final String ID_COLUMN_LABEL = "id";
-	public static final String NAME_COLUMN_LABEL = "name";
-	public static final String INTRODUCED_COLUMN_LABEL = "introduced";
-	public static final String DISCONTINUED_COLUMN_LABEL = "discontinued";
-	public static final String COMPANY_ID_COLUMN_LABEL = "company_id";
+	public static final String ID_COLUMN_LABEL = "computer.id";
+	public static final String NAME_COLUMN_LABEL = "computer.name";
+	public static final String INTRODUCED_COLUMN_LABEL = "computer.introduced";
+	public static final String DISCONTINUED_COLUMN_LABEL = "computer.discontinued";
+	public static final String COMPANY_ID_COLUMN_LABEL = "computer.company_id";
+	public static final String COMPANY_NAME_COLUMN_LABEL = "company.name";
 	
 	private ComputerMapper mapper;
 	
@@ -40,7 +41,10 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public Computer getById(Long id, Connection con) throws SQLException {
 		LOG.trace("getById(" + id + ")");
 		Computer result = null;
-		String query = "SELECT * FROM computer WHERE id=?;";
+		String query = "SELECT * "
+				+ "FROM computer "
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "WHERE computer.id=?;";
 		PreparedStatement ps = con.prepareStatement(query);
 		int paramIndex = 0;
 		ps.setLong(++paramIndex, id);
@@ -53,13 +57,18 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getByName(String name, Connection con)
+	public List<Computer> getByNameOrCompanyName(String name, Connection con)
 			throws SQLException {
-		LOG.trace("getByName(" + name + ")");
+		LOG.trace("getByNameOrCompanyName(" + name + ")");
 		List<Computer> result = new ArrayList<Computer>();
-		String query = "SELECT * FROM computer WHERE name=?;";
+		String query = "SELECT * "
+				+ "FROM computer "
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "WHERE computer.name LIKE %?%"
+				+ "OR company.name LIKE %?%;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, name);
+		ps.setString(2, name);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
 			result.add(mapper.mapComputer(results));
@@ -79,7 +88,10 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		List<Computer> result = new ArrayList<Computer>();
-		String query = "SELECT * FROM computer LIMIT ? OFFSET ?;";
+		String query = "SELECT * "
+				+ "FROM computer "
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "LIMIT ? OFFSET ?;";
 		PreparedStatement ps = con.prepareStatement(query);
 		int paramIndex = 0;
 		ps.setLong(++paramIndex, limit);

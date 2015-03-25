@@ -46,21 +46,6 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		ps.close();
 		return result;
 	}
-
-	@Override
-	public List<Company> getByName(String name, Connection con) throws SQLException {
-		LOG.trace("getByName(" + name + ")");
-		List<Company> result = new ArrayList<Company>();
-		String query = "SELECT * FROM company WHERE name=?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ps.setString(1, name);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapCompany(results));
-		}
-		ps.close();
-		return result;
-	}
 	
 	@Override
 	public List<Company> getAll(int limit, int offset, Connection con) throws SQLException {

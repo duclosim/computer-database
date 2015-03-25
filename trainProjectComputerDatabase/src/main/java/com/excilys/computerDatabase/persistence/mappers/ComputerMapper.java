@@ -38,6 +38,9 @@ public enum ComputerMapper {
 				discontinuedDate = results.getTimestamp(ComputerDAOImpl.DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
 			}
 			if (results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL) != 0) {
+				company = new Company();
+				company.setId(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL));
+				company.setName(results.getString(ComputerDAOImpl.COMPANY_NAME_COLUMN_LABEL));
 				company = companyService.getById(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL));
 			}
 			computerBean = new Computer(results.getLong(ComputerDAOImpl.ID_COLUMN_LABEL), 

@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.excilys.computerDatabase.model.beans.Computer;
 
@@ -19,4 +20,13 @@ public interface ComputerDAO extends CRUDDao<Computer> {
 	 * @throws SQLException 
 	 */
 	void deleteByCompanyId(Long companyId, Connection con) throws SQLException;
+
+	/**
+	 * 
+	 * @param name
+	 * @param con
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Computer> getByNameOrCompanyName(String name, Connection con) throws SQLException;
 }
