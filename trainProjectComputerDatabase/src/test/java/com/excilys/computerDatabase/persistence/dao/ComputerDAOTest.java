@@ -122,8 +122,8 @@ public class ComputerDAOTest {
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
 		LocalDateTime time = null;
-		bean.setIntroduced(time);
-		bean.setDiscontinued(time);
+		bean.setIntroducedDate(time);
+		bean.setDiscontinuedDate(time);
 		try {
 			bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, connection));
 			// When
@@ -177,8 +177,8 @@ public class ComputerDAOTest {
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
 		LocalDateTime time = null;
-		bean.setIntroduced(time);
-		bean.setDiscontinued(time);
+		bean.setIntroducedDate(time);
+		bean.setDiscontinuedDate(time);
 		try {
 			bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, connection));
 			dao.create(bean, connection);

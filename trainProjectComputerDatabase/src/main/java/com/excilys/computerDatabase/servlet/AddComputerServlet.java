@@ -30,6 +30,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
 		LOG.trace("init(" + config + ")");
 		companyService = CompanyServiceImpl.INSTANCE;
 		computerService = ComputerServiceImpl.INSTANCE;
@@ -53,9 +54,21 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 			.append(resp).append(")").toString());
 		ComputerDTO computerDTO = new ComputerDTO();
 		computerDTO.setName(req.getParameter("computerName"));
-		computerDTO.setIntroducedDate(req.getParameter("introduced"));
-		computerDTO.setDiscontinuedDate(req.getParameter("discontinued"));
-		computerDTO.setCompanyId(req.getParameter("companyId"));
+		String introducedDate = req.getParameter("introduced");
+		String discontinuedDate = req.getParameter("discontinued");
+		String companyId = req.getParameter("companyId");
+		if (introducedDate != null && introducedDate.trim().isEmpty()) {
+			introducedDate = null;
+		}
+		if (discontinuedDate != null && discontinuedDate.trim().isEmpty()) {
+			discontinuedDate = null;
+		}
+		if (companyId != null && companyId.trim().isEmpty()) {
+			companyId = null;
+		}
+		computerDTO.setIntroducedDate(introducedDate);
+		computerDTO.setDiscontinuedDate(discontinuedDate);
+		computerDTO.setCompanyId(companyId);
 		computerService.create(computerDTO);
 		
 		req.setAttribute("validMessage", "Computer successfully updated : " + computerDTO.toString());

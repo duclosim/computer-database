@@ -28,9 +28,18 @@ public enum ComputerDTOMapper {
 		Computer bean = new Computer();
 		bean.setId(Long.parseLong(dto.getId()));
 		bean.setName(dto.getName());
-		bean.setIntroduced(LocalDateTime.parse(dto.getIntroducedDate()));
-		bean.setDiscontinued(LocalDateTime.parse(dto.getDiscontinuedDate()));
-		bean.setCompany(new Company(Long.parseLong(dto.getCompanyId()), dto.getCompanyName()));
+		bean.setIntroducedDate(null);
+		bean.setDiscontinuedDate(null);
+		bean.setCompany(null);
+		if (dto.getIntroducedDate() != null) {
+			bean.setIntroducedDate(LocalDateTime.parse(dto.getIntroducedDate()));
+		}
+		if (dto.getDiscontinuedDate() != null) {
+			bean.setDiscontinuedDate(LocalDateTime.parse(dto.getDiscontinuedDate()));
+		}
+		if ((dto.getCompanyId() != null) && (dto.getCompanyName() != null)) {
+			bean.setCompany(new Company(Long.parseLong(dto.getCompanyId()), dto.getCompanyName()));
+		}
 		return bean;
 	}
 	
@@ -44,10 +53,20 @@ public enum ComputerDTOMapper {
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(bean.getId().toString());
 		dto.setName(bean.getName());
-		dto.setIntroducedDate(bean.getIntroduced().toLocalDate().toString());
-		dto.setDiscontinuedDate(bean.getDiscontinued().toLocalDate().toString());
-		dto.setCompanyId(bean.getCompany().getId().toString());
-		dto.setCompanyName(bean.getCompany().getName());
+		dto.setIntroducedDate(null);
+		dto.setDiscontinuedDate(null);
+		dto.setCompanyId(null);
+		dto.setCompanyName(null);
+		if (bean.getIntroducedDate() != null) {
+			dto.setIntroducedDate(bean.getIntroducedDate().toLocalDate().toString());
+		}
+		if (bean.getDiscontinuedDate() != null) {
+			dto.setDiscontinuedDate(bean.getDiscontinuedDate().toLocalDate().toString());
+		}
+		if (bean.getCompany() != null) {
+			dto.setCompanyId(bean.getCompany().getId().toString());
+			dto.setCompanyName(bean.getCompany().getName());
+		}
 		return dto;
 	}
 }

@@ -30,6 +30,7 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
 		LOG.trace("init(" + config + ")");
 		companyService = CompanyServiceImpl.INSTANCE;
 		computerService = ComputerServiceImpl.INSTANCE;
@@ -56,12 +57,23 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 		LOG.trace(new StringBuilder("doPost(")
 			.append(req).append(", ")
 			.append(resp).append(")").toString());
-		ComputerDTO computerDTO = new ComputerDTO();
-		computerDTO.setName(req.getParameter("computerName"));
-		computerDTO.setIntroducedDate(req.getParameter("introduced"));
-		computerDTO.setDiscontinuedDate(req.getParameter("discontinued"));
-		computerDTO.setCompanyId(req.getParameter("companyId"));
-		computerService.update(computerDTO);
+		computer.setName(req.getParameter("computerName"));
+		String introducedDate = req.getParameter("introduced");
+		String discontinuedDate = req.getParameter("discontinued");
+		String companyId = req.getParameter("companyId");
+		if (introducedDate != null && introducedDate.trim().isEmpty()) {
+			introducedDate = null;
+		}
+		if (discontinuedDate != null && discontinuedDate.trim().isEmpty()) {
+			discontinuedDate = null;
+		}
+		if (companyId != null && companyId.trim().isEmpty()) {
+			companyId = null;
+		}
+		computer.setIntroducedDate(introducedDate);
+		computer.setDiscontinuedDate(discontinuedDate);
+		computer.setCompanyId(companyId);
+		computerService.update(computer);
 		
 		req.setAttribute("validMessage", "Computer successfully updated.");
 		req.setAttribute("computerBean", computer);

@@ -103,11 +103,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		int colNb = 0;
 		Timestamp introduced = null;
 		Timestamp discontinued = null;
-		if (computer.getIntroduced() != null) {
-			introduced = Timestamp.valueOf(computer.getIntroduced());
+		if (computer.getIntroducedDate() != null) {
+			introduced = Timestamp.valueOf(computer.getIntroducedDate());
 		}
-		if (computer.getDiscontinued() != null) {
-			discontinued = Timestamp.valueOf(computer.getDiscontinued());
+		if (computer.getDiscontinuedDate() != null) {
+			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
 		}
 		ps.setString(++colNb, computer.getName());
 		ps.setTimestamp(++colNb, introduced);
@@ -146,11 +146,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		int colNb = 0;
 		Timestamp introduced = null;
 		Timestamp discontinued = null;
-		if (computer.getIntroduced() != null) {
-			introduced = Timestamp.valueOf(computer.getIntroduced());
+		if (computer.getIntroducedDate() != null) {
+			introduced = Timestamp.valueOf(computer.getIntroducedDate());
 		}
-		if (computer.getDiscontinued() != null) {
-			discontinued = Timestamp.valueOf(computer.getDiscontinued());
+		if (computer.getDiscontinuedDate() != null) {
+			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
 		}
 		// name
 		ps.setString(++colNb, computer.getName());

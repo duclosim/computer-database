@@ -28,6 +28,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
 		LOG.trace("init(" + config + ")");
 		service = ComputerServiceImpl.INSTANCE;
 		page = new Page<>(service);

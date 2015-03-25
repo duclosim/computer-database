@@ -9,20 +9,10 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet"
-	media="screen">
-<link href="css/font-awesome.css" rel="stylesheet"
-	media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+	<%@ include file="/WEB-INF/partials/includeCSS.jsp" %>
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application -
-				Computer Database </a>
-		</div>
-	</header>
+	<%@ include file="/WEB-INF/partials/header.jsp" %>
 
 	<section id="main">
 		<div class="container">
@@ -79,9 +69,9 @@
 							<td><a href="<c:url value="editComputer">
 								<c:param name="beanId" value="${item.id}"/>
 							</c:url>" onclick="">${item.name}</a></td>
-							<td>${item.introduced}</td>
-							<td>${item.discontinued}</td>
-							<td>${item.company.name}</td>
+							<td>${item.introducedDate}</td>
+							<td>${item.discontinuedDate}</td>
+							<td>${item.companyName}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -92,8 +82,6 @@
 	<footer class="navbar-fixed-bottom">
 		<p:paging page="${page}"/>
 	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
+	<%@ include file="/WEB-INF/partials/includeJS.jsp" %>
 </body>
 </html>

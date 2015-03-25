@@ -16,8 +16,8 @@ public class Computer {
 	
 	private Long id;
 	private String name;
-	private LocalDateTime introduced;
-	private LocalDateTime discontinued;
+	private LocalDateTime introducedDate;
+	private LocalDateTime discontinuedDate;
 	private Company company;
 
 	public Computer(Long id, String name, LocalDateTime introduced,
@@ -31,8 +31,8 @@ public class Computer {
 			.toString());
 		this.id = id;
 		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
+		this.introducedDate = introduced;
+		this.discontinuedDate = discontinued;
 		this.company = company;
 	}
 	
@@ -56,21 +56,21 @@ public class Computer {
 		LOG.trace("setName(" + name + ")");
 		this.name = name;
 	}
-	public LocalDateTime getIntroduced() {
-		LOG.trace("getIntroduced()");
-		return introduced;
+	public LocalDateTime getIntroducedDate() {
+		LOG.trace("getIntroducedDate()");
+		return introducedDate;
 	}
-	public void setIntroduced(LocalDateTime introduced) {
-		LOG.trace("setIntroduced(" + introduced + ")");
-		this.introduced = introduced;
+	public void setIntroducedDate(LocalDateTime introducedDate) {
+		LOG.trace("setIntroducedDate(" + introducedDate + ")");
+		this.introducedDate = introducedDate;
 	}
-	public LocalDateTime getDiscontinued() {
-		LOG.trace("getDiscontinued()");
-		return discontinued;
+	public LocalDateTime getDiscontinuedDate() {
+		LOG.trace("getDiscontinuedDate()");
+		return discontinuedDate;
 	}
-	public void setDiscontinued(LocalDateTime discontinued) {
-		LOG.trace("setDiscontinued(" + discontinued + ")");
-		this.discontinued = discontinued;
+	public void setDiscontinuedDate(LocalDateTime discontinuedDate) {
+		LOG.trace("setDiscontinuedDate(" + discontinuedDate + ")");
+		this.discontinuedDate = discontinuedDate;
 	}
 	public Company getCompany() {
 		LOG.trace("getCompany()");
@@ -88,10 +88,10 @@ public class Computer {
 		result = prime * result
 				+ ((company == null) ? 0 : company.hashCode());
 		result = prime * result
-				+ ((discontinued == null) ? 0 : discontinued.hashCode());
+				+ ((discontinuedDate == null) ? 0 : discontinuedDate.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
-				+ ((introduced == null) ? 0 : introduced.hashCode());
+				+ ((introducedDate == null) ? 0 : introducedDate.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -110,20 +110,20 @@ public class Computer {
 				return false;
 		} else if (!company.equals(other.company))
 			return false;
-		if (discontinued == null) {
-			if (other.discontinued != null)
+		if (discontinuedDate == null) {
+			if (other.discontinuedDate != null)
 				return false;
-		} else if (!discontinued.equals(other.discontinued))
+		} else if (!discontinuedDate.equals(other.discontinuedDate))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (introduced == null) {
-			if (other.introduced != null)
+		if (introducedDate == null) {
+			if (other.introducedDate != null)
 				return false;
-		} else if (!introduced.equals(other.introduced))
+		} else if (!introducedDate.equals(other.introducedDate))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -136,7 +136,7 @@ public class Computer {
 	@Override
 	public String toString() {
 		return "ComputerBean [id=" + id + ", name=" + name + ", introduced="
-				+ introduced + ", discontinued=" + discontinued
+				+ introducedDate + ", discontinued=" + discontinuedDate
 				+ ", company=" + company + "]";
 	}
 }
