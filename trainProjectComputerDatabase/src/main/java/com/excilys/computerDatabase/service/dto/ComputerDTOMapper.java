@@ -1,14 +1,13 @@
 package com.excilys.computerDatabase.service.dto;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.beans.Computer;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 

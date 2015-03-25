@@ -1,5 +1,13 @@
 package com.excilys.computerDatabase.persistence.dao;
 
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,15 +15,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 public class ComputerDAOTest {
 	private Connection con;

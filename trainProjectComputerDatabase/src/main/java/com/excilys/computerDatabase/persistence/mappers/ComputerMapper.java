@@ -1,18 +1,17 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.CompanyServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public enum ComputerMapper {
 	INSTANCE;

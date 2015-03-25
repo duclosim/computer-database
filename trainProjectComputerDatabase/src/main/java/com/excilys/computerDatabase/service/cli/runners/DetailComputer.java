@@ -1,13 +1,12 @@
 package com.excilys.computerDatabase.service.cli.runners;
 
-import java.util.Scanner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Scanner;
 
 /**
  * Cette classe peut lancer la commande d'affichage des détails d'un ordinateur.

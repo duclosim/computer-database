@@ -1,10 +1,10 @@
 package com.excilys.computerDatabase.persistence.dao;
 
+import com.excilys.computerDatabase.model.beans.Computer;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
-import com.excilys.computerDatabase.model.beans.Computer;
 
 /**
  * Cette interface rassemble des méthodes d'accès à la table computer.

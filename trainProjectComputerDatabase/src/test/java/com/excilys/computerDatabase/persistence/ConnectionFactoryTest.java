@@ -1,7 +1,6 @@
 package com.excilys.computerDatabase.persistence;
 
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
-
 import org.junit.Test;
 
 public class ConnectionFactoryTest {

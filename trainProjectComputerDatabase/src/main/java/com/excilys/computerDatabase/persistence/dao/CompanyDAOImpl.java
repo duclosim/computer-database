@@ -1,17 +1,16 @@
 package com.excilys.computerDatabase.persistence.dao;
 
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 /**
  * Cette classe implémente CompanyDAO et utilise le design pattern Singleton.

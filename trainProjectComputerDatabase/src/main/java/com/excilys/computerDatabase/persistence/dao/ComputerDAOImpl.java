@@ -1,19 +1,13 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.

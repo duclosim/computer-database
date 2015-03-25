@@ -1,19 +1,10 @@
 package com.excilys.computerDatabase.service.cli;
 
-import java.util.Scanner;
-
+import com.excilys.computerDatabase.service.cli.runners.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerDatabase.service.cli.runners.CommandRunner;
-import com.excilys.computerDatabase.service.cli.runners.CreateComputer;
-import com.excilys.computerDatabase.service.cli.runners.DeleteCompany;
-import com.excilys.computerDatabase.service.cli.runners.DeleteComputer;
-import com.excilys.computerDatabase.service.cli.runners.DetailComputer;
-import com.excilys.computerDatabase.service.cli.runners.Exit;
-import com.excilys.computerDatabase.service.cli.runners.GetCompanies;
-import com.excilys.computerDatabase.service.cli.runners.GetComputers;
-import com.excilys.computerDatabase.service.cli.runners.UpdateComputer;
+import java.util.Scanner;
 
 /**
  * Cette énumération représente les différentes commandes invoquables depuis

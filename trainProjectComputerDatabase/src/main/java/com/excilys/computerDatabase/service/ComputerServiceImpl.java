@@ -1,13 +1,5 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
@@ -15,6 +7,13 @@ import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 import com.excilys.computerDatabase.service.dto.ComputerDTOMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 

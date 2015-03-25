@@ -1,7 +1,12 @@
 package com.excilys.computerDatabase.servlet;
 
-import java.io.IOException;
-import java.util.StringTokenizer;
+import com.excilys.computerDatabase.model.UserInputsValidator;
+import com.excilys.computerDatabase.model.page.NavigationPage;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -10,15 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.model.page.NavigationPage;
-import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet implements Servlet {

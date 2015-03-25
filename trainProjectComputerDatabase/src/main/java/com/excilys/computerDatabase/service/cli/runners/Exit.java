@@ -1,9 +1,9 @@
 package com.excilys.computerDatabase.service.cli.runners;
 
-import java.util.Scanner;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Scanner;
 
 /**
  * Cette classe peut lancer la commande de sortie du programme.

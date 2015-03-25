@@ -1,17 +1,12 @@
 package com.excilys.computerDatabase.service.cli;
 
+import com.excilys.computerDatabase.service.cli.CLIService;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
-
-import com.excilys.computerDatabase.service.cli.CLIService;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class CLIServiceTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();

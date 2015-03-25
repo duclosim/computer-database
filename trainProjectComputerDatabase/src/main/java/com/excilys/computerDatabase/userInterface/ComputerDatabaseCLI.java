@@ -1,11 +1,10 @@
 package com.excilys.computerDatabase.userInterface;
 
-import java.util.Scanner;
-
+import com.excilys.computerDatabase.service.cli.CLIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerDatabase.service.cli.CLIService;
+import java.util.Scanner;
 
 /**
  * Cette classe lit les commandes entrées en ligne de commande et les exécute.

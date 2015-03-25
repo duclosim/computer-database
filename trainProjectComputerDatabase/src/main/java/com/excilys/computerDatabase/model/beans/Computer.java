@@ -1,9 +1,9 @@
 package com.excilys.computerDatabase.model.beans;
 
-import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 

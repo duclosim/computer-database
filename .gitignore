@@ -19,3 +19,8 @@ hs_err_pid*
 .classpath
 .project
 org.eclipse.*
+
+trainProjectComputerDatabase/computerDatabase.iml
+trainProjectComputerDatabase/.classpath
+trainProjectComputerDatabase/.project
+trainProjectComputerDatabase/.settings

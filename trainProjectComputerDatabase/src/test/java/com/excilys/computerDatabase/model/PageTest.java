@@ -1,17 +1,16 @@
 package com.excilys.computerDatabase.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.page.NavigationPage;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.CompanyServiceImpl;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.page.NavigationPage;
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PageTest {
 	private static final int DEFAULT_LIMIT = 10;

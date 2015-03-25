@@ -1,11 +1,11 @@
 package com.excilys.computerDatabase.service.cli;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Cette classe représente l'interpréteur et invocateur de commandes.

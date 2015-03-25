@@ -1,12 +1,11 @@
 package com.excilys.computerDatabase.model.page;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.excilys.computerDatabase.service.PageableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerDatabase.service.PageableService;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cette classe représente une page contenant des objets pour les 

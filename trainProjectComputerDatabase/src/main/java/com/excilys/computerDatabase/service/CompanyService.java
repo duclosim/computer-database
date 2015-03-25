@@ -1,8 +1,8 @@
 package com.excilys.computerDatabase.service;
 
-import java.util.List;
-
 import com.excilys.computerDatabase.model.beans.Company;
+
+import java.util.List;
 
 /**
  * 

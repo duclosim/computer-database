@@ -1,15 +1,14 @@
 package com.excilys.computerDatabase.service.cli;
 
-import java.util.Scanner;
-
 import com.excilys.computerDatabase.service.cli.CLICommand;
 import com.excilys.computerDatabase.service.cli.runners.CommandRunner;
 import com.excilys.computerDatabase.service.cli.runners.GetCompanies;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.util.Scanner;
 
 
 public class CLICommandsTest {

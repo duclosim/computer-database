@@ -1,10 +1,10 @@
 package com.excilys.computerDatabase.model;
 
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class UserInputsValidator {
 	private static final String NUMBER_REGEX = "[0-9]*";
@@ -83,7 +83,7 @@ public class UserInputsValidator {
 
 	/**
 	 * Teste si un nombre est valide ou pas.
-	 * @param date Le nombre à valider.
+	 * @param number Le nombre à valider.
 	 * @return <code>true</code> si le nombre est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidNumber(String number) {

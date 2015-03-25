@@ -1,11 +1,5 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
@@ -14,11 +8,16 @@ import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class ComputerMapperTest {
 	private ComputerMapper computerMapper = ComputerMapper.INSTANCE;
