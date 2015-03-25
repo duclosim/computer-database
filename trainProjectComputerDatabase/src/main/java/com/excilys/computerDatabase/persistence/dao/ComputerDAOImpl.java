@@ -26,7 +26,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public static final String COMPANY_ID_COLUMN_LABEL = "computer.company_id";
 	public static final String COMPANY_NAME_COLUMN_LABEL = "company.name";
 	
-	private ComputerMapper mapper;
+	private final ComputerMapper mapper;
 	
 	private ComputerDAOImpl() {
 		mapper = ComputerMapper.INSTANCE;
@@ -54,7 +54,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public List<Computer> getByNameOrCompanyName(String name, Connection con)
 			throws SQLException {
 		LOG.trace("getByNameOrCompanyName(" + name + ")");
-		List<Computer> result = new ArrayList<Computer>();
+		List<Computer> result = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
@@ -81,7 +81,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			throw new IllegalArgumentException("offset est négatif.");
 		}
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
-		List<Computer> result = new ArrayList<Computer>();
+		List<Computer> result = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "

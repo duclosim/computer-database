@@ -19,7 +19,7 @@ public class CLIService {
 	
 	public CLIService() {
 		LOG.trace("new CLIService()");
-		map = new HashMap<String, CLICommand>();
+		map = new HashMap<>();
 		map.put("get_companies", CLICommand.GET_COMPANIES);
 		map.put("get_computers", CLICommand.GET_COMPUTERS);
 		map.put("detail_computer", CLICommand.DETAIL_COMPUTER);

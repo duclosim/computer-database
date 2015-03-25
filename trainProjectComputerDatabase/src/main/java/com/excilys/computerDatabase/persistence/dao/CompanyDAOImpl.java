@@ -25,7 +25,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
 
-	private CompanyMapper mapper;
+	private final CompanyMapper mapper;
 	
 	private CompanyDAOImpl() {
 		mapper = CompanyMapper.INSTANCE;
@@ -49,7 +49,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll(int limit, int offset, Connection con) throws SQLException {
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
-		List<Company> result = new ArrayList<Company>();
+		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
 		PreparedStatement ps = con.prepareStatement(query);
 		int paramIndex = 0;
@@ -66,7 +66,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll(Connection con) throws SQLException {
 		LOG.trace("getAll()");
-		List<Company> result = new ArrayList<Company>();
+		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ResultSet results = ps.executeQuery();

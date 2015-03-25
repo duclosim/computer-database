@@ -25,8 +25,8 @@ public enum ComputerServiceImpl implements ComputerService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
 	
-	private ComputerDAO dao;
-	private ComputerDTOMapper dtoMapper;
+	private final ComputerDAO dao;
+	private final ComputerDTOMapper dtoMapper;
 	
 	private ComputerServiceImpl() {
 		dao = ComputerDAOImpl.INSTANCE;

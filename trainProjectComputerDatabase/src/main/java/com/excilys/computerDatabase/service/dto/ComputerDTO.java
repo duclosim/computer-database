@@ -13,24 +13,6 @@ public class ComputerDTO {
 	private String companyId;
 	private String companyName;
 	
-	public ComputerDTO(String id, String name, String introducedDate,
-			String discontinuedDate, String companyId, String companyName) {
-		LOG.trace(new StringBuilder("new Computer(")
-			.append(id).append(",")
-			.append(name).append(",")
-			.append(introducedDate).append(",")
-			.append(discontinuedDate).append(",")
-			.append(companyId).append(",")
-			.append(companyName).append(")")
-			.toString());
-		this.id = id;
-		this.name = name;
-		this.introducedDate = introducedDate;
-		this.discontinuedDate = discontinuedDate;
-		this.companyId = companyId;
-		this.companyName = companyName;
-	}
-	
 	public ComputerDTO() {
 		LOG.trace("new ComputerDTO()");
 	}

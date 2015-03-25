@@ -21,8 +21,7 @@ public class UserInputsValidator {
 		if (!isValidString(date)) {
 			return false;
 		}
-		boolean result = true;
-		result &= Pattern.matches(DATE_REGEX, date);
+		boolean result = Pattern.matches(DATE_REGEX, date);
 		int day = 0;
 		int month = 0;
 		int year = 0;

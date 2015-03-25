@@ -19,7 +19,7 @@ public class NavigationPage<T> {
 	private static final int WIDTH = 3;
 	
 	public static final int DEFAULT_LIMIT = 10;
-	public static final int DEFAULT_OFFSET = 0;
+	private static final int DEFAULT_OFFSET = 0;
 	public static final int DEFAULT_PAGE_NUM = 1;
 	
 	private PageableService<T> service;
@@ -27,7 +27,7 @@ public class NavigationPage<T> {
 	private int maxNbItemsByPage;
 	private int pageNum;
 	private int lastPageNb;
-	private int totalNbEntities;
+    private int totalNbEntities;
 
 	/**
 	 * 
@@ -86,6 +86,13 @@ public class NavigationPage<T> {
 		LOG.trace("getLastPageNb()");
 		return lastPageNb;
 	}
+    /**
+     *
+     * @return
+     */
+    public int getTotalNbEntities() {
+        return totalNbEntities;
+    }
 	/**
 	 * Retourne le numéro de la page courante.
 	 * @return
@@ -94,12 +101,8 @@ public class NavigationPage<T> {
 		LOG.trace("getPageNum()");
 		return pageNum;
 	}
-	
-	public int getTotalNbEntities() {
-		LOG.trace("getTotalNbENtities()");
-		return totalNbEntities;
-	}
-	public int getStartingPage() {
+
+    public int getStartingPage() {
 		LOG.trace("getStartingPage()");
 		return Integer.max(1, getPageNum() - WIDTH);
 	}
@@ -142,26 +145,8 @@ public class NavigationPage<T> {
 		this.pageNum = pageNum;
 		stdRefresh();
 	}
-	/**
-	 * Va à la prochaine page si on y est pas déjà.
-	 */
-	public void goToNextPage() {
-		LOG.trace("goToNextPage()");
-		if (getPageNum() != getLastPageNb()) {
-			setPageNum(pageNum + 1);
-		}
-	}
-	/**
-	 * Va à la page précédente si on y est pas déjà.
-	 */
-	public void goToPreviousPage() {
-		LOG.trace("goToPreviousPage()");
-		if (getPageNum() != 0) {
-			setPageNum(pageNum - 1);
-		}
-	}
-	
-	// OUTILS
+
+    // OUTILS
 	/**
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.

@@ -24,9 +24,9 @@ public enum CLICommand {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CLICommand.class);
 	
-	private String command;
-	private boolean endService;
-	private CommandRunner commandRunner;
+	private final String command;
+	private final boolean endService;
+	private final CommandRunner commandRunner;
 	
 	CLICommand(String command, boolean endService, CommandRunner commandRunner) {
 		this.command = command;

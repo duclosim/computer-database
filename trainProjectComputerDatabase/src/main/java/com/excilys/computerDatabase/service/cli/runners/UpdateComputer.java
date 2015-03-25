@@ -69,8 +69,7 @@ public class UpdateComputer implements CommandRunner {
 			computerService.update(computer);
 		} catch (NumberFormatException e) {
 			LOG.error("Nombre impossible à reconnaître");
-		} finally {
 		}
-	}
+    }
 
 }

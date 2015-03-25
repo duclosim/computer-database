@@ -23,7 +23,7 @@ public enum CompanyServiceImpl implements CompanyService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
 	
-	private CompanyDAO dao;
+	private final CompanyDAO dao;
 	
 	private CompanyServiceImpl() {
 		dao = CompanyDAOImpl.INSTANCE;

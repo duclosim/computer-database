@@ -58,7 +58,7 @@ public enum ConnectionFactory {
 	public final Connection getConnection() {
 		LOG.trace("getConnection()");
 		try {
-			return (Connection) DriverManager.getConnection(url, user, password);
+			return DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			LOG.error("Pas possible de se connecter à la bdd.");
 			e.printStackTrace();
@@ -80,21 +80,8 @@ public enum ConnectionFactory {
 			e.printStackTrace();
 		}
 	}
-	
-	public final void closeConnectionAndStatement(Connection connection, 
-			Statement statement) {
-		LOG.trace("closeConnection(" + connection + ", " + statement + ")");
-		try {
-			connection.close();
-			statement.close();
-		} catch (SQLException e) {
-			LOG.error("Erreur : impossible de fermer la "
-					+ "connection à la base de données.");
-			e.printStackTrace();
-		}
-	}
-	
-	public final void closeConnectionAndStatementAndResults(Connection connection, 
+
+    public final void closeConnectionAndStatementAndResults(Connection connection,
 			Statement statement, ResultSet results) {
 		LOG.trace("closeConnection(" 
 			+ connection + ", " 

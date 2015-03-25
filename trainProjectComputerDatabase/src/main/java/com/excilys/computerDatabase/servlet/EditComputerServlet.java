@@ -22,8 +22,8 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 	private static final Logger LOG = LoggerFactory.getLogger(EditComputerServlet.class);
 	private static final long serialVersionUID = 423648038487626720L;
 	
-	CompanyService companyService;
-	ComputerService computerService;
+	private CompanyService companyService;
+	private ComputerService computerService;
 	private ComputerDTO computer;
 	
 	@Override

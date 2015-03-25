@@ -21,9 +21,8 @@ public enum CompanyMapper {
 			throw new IllegalArgumentException("results est à null.");
 		}
 		try {
-			Company companyBean = new Company(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
-					results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
-			return companyBean;
+            return new Company(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
+                    results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 		} catch (SQLException e) {
 			LOG.error("Erreur de lecture d'une colonne");
 			e.printStackTrace();

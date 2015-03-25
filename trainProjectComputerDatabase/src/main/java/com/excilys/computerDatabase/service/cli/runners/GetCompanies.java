@@ -20,10 +20,10 @@ public class GetCompanies implements CommandRunner {
 	public void runCommand(Scanner sc) {
 		LOG.trace("runCommand(" + sc + ")");
 		CompanyService companyService = CompanyServiceImpl.INSTANCE;
-		NavigationPage<Company> page = new NavigationPage<Company>(companyService, MAX_ITEMS_BY_PAGE, 0);
+		NavigationPage<Company> page = new NavigationPage<>(companyService, MAX_ITEMS_BY_PAGE, 0);
 		System.out.println(page);
 		for (int k = 2; k < page.getLastPageNb(); ++k) {
-			page = new NavigationPage<Company>(companyService);
+			page = new NavigationPage<>(companyService);
 			System.out.println(page);
 			sc.nextLine();
 		}

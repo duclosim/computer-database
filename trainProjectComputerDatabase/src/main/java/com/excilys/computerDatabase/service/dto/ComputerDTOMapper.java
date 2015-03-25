@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -43,22 +43,8 @@ public enum ComputerDTOMapper {
 		}
 		return bean;
 	}
-	
-	/**
-	 * 
-	 * @param dtos
-	 * @return
-	 */
-	public List<Computer> DTOsToBeans(List<ComputerDTO> dtos) {
-		LOG.trace("DTOsToBeans(" + dtos + ")");
-		List<Computer> computers = new ArrayList<>();
-		for (ComputerDTO dto : dtos) {
-			computers.add(DTOToBean(dto));
-		}
-		return computers;
-	}
-	
-	/**
+
+    /**
 	 * 
 	 * @param bean
 	 * @return
@@ -91,10 +77,6 @@ public enum ComputerDTOMapper {
 	 * @return
 	 */
 	public List<ComputerDTO> BeansToDTOs(List<Computer> beans) {
-		List<ComputerDTO> dtos = new ArrayList<>();
-		for (Computer computer : beans) {
-			dtos.add(BeanToDTO(computer));
-		}
-		return dtos;
+        return beans.stream().map(this::BeanToDTO).collect(Collectors.toList());
 	}
 }
