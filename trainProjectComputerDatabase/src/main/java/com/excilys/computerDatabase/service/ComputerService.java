@@ -8,12 +8,6 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  *
  */
 public interface ComputerService extends PageableService<ComputerDTO> {
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
-	ComputerDTO getById(Long id);
 	
 	/**
 	 * 
@@ -26,10 +20,4 @@ public interface ComputerService extends PageableService<ComputerDTO> {
 	 * @param computer
 	 */
 	void update(ComputerDTO computer);
-	
-	/**
-	 * 
-	 * @param computer
-	 */
-	void delete(ComputerDTO computer);
 }

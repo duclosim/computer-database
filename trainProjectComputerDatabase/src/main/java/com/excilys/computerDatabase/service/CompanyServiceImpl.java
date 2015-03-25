@@ -53,6 +53,24 @@ public enum CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
+	public List<Company> getByName(String name) {
+		LOG.trace("getAll()");
+		Connection connection = null;
+		List<Company> result = null;
+		try {
+			connection = ConnectionFactory.INSTANCE.getConnection();
+			result = dao.getByName(name, connection);
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(connection);
+		}
+		return result;
+	}
+
+	@Override
 	public List<Company> getAll(int limit, int offset) {
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		if (limit <= 0) {
@@ -144,4 +162,5 @@ public enum CompanyServiceImpl implements CompanyService {
 		}
 	}
 
+	
 }

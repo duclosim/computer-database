@@ -4,6 +4,21 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface PageableService<T> {
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	T getById(Long id);
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	List<T> getByName(String name);
+	
 	/**
 	 * Cette méthode retourne tout le contenu de la table 
 	 *   sous forme de liste de bean.
@@ -20,4 +35,10 @@ public interface PageableService<T> {
 	 * @throws SQLException 
 	 */
 	int countLines();
+	
+	/**
+	 * 
+	 * @param computer
+	 */
+	void delete(T t);
 }

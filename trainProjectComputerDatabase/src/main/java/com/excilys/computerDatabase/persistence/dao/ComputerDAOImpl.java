@@ -31,6 +31,12 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public static final String DISCONTINUED_COLUMN_LABEL = "discontinued";
 	public static final String COMPANY_ID_COLUMN_LABEL = "company_id";
 	
+	private ComputerMapper mapper;
+	
+	private ComputerDAOImpl() {
+		mapper = ComputerMapper.INSTANCE;
+	}
+	
 	public Computer getById(Long id, Connection con) throws SQLException {
 		LOG.trace("getById(" + id + ")");
 		Computer result = null;
@@ -40,7 +46,23 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		ps.setLong(++paramIndex, id);
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
-			result = ComputerMapper.INSTANCE.mapComputer(results);
+			result = mapper.mapComputer(results);
+		}
+		ps.close();
+		return result;
+	}
+
+	@Override
+	public List<Computer> getByName(String name, Connection con)
+			throws SQLException {
+		LOG.trace("getByName(" + name + ")");
+		List<Computer> result = new ArrayList<Computer>();
+		String query = "SELECT * FROM computer WHERE name=?;";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, name);
+		ResultSet results = ps.executeQuery();
+		while (results.next()) {
+			result.add(mapper.mapComputer(results));
 		}
 		ps.close();
 		return result;
@@ -64,7 +86,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		ps.setLong(++paramIndex, offset);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
-			result.add(ComputerMapper.INSTANCE.mapComputer(results));
+			result.add(mapper.mapComputer(results));
 		}
 		ps.close();
 		return result;
@@ -127,6 +149,10 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
+		}
+		if (computer.getName() == null) {
+			LOG.error("computerName est à null.");
+			throw new IllegalArgumentException("computerName est à null.");
 		}
 		LOG.trace("update(" + computer + ")");
 		StringBuilder query = new StringBuilder("UPDATE computer SET ")

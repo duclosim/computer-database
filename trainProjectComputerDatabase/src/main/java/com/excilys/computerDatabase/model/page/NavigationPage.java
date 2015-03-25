@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model;
+package com.excilys.computerDatabase.model.page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,12 @@ import com.excilys.computerDatabase.service.PageableService;
  *
  * @param <T> La classe des objets que doivent contenir les pages.
  */
-public class Page<T> {
-	private static final Logger LOG = LoggerFactory.getLogger(Page.class);
-	public static final int DEFAULT_LIMIT = 10;
-	private static final int DEFAULT_OFFSET = 0;
+public class NavigationPage<T> {
+	private static final Logger LOG = LoggerFactory.getLogger(NavigationPage.class);
 	private static final int WIDTH = 3;
+	
+	public static final int DEFAULT_LIMIT = 10;
+	public static final int DEFAULT_OFFSET = 0;
 	public static final int DEFAULT_PAGE_NUM = 1;
 	
 	private PageableService<T> service;
@@ -33,7 +34,7 @@ public class Page<T> {
 	 * 
 	 * @param service
 	 */
-	public Page(PageableService<T> service) {
+	public NavigationPage(PageableService<T> service) {
 		this(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
 		LOG.trace("new Page(" + service + ")");
 	}
@@ -44,7 +45,7 @@ public class Page<T> {
 	 * @param offset
 	 * @param limit
 	 */
-	public Page(PageableService<T> service, int limit, int offset) {
+	public NavigationPage(PageableService<T> service, int limit, int offset) {
 		LOG.trace(new StringBuilder("new Page(")
 			.append(service).append(", ")
 			.append(limit).append(",')")
@@ -155,11 +156,11 @@ public class Page<T> {
 	}
 	
 	// OUTILS
-	/*
+	/**
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	private void refresh() {
+	public void refresh() {
 		LOG.trace("refresh()");
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
 		entities = new ArrayList<>(service.getAll(getMaxNbItemsByPage(), offset));

@@ -27,7 +27,7 @@ public enum CLICommand {
 	DETAIL_COMPUTER("detail_computer", false, new DetailComputer()),
 	CREATE_COMPUTER("create_computer", false, new CreateComputer()),
 	UPDATE_COMPUTER("update_computer", false, new UpdateComputer()),
-	DELETE_COMPANIES("delete_companies", false, new DeleteCompany()),
+	DELETE_COMPANIES("delete_company", false, new DeleteCompany()),
 	DELETE_COMPUTER("delete_computer", false, new DeleteComputer()),
 	EXIT("exit", true, new Exit());
 	

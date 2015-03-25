@@ -26,6 +26,12 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
 
+	private CompanyMapper mapper;
+	
+	private CompanyDAOImpl() {
+		mapper = CompanyMapper.INSTANCE;
+	}
+	
 	@Override
 	public Company getById(Long id, Connection con) throws SQLException {
 		LOG.trace("getById(" + id + ")");
@@ -35,7 +41,22 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		ps.setLong(1, id);
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
-			result = CompanyMapper.INSTANCE.mapCompany(results);
+			result = mapper.mapCompany(results);
+		}
+		ps.close();
+		return result;
+	}
+
+	@Override
+	public List<Company> getByName(String name, Connection con) throws SQLException {
+		LOG.trace("getByName(" + name + ")");
+		List<Company> result = new ArrayList<Company>();
+		String query = "SELECT * FROM company WHERE name=?;";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, name);
+		ResultSet results = ps.executeQuery();
+		while (results.next()) {
+			result.add(mapper.mapCompany(results));
 		}
 		ps.close();
 		return result;
@@ -52,7 +73,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		ps.setLong(++paramIndex, offset);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
-			result.add(CompanyMapper.INSTANCE.mapCompany(results));
+			result.add(mapper.mapCompany(results));
 		}
 		ps.close();
 		return result;
@@ -66,7 +87,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		PreparedStatement ps = con.prepareStatement(query);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
-			result.add(CompanyMapper.INSTANCE.mapCompany(results));
+			result.add(mapper.mapCompany(results));
 		}
 		ps.close();
 		return result;

@@ -1,6 +1,8 @@
 package com.excilys.computerDatabase.service.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,20 @@ public enum ComputerDTOMapper {
 	
 	/**
 	 * 
+	 * @param dtos
+	 * @return
+	 */
+	public List<Computer> DTOsToBeans(List<ComputerDTO> dtos) {
+		LOG.trace("DTOsToBeans(" + dtos + ")");
+		List<Computer> computers = new ArrayList<>();
+		for (ComputerDTO dto : dtos) {
+			computers.add(DTOToBean(dto));
+		}
+		return computers;
+	}
+	
+	/**
+	 * 
 	 * @param bean
 	 * @return
 	 */
@@ -58,15 +74,28 @@ public enum ComputerDTOMapper {
 		dto.setCompanyId(null);
 		dto.setCompanyName(null);
 		if (bean.getIntroducedDate() != null) {
-			dto.setIntroducedDate(bean.getIntroducedDate().toLocalDate().toString());
+			dto.setIntroducedDate(bean.getIntroducedDate().toString());
 		}
 		if (bean.getDiscontinuedDate() != null) {
-			dto.setDiscontinuedDate(bean.getDiscontinuedDate().toLocalDate().toString());
+			dto.setDiscontinuedDate(bean.getDiscontinuedDate().toString());
 		}
 		if (bean.getCompany() != null) {
 			dto.setCompanyId(bean.getCompany().getId().toString());
 			dto.setCompanyName(bean.getCompany().getName());
 		}
 		return dto;
+	}
+	
+	/**
+	 * 
+	 * @param beans
+	 * @return
+	 */
+	public List<ComputerDTO> BeansToDTOs(List<Computer> beans) {
+		List<ComputerDTO> dtos = new ArrayList<>();
+		for (Computer computer : beans) {
+			dtos.add(BeanToDTO(computer));
+		}
+		return dtos;
 	}
 }

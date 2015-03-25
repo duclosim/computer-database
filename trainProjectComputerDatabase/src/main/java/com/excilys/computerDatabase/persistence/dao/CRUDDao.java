@@ -11,6 +11,7 @@ public interface CRUDDao<T> {
 	 * @throws SQLException 
 	 */
 	void create(T entity, Connection con) throws SQLException;
+	
 	/**
 	 * Cette méthode retourne un bean dont on a donné 
 	 *   l'identifiant en paramètre.
@@ -21,6 +22,18 @@ public interface CRUDDao<T> {
 	 * @throws SQLException 
 	 */
 	T getById(Long id, Connection con) throws SQLException;
+	
+	/**
+	 * Cette méthode retourne un bean dont on a donné 
+	 *   l'identifiant en paramètre.
+	 * @param name Le nom du ou des bean recherché.
+	 * @return Une liste de beans contenant les informations de la ligne 
+	 *   correspondant au name donné en paramètre, null s'il ne correspond 
+	 *   à aucune ligne.
+	 * @throws SQLException 
+	 */
+	List<T> getByName(String name, Connection con) throws SQLException;
+	
 	/**
 	 * Cette méthode retourne tout le contenu de la table 
 	 *   sous forme de liste de bean.

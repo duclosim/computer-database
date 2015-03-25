@@ -10,19 +10,7 @@ import com.excilys.computerDatabase.model.beans.Company;
  *
  */
 public interface CompanyService extends PageableService<Company> {
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Company getById(Long id);
 	
-	/**
-	 * 
-	 * @param company
-	 */
-	void delete(Company company);
-
 	/**
 	 * 
 	 * @return

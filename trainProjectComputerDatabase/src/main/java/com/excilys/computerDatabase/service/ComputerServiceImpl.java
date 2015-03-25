@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
@@ -54,15 +53,30 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
+	public List<ComputerDTO> getByName(String name) {
+		LOG.trace("getByName(" + name + ")");
+		Connection connection = null;
+		List<ComputerDTO> result = null;
+		try {
+			connection = ConnectionFactory.INSTANCE.getConnection();
+			result = dtoMapper.BeansToDTOs((dao.getByName(name, connection)));
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.closeConnection(connection);
+		}
+		return result;
+	}
+
+	@Override
 	public List<ComputerDTO> getAll(int limit, int offset) {
 		Connection connection = null;
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
 			connection = ConnectionFactory.INSTANCE.getConnection();
-			List<Computer> list = dao.getAll(limit, offset, connection);
-			for (Computer computer : list) {
-				result.add(dtoMapper.BeanToDTO(computer));
-			}
+			result = dtoMapper.BeansToDTOs((dao.getAll(limit, offset, connection)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -148,7 +162,7 @@ public enum ComputerServiceImpl implements ComputerService {
 		String discontinuedDate = computer.getDiscontinuedDate();
 		String companyIdStr = computer.getCompanyId();
 		// Test de l'objet.
-		if ((name == null) || (name.trim().isEmpty())) {
+		if ((name != null) && (!UserInputsValidator.isValidString(name))) {
 			LOG.error("Nom non valide.\n");
 			throw new IllegalArgumentException("Nom non valide.\n");
 		}
