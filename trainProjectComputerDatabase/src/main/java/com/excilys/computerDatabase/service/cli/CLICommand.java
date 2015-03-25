@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.service.cli;
 
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.service.cli.runners.CommandRunner;
 import com.excilys.computerDatabase.service.cli.runners.CreateComputer;
 import com.excilys.computerDatabase.service.cli.runners.DeleteCompany;
@@ -28,6 +31,8 @@ public enum CLICommand {
 	DELETE_COMPUTER("delete_computer", false, new DeleteComputer()),
 	EXIT("exit", true, new Exit());
 	
+	private static final Logger LOG = LoggerFactory.getLogger(CLICommand.class);
+	
 	private String command;
 	private boolean endService;
 	private CommandRunner commandRunner;
@@ -39,14 +44,17 @@ public enum CLICommand {
 	}
 	
 	public String getCommand() {
+		LOG.trace("getCommand()");
 		return this.command;
 	}
 	
 	public boolean getEndService() {
+		LOG.trace("getEndService()");
 		return this.endService;
 	}
 	
 	public CommandRunner getCommandRunner() {
+		LOG.trace("getCommandRunner()");
 		return this.commandRunner;
 	}
 	
@@ -57,7 +65,9 @@ public enum CLICommand {
 	 * @return Un booléen indiquant si la commande appelée met fin au programme.
 	 */
 	public boolean runCommand(Scanner sc) {
+		LOG.trace("runCommand(" + sc + ")");
 		if (sc == null) {
+			LOG.error("sc est à null.");
 			throw new IllegalArgumentException("sc est à null.");
 		}
 		getCommandRunner().runCommand(sc);

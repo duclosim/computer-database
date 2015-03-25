@@ -3,6 +3,9 @@ package com.excilys.computerDatabase.service.cli.runners;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
@@ -14,8 +17,10 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  *
  */
 public class UpdateComputer implements CommandRunner {
+	private static final Logger LOG = LoggerFactory.getLogger(UpdateComputer.class);
 
 	public void runCommand(Scanner sc) {
+		LOG.trace("runCommand(" + sc + ")");
 		ComputerService computerService = ComputerServiceImpl.INSTANCE;
 		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
 		String args = sc.next();
@@ -35,7 +40,7 @@ public class UpdateComputer implements CommandRunner {
 				try {
 					computer.setIntroducedDate(args);
 				} catch (DateTimeParseException e) {
-					System.err.println("Date impossible à reconnaître.");
+					LOG.error("Date impossible à reconnaître.");
 				}
 			} else {
 				computer.setIntroducedDate(null);
@@ -46,7 +51,7 @@ public class UpdateComputer implements CommandRunner {
 				try {
 					computer.setDiscontinuedDate(args);
 				} catch (DateTimeParseException e) {
-					System.err.println("Date impossible à reconnaître.");
+					LOG.error("Date impossible à reconnaître.");
 				}
 			} else {
 				computer.setDiscontinuedDate(null);
@@ -57,14 +62,14 @@ public class UpdateComputer implements CommandRunner {
 				try {
 					computer.setCompanyId(args);
 				} catch (NumberFormatException e) {
-					System.err.println("Nombre impossible à reconnaître.");
+					LOG.error("Nombre impossible à reconnaître.");
 				}
 			} else {
 				computer.setCompanyId(null);
 			}
 			computerService.update(computer);
 		} catch (NumberFormatException e) {
-			System.err.println("Nombre impossible à reconnaître");
+			LOG.error("Nombre impossible à reconnaître");
 		} finally {
 		}
 	}

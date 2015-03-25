@@ -3,6 +3,9 @@ package com.excilys.computerDatabase.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.service.PageableService;
 
 /**
@@ -13,6 +16,7 @@ import com.excilys.computerDatabase.service.PageableService;
  * @param <T> La classe des objets que doivent contenir les pages.
  */
 public class Page<T> {
+	private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 	public static final int DEFAULT_LIMIT = 10;
 	private static final int DEFAULT_OFFSET = 0;
 	private static final int WIDTH = 3;
@@ -31,6 +35,7 @@ public class Page<T> {
 	 */
 	public Page(PageableService<T> service) {
 		this(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		LOG.trace("new Page(" + service + ")");
 	}
 	
 	/**
@@ -40,13 +45,21 @@ public class Page<T> {
 	 * @param limit
 	 */
 	public Page(PageableService<T> service, int limit, int offset) {
+		LOG.trace(new StringBuilder("new Page(")
+			.append(service).append(", ")
+			.append(limit).append(",')")
+			.append(offset).append(")")
+			.toString());
 		if (service == null) {
+			LOG.error("service est à null.");
 			throw new IllegalArgumentException("service est à null.");
 		}
 		if (limit <= 0) {
+			LOG.error("limit est négatif ou nul");
 			throw new IllegalArgumentException("limit est négatif ou nul");
 		}
 		if (offset < 0) {
+			LOG.error("offset est négatif");
 			throw new IllegalArgumentException("offset est négatif");
 		}
 		this.service = service;
@@ -57,13 +70,12 @@ public class Page<T> {
 	}
 
 	// REQUETES
-	public PageableService<T> getDao() {
-		return service;
-	}
 	public List<T> getEntities() {
+		LOG.trace("getEntities()");
 		return entities;
 	}
 	public int getMaxNbItemsByPage() {
+		LOG.trace("getMaxNbItemsByPage");
 		return maxNbItemsByPage;
 	}
 	/**
@@ -71,6 +83,7 @@ public class Page<T> {
 	 * @return
 	 */
 	public int getLastPageNb() {
+		LOG.trace("getLastPageNb()");
 		return lastPageNb;
 	}
 	/**
@@ -78,16 +91,20 @@ public class Page<T> {
 	 * @return
 	 */
 	public int getPageNum() {
+		LOG.trace("getPageNum()");
 		return pageNum;
 	}
 	
 	public int getTotalNbEntities() {
+		LOG.trace("getTotalNbENtities()");
 		return totalNbEntities;
 	}
 	public int getStartingPage() {
+		LOG.trace("getStartingPage()");
 		return Integer.max(1, getPageNum() - WIDTH);
 	}
 	public int getFinishingPage() {
+		LOG.trace("getFinishingPage()");
 		return Integer.min(getLastPageNb(), getPageNum() + WIDTH);
 	}
 
@@ -97,7 +114,9 @@ public class Page<T> {
 	 * @param maxNbItemsByPage
 	 */
 	public void setMaxNbItemsByPage(int maxNbItemsByPage) {
+		LOG.trace("setMaxNbItemsByPage(" + maxNbItemsByPage + ")");
 		if (maxNbItemsByPage < 0) {
+			LOG.error("maxNbItemsByPage est négatif.");
 			throw new IllegalArgumentException("maxNbItemsByPage est négatif.");
 		}
 		this.maxNbItemsByPage = maxNbItemsByPage;
@@ -108,7 +127,9 @@ public class Page<T> {
 	 * @param pageNum
 	 */
 	public void setPageNum(int pageNum) {
+		LOG.trace("setPageNum(" + pageNum + ")");
 		if ((0 >= pageNum) || (pageNum > lastPageNb)) {
+			LOG.error("pageNum est hors-limites.");
 			throw new IllegalArgumentException("pageNum est hors-limites.");
 		}
 		this.pageNum = pageNum;
@@ -118,6 +139,7 @@ public class Page<T> {
 	 * Va à la prochaine page si on y est pas déjà.
 	 */
 	public void goToNextPage() {
+		LOG.trace("goToNextPage()");
 		if (getPageNum() != getLastPageNb()) {
 			setPageNum(pageNum + 1);
 		}
@@ -126,6 +148,7 @@ public class Page<T> {
 	 * Va à la page précédente si on y est pas déjà.
 	 */
 	public void goToPreviousPage() {
+		LOG.trace("goToPreviousPage()");
 		if (getPageNum() != 0) {
 			setPageNum(pageNum - 1);
 		}
@@ -137,6 +160,7 @@ public class Page<T> {
 	 *   de page ou du nombre d'objets par page.
 	 */
 	private void refresh() {
+		LOG.trace("refresh()");
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
 		entities = new ArrayList<>(service.getAll(getMaxNbItemsByPage(), offset));
 		lastPageNb = service.countLines() / getMaxNbItemsByPage() + 1;

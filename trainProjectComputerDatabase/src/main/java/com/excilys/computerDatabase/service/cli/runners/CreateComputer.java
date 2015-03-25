@@ -3,6 +3,9 @@ package com.excilys.computerDatabase.service.cli.runners;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
@@ -13,8 +16,10 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  *
  */
 public class CreateComputer implements CommandRunner {
-
+	private static final Logger LOG = LoggerFactory.getLogger(CreateComputer.class);
+	
 	public void runCommand(Scanner sc) {
+		LOG.trace("runCommand(" + sc + ")");
 		ComputerService computerService = ComputerServiceImpl.INSTANCE;
 		ComputerDTO computer = new ComputerDTO();
 		System.out.println("Nom du nouvel ordinateur : ");
@@ -27,21 +32,21 @@ public class CreateComputer implements CommandRunner {
 		try {
 			computer.setIntroducedDate(args);
 		} catch (DateTimeParseException e) {
-			System.err.println("Date impossible à reconnaître.");
+			LOG.error("Date impossible à reconnaître.");
 		}
 		System.out.println("Date de sortie du nouvel ordinateur (format 2007-12-03T10:15:30) : ");
 		args = sc.nextLine();
 		try {
 			computer.setDiscontinuedDate(args);
 		} catch (DateTimeParseException e) {
-			System.err.println("Date impossible à reconnaître.");
+			LOG.error("Date impossible à reconnaître.");
 		}
 		System.out.println("Id d'entreprise du nouvel ordinateur : ");
 		args = sc.nextLine();
 		try {
 			computer.setCompanyId(args);
 		} catch (NumberFormatException e) {
-			System.err.println("Nombre impossible à reconnaître.");
+			LOG.error("Nombre impossible à reconnaître.");
 		}
 		computerService.create(computer);
 	}

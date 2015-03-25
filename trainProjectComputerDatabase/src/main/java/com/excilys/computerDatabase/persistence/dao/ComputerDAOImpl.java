@@ -48,9 +48,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	public List<Computer> getAll(int limit, int offset, Connection con) throws SQLException {
 		if (limit <= 0) {
+			LOG.error("limit est négatif ou nul.");
 			throw new IllegalArgumentException("limit est négatif ou nul.");
 		}
 		if (offset < 0) {
+			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
@@ -83,6 +85,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	public void create(Computer computer, Connection con) throws SQLException {
 		if (computer == null) {
+			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
 		LOG.trace("create(" + computer + ")");
@@ -122,6 +125,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	public void update(Computer computer, Connection con) throws SQLException {
 		if (computer == null) {
+			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
 		LOG.trace("update(" + computer + ")");
@@ -166,6 +170,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	public void delete(Computer computer, Connection con) throws SQLException {
 		if (computer == null) {
+			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
 		LOG.trace("delete(" + computer + ")");

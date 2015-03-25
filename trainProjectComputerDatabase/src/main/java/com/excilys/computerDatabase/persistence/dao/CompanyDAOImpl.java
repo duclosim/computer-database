@@ -21,7 +21,7 @@ import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 public enum CompanyDAOImpl implements CompanyDAO {
 	INSTANCE;
 
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
@@ -100,6 +100,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public void delete(Company company, Connection con) throws SQLException {
 		if (company == null) {
+			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");
 		}
 		LOG.trace("delete(" + company + ")");

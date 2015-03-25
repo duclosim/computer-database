@@ -3,9 +3,13 @@ package com.excilys.computerDatabase.model;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class UserInputsValidator {
 	private static final String NUMBER_REGEX = "[0-9]*";
 	private static final String DATE_REGEX = "[1-2][0-9]{3}-[0-1][1-9]-[0-3][0-9]";
+	private static final Logger LOG = LoggerFactory.getLogger(UserInputsValidator.class);
 	
 	/**
 	 * Teste si une date est valide ou pas AAAA-MM-JJ.
@@ -13,6 +17,7 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si la date est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidDate(String date) {
+		LOG.trace("isValidDate(" + date + ")");
 		if (!isValidString(date)) {
 			return false;
 		}
@@ -72,6 +77,7 @@ public class UserInputsValidator {
 	}
 	
 	private static boolean isBissextileYear(int y) {
+		LOG.trace("isBissextileYear(" + y + ")");
 		return (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0));
 	}
 
@@ -81,10 +87,12 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si le nombre est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidNumber(String number) {
+		LOG.trace("isValidNumber(" + number + ")");
 		return isValidString(number) && Pattern.matches(NUMBER_REGEX, number);
 	}
 	
 	public static boolean isValidString(String string) {
+		LOG.trace("isValidString(" + string + ")");
 		return ((string != null) && (!string.trim().isEmpty()));
 	}
 }

@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.userInterface;
 
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.service.cli.CLIService;
 
 /**
@@ -10,7 +13,10 @@ import com.excilys.computerDatabase.service.cli.CLIService;
  *
  */
 public class ComputerDatabaseCLI {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabaseCLI.class);
+	
 	public static void main(String args[]) {
+		LOG.trace("main(" + args + ")");
 		Scanner sc = new Scanner(System.in);
 		boolean terminated = false;
 		CLIService cliService = new CLIService();

@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.service.dto;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
 
@@ -13,12 +16,15 @@ import com.excilys.computerDatabase.model.beans.Computer;
 public enum ComputerDTOMapper {
 	INSTANCE;
 	
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOMapper.class);
+	
 	/**
 	 * 
 	 * @param dto
 	 * @return
 	 */
 	public Computer DTOToBean(ComputerDTO dto) {
+		LOG.trace("DTOToBean(" + dto + ")");
 		Computer bean = new Computer();
 		bean.setId(Long.parseLong(dto.getId()));
 		bean.setName(dto.getName());
@@ -34,6 +40,7 @@ public enum ComputerDTOMapper {
 	 * @return
 	 */
 	public ComputerDTO BeanToDTO(Computer bean) {
+		LOG.trace("BeanToDTO(" + bean + ")");
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(bean.getId().toString());
 		dto.setName(bean.getName());

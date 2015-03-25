@@ -22,9 +22,6 @@
 			<a class="navbar-brand" href="dashboard"> Application -
 				Computer Database </a>
 		</div>
-		<c:if test="!${empty errorMessage}">
-			<c:out value="${errorMessage}" />
-		</c:if>
 	</header>
 
 	<section id="main">

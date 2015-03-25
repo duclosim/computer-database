@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.service.cli.runners;
 
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
@@ -12,8 +15,10 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  *
  */
 public class DeleteComputer implements CommandRunner {
+	private static final Logger LOG = LoggerFactory.getLogger(DeleteComputer.class);
 
 	public void runCommand(Scanner sc) {
+		LOG.trace("runCommand(" + sc + ")");
 		ComputerService computerService = ComputerServiceImpl.INSTANCE;
 		try {
 			System.out.println("Entrez l'id de l'ordinateur à supprimer : ");
@@ -23,7 +28,7 @@ public class DeleteComputer implements CommandRunner {
 			computerService.delete(computer);
 			System.out.println(computer + " a été supprimé avec succès.");
 		} catch (NumberFormatException e) {
-			System.err.println("L'id passé n'est pas un nombre.");
+			LOG.error("L'id passé n'est pas un nombre.");
 		}
 	}
 

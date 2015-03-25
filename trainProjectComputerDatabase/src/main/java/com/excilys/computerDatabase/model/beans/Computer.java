@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.model.beans;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Cette classe contient les informations contenue dans une ligne de 
  *   la table computer.
@@ -9,19 +12,23 @@ import java.time.LocalDateTime;
  *
  */
 public class Computer {
+	private static final Logger LOG = LoggerFactory.getLogger(Computer.class);
+	
 	private Long id;
 	private String name;
 	private LocalDateTime introduced;
 	private LocalDateTime discontinued;
 	private Company company;
 
-	public Computer() {
-		
-	}
-
 	public Computer(Long id, String name, LocalDateTime introduced,
 			LocalDateTime discontinued, Company company) {
-		super();
+		LOG.trace(new StringBuilder("new Computer(")
+			.append(id).append(",")
+			.append(name).append(",")
+			.append(introduced).append(",")
+			.append(discontinued).append(",")
+			.append(company).append(")")
+			.toString());
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -29,34 +36,48 @@ public class Computer {
 		this.company = company;
 	}
 	
+	public Computer() {
+		LOG.trace("new Computer()");
+	}
+	
 	public Long getId() {
+		LOG.trace("getId()");
 		return id;
 	}
 	public void setId(Long id) {
+		LOG.trace("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
+		LOG.trace("getName()");
 		return name;
 	}
 	public void setName(String name) {
+		LOG.trace("setName(" + name + ")");
 		this.name = name;
 	}
 	public LocalDateTime getIntroduced() {
+		LOG.trace("getIntroduced()");
 		return introduced;
 	}
 	public void setIntroduced(LocalDateTime introduced) {
+		LOG.trace("setIntroduced(" + introduced + ")");
 		this.introduced = introduced;
 	}
 	public LocalDateTime getDiscontinued() {
+		LOG.trace("getDiscontinued()");
 		return discontinued;
 	}
 	public void setDiscontinued(LocalDateTime discontinued) {
+		LOG.trace("setDiscontinued(" + discontinued + ")");
 		this.discontinued = discontinued;
 	}
 	public Company getCompany() {
+		LOG.trace("getCompany()");
 		return company;
 	}
 	public void setCompany(Company company) {
+		LOG.trace("setCompany(" + company + ")");
 		this.company = company;
 	}
 

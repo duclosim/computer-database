@@ -1,6 +1,11 @@
 package com.excilys.computerDatabase.service.dto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ComputerDTO {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTO.class);
+	
 	private String id;
 	private String name;
 	private String introducedDate;
@@ -10,7 +15,14 @@ public class ComputerDTO {
 	
 	public ComputerDTO(String id, String name, String introducedDate,
 			String discontinuedDate, String companyId, String companyName) {
-		super();
+		LOG.trace(new StringBuilder("new Computer(")
+			.append(id).append(",")
+			.append(name).append(",")
+			.append(introducedDate).append(",")
+			.append(discontinuedDate).append(",")
+			.append(companyId).append(",")
+			.append(companyName).append(")")
+			.toString());
 		this.id = id;
 		this.name = name;
 		this.introducedDate = introducedDate;
@@ -20,43 +32,55 @@ public class ComputerDTO {
 	}
 	
 	public ComputerDTO() {
-		
+		LOG.trace("new ComputerDTO()");
 	}
 	
 	public String getId() {
+		LOG.trace("getId()");
 		return id;
 	}
 	public void setId(String id) {
+		LOG.trace("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
+		LOG.trace("getName()");
 		return name;
 	}
 	public void setName(String name) {
+		LOG.trace("setName(" + name + ")");
 		this.name = name;
 	}
 	public String getIntroducedDate() {
+		LOG.trace("getIntroducedDate()");
 		return introducedDate;
 	}
 	public void setIntroducedDate(String introducedDate) {
+		LOG.trace("setIntroducedDate(" + introducedDate + ")");
 		this.introducedDate = introducedDate;
 	}
 	public String getDiscontinuedDate() {
+		LOG.trace("getDiscontinuedDate()");
 		return discontinuedDate;
 	}
 	public void setDiscontinuedDate(String discontinuedDate) {
+		LOG.trace("setDiscontinuedDate(" + discontinuedDate + ")");
 		this.discontinuedDate = discontinuedDate;
 	}
 	public String getCompanyId() {
+		LOG.trace("getCompanyId()");
 		return companyId;
 	}
 	public void setCompanyId(String companyId) {
+		LOG.trace("setCompanyId(" + companyId + ")");
 		this.companyId = companyId;
 	}
 	public String getCompanyName() {
+		LOG.trace("getCompanyName()");
 		return companyName;
 	}
 	public void setCompanyName(String companyName) {
+		LOG.trace("setCompanyName(" + companyName + ")");
 		this.companyName = companyName;
 	}
 

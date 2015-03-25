@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mysql.jdbc.Driver;
 
 /**
@@ -19,7 +22,8 @@ import com.mysql.jdbc.Driver;
  */
 public enum ConnectionFactory {
 	INSTANCE;
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
 	private static final String PROPERTIES_FILE = "./db.properties";
 	private String url;
 	private String user;
@@ -57,10 +61,11 @@ public enum ConnectionFactory {
 	 *   à la base de données.
 	 */
 	public final Connection getConnection() {
+		LOG.trace("getConnection()");
 		try {
 			return (Connection) DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
-			System.err.println("Pas possible de se connecter à la bdd.");
+			LOG.error("Pas possible de se connecter à la bdd.");
 			e.printStackTrace();
 			throw new IllegalStateException("Problème de connexion.");
 		}
@@ -71,10 +76,11 @@ public enum ConnectionFactory {
 	 * @param connection La connexion à refermer.
 	 */
 	public static final void closeConnection(Connection connection) {
+		LOG.trace("closeConnection(" + connection + ")");
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			System.err.println("Erreur : impossible de fermer la "
+			LOG.error("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");
 			e.printStackTrace();
 		}
@@ -82,11 +88,12 @@ public enum ConnectionFactory {
 	
 	public static final void closeConnectionAndStatement(Connection connection, 
 			Statement statement) {
+		LOG.trace("closeConnection(" + connection + ", " + statement + ")");
 		try {
 			connection.close();
 			statement.close();
 		} catch (SQLException e) {
-			System.err.println("Erreur : impossible de fermer la "
+			LOG.error("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");
 			e.printStackTrace();
 		}
@@ -94,12 +101,16 @@ public enum ConnectionFactory {
 	
 	public static final void closeConnectionAndStatementAndResults(Connection connection, 
 			Statement statement, ResultSet results) {
+		LOG.trace("closeConnection(" 
+			+ connection + ", " 
+			+ statement + ", "
+			+ results + ")");
 		try {
 			connection.close();
 			statement.close();
 			results.close();
 		} catch (SQLException e) {
-			System.err.println("Erreur : impossible de fermer la "
+			LOG.error("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");
 			e.printStackTrace();
 		}

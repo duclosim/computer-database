@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Cette classe représente l'interpréteur et invocateur de commandes.
  * @author excilys
@@ -12,9 +15,10 @@ import java.util.Scanner;
 public class CLIService {
 	private static Map<String, CLICommand> map;
 	private static final String UNKNOWN_COMMAND = "Commande non reconnue.";
+	private static final Logger LOG = LoggerFactory.getLogger(CLIService.class);
 	
 	public CLIService() {
-		super();
+		LOG.trace("new CLIService()");
 		map = new HashMap<String, CLICommand>();
 		map.put("get_companies", CLICommand.GET_COMPANIES);
 		map.put("get_computers", CLICommand.GET_COMPUTERS);
@@ -33,10 +37,15 @@ public class CLIService {
 	 * @return true if the program is over.
 	 */
 	public boolean interpretCommand(String command, Scanner sc) {
+		LOG.trace(new StringBuilder("new interpretCommand(")
+			.append(command).append(", ")
+			.append(sc).append(")").toString());
 		if (command == null) {
+			LOG.error("command est à null.");
 			throw new IllegalArgumentException("command est à null.");
 		}
 		if (sc == null) {
+			LOG.error("sc est à null.");
 			throw new IllegalArgumentException("sc est à null.");
 		}
 		CLICommand cliCommands = map.get(command);

@@ -3,11 +3,15 @@ package com.excilys.computerDatabase.servlet;
 import java.io.IOException;
 
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.model.UserInputsValidator;
@@ -17,33 +21,34 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet implements Servlet {
+	private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = -5526661127455358108L;
-	private ComputerService service = ComputerServiceImpl.INSTANCE;
+	private ComputerService service;
 	private Page<ComputerDTO> page;
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		LOG.trace("init(" + config + ")");
+		service = ComputerServiceImpl.INSTANCE;
+		page = new Page<>(service);
+	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		LOG.trace(new StringBuilder("doGet(")
+			.append(req).append(", ")
+			.append(resp).append(")").toString());
 		try {
 			String numParam = req.getParameter("pageNum");
 			String maxItemPageParam = req.getParameter("itemByPage");
-			StringBuilder sb = new StringBuilder("");
 			int newPageNum = Page.DEFAULT_PAGE_NUM;
 			int newItemByPage = Page.DEFAULT_LIMIT;
-			// Construction de la Page.
-			if (page == null) {
-				page = new Page<>(service);
-			}
 			if ((numParam != null) && (!UserInputsValidator.isValidNumber(numParam))) {
-				sb.append("Numéro de page invalide.\n");
+				numParam = null;
 			}
 			if ((maxItemPageParam != null) && (!UserInputsValidator.isValidNumber(maxItemPageParam))) {
-				sb.append("Nombre d'objets par page invalide.\n");
-			}
-			if (!sb.toString().isEmpty()) {
-				req.setAttribute("errorMessage", sb.toString());
-				this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
-				return;
+				maxItemPageParam = null;
 			}
 			if (numParam != null) {
 				newPageNum = Integer.parseInt(numParam);
@@ -57,7 +62,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			req.setAttribute("page", page);
 			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 		} catch (NumberFormatException e) {
-			System.err.println("Erreur de parsing du numéro de page.");
+			LOG.error("Erreur de parsing du numéro de page.");
 			e.printStackTrace();
 			throw new IllegalArgumentException("Pas de numéro de page valide");
 		}

@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.service.cli.runners;
 
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.PageableService;
@@ -13,16 +16,16 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  *
  */
 public class GetComputers implements CommandRunner {
+	private static final Logger LOG = LoggerFactory.getLogger(GetComputers.class);
 
 	public void runCommand(Scanner sc) {
+	LOG.trace("runCommand(" + sc + ")");
 		PageableService<ComputerDTO> computerService = ComputerServiceImpl.INSTANCE;
-		int offset = 0;
-		int limit = MAX_ITEMS_BY_PAGE;
-		Page<ComputerDTO> page = new Page<>(computerService, limit, offset);
-		while (page.getPageNum() <= page.getLastPageNb()) {
+		Page<ComputerDTO> page = new Page<>(computerService, MAX_ITEMS_BY_PAGE, 0);
+		System.out.println(page);
+		for (int k = 2; k < page.getLastPageNb(); ++k) {
 			System.out.println(page);
-			page = new Page<>(computerService, limit, offset);
-			offset += limit;
+			page.setPageNum(k);
 			sc.nextLine();
 		}
 	}
