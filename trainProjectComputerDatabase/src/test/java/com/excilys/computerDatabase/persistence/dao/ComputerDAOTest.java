@@ -126,7 +126,6 @@ public class ComputerDAOTest {
 	public void countLinesShouldReturnTheNumberOfRowsInTheDatabase() throws SQLException {
 		// Given
 		int nbLines;
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		String query = "SELECT COUNT(*) FROM computer;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ResultSet results = ps.executeQuery();
@@ -144,7 +143,6 @@ public class ComputerDAOTest {
 	@Test
 	public void createShouldAddABeanToTheDatabase() throws SQLException {
 		// Given
-		Connection connection = ConnectionFactory.INSTANCE.getConnection();
 		Computer bean = new Computer();
 		Long companyId = new Long(10);
 		String newBeanName = "newBean";
@@ -152,10 +150,10 @@ public class ComputerDAOTest {
 		LocalDateTime time = null;
 		bean.setIntroducedDate(time);
 		bean.setDiscontinuedDate(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, connection));
+		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, con));
 		// When
-		computerDAO.create(bean, connection);
-		Computer expectedBean = computerDAO.getById(bean.getId(), connection);
+		computerDAO.create(bean, con);
+		Computer expectedBean = computerDAO.getById(bean.getId(), con);
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -163,17 +161,16 @@ public class ComputerDAOTest {
 	@Test
 	public void updateShouldAlterABeanFromTheDatabase() throws SQLException {
 		// Given
-		Connection connection = ConnectionFactory.INSTANCE.getConnection();
 		Long id = new Long(10);
 		Computer bean;
-		bean = computerDAO.getById(id, connection);
-		Computer expectedBean = computerDAO.getById(id, connection);
+		bean = computerDAO.getById(id, con);
+		Computer expectedBean = computerDAO.getById(id, con);
 		String name = "new " + bean.getName();
 		bean.setName(name);
 		expectedBean.setName(name);
 		// When
-		computerDAO.update(bean, connection);
-		bean = computerDAO.getById(id, connection);
+		computerDAO.update(bean, con);
+		bean = computerDAO.getById(id, con);
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -181,7 +178,6 @@ public class ComputerDAOTest {
 	@Test
 	public void deleteShouldRemoveABeanFromTheDatabase() throws SQLException {
 		// Given
-		Connection connection = ConnectionFactory.INSTANCE.getConnection();
 		Computer bean = new Computer();
 		Long companyId = new Long(10);
 		String newBeanName = "newBean";
@@ -189,12 +185,31 @@ public class ComputerDAOTest {
 		LocalDateTime time = null;
 		bean.setIntroducedDate(time);
 		bean.setDiscontinuedDate(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, connection));
-		computerDAO.create(bean, connection);
+		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, con));
+		computerDAO.create(bean, con);
 		// When
-		computerDAO.delete(bean, connection);
-		bean = computerDAO.getById(bean.getId(), connection);
+		computerDAO.delete(bean, con);
+		bean = computerDAO.getById(bean.getId(), con);
 		// Then
 		Assert.assertNull("Erreur sur le bean", bean);
+	}
+	
+	@Test
+	public void deleteByCompanyIdShouldDeleteMultipleBeans() throws SQLException {
+		// Given
+		int nbLines;
+		Long companyId = new Long(1);
+		String query = "SELECT COUNT(*) FROM computer WHERE company_id = ?;";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setLong(1, companyId);
+		ResultSet results = ps.executeQuery();
+		if (results.next()) {
+			nbLines = results.getInt(1);
+			ps.close();
+			// When
+			computerDAO.deleteByCompanyId(companyId, con);
+			// Then
+			Assert.assertEquals("Erreur sur le nombre de lignes", 0, nbLines);
+		}
 	}
 }

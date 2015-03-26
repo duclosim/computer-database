@@ -110,7 +110,6 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		// TODO
 		if (limit <= 0) {
 			LOG.error("limit est négatif ou nul.");
 			throw new IllegalArgumentException("limit est négatif ou nul.");

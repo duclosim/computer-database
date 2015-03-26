@@ -17,13 +17,13 @@ import java.util.List;
 
 public class CompanyDAOTest {
 	private Connection con;
-	private CompanyDAO commpanyDAO;
+	private CompanyDAO companyDAO;
 	private CompanyMapper mapper;
 	
 	@Before
 	public void initConnection() {
 		con = ConnectionFactory.INSTANCE.getConnection();
-		commpanyDAO = CompanyDAOImpl.INSTANCE;
+		companyDAO = CompanyDAOImpl.INSTANCE;
 		mapper = CompanyMapper.INSTANCE;
 	}
 	
@@ -48,7 +48,7 @@ public class CompanyDAOTest {
 			expectedBean = mapper.mapCompany(results);
 			ps.close();
 			// When
-			bean = commpanyDAO.getById(id, con);
+			bean = companyDAO.getById(id, con);
 			// Then
 			Assert.assertNotNull("Erreur sur le bean.", bean);
 			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
@@ -75,7 +75,7 @@ public class CompanyDAOTest {
 		}
 		ps.close();
 		// When
-		bean = commpanyDAO.getAll(limit, offset, con);
+		bean = companyDAO.getAll(limit, offset, con);
 		// Then
 		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
 	}
@@ -91,14 +91,9 @@ public class CompanyDAOTest {
 			int expectedSize = results.getInt(1);
 			ps.close();
 			// When
-			nbLines = commpanyDAO.countLines(con);
+			nbLines = companyDAO.countLines(con);
 			// Then
 			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 		}
-	}
-	
-	@Test
-	public void deleteCompanyShouldDeleteCompanyAndRelatedComputers() {
-		// TODO écrire test
 	}
 }

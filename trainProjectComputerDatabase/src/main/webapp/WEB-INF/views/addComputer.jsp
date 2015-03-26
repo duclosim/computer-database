@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title>Computer Database - Add a computer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<%@ include file="/WEB-INF/partials/includeCSS.jsp" %>
 </head>
