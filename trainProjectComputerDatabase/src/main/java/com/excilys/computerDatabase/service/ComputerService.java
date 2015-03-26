@@ -8,7 +8,6 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  *
  */
 public interface ComputerService extends PageableService<ComputerDTO> {
-	// TODO ajouter tri par nom, date d'introduction, date de sortie et nom d'entreprise.
 	
 	/**
 	 * 

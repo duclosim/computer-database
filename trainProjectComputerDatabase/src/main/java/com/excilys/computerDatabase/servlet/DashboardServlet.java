@@ -71,7 +71,6 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 				if (maxItemPageParam != null) {
 					newItemByPage = Integer.parseInt(maxItemPageParam);
 				}
-				// TODO mettre noms des paramètres
 				String computerColumnStr = req.getParameter("column");
 				String orderWayStr = req.getParameter("orderWay");
 				ComputerColumn column = null;
@@ -101,8 +100,6 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 						way = ow;
 					}
 					page = new OrderedPage<ComputerDTO>(service, column, way);
-				} else {
-					page = new NavigationPage<ComputerDTO>(service);
 				}
 				if (page.getPageNum() != newPageNum) {
 					page.setPageNum(newPageNum);

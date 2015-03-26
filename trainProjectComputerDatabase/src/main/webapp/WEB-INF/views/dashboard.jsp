@@ -51,12 +51,49 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th>Computer name
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="computer.name"/>
+								<c:param name="orderWay" value="ASC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="computer.name"/>
+								<c:param name="orderWay" value="DESC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+						</th>
+							
+						<th>Introduced date
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="computer.introduced"/>
+								<c:param name="orderWay" value="ASC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="computer.introduced"/>
+								<c:param name="orderWay" value="DESC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+						</th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th>Discontinued date
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="computer.discontinued"/>
+								<c:param name="orderWay" value="ASC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="computer.discontinued"/>
+								<c:param name="orderWay" value="DESC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+						</th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th>Company
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="company.name"/>
+								<c:param name="orderWay" value="ASC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<c:url value="dashboard">
+								<c:param name="column" value="company.name"/>
+								<c:param name="orderWay" value="DESC"/>
+							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+						</th>
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -79,7 +116,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<p:paging page="${page}"/>
+		<p:paging page="${page}" orderWay="${orderWay}" column="${column}"/>
 	</footer>
 	<%@ include file="/WEB-INF/partials/includeJS.jsp" %>
 </body>

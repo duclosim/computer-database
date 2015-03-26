@@ -121,7 +121,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 		List<Computer> result = new ArrayList<>();
 		StringBuilder query = new StringBuilder("SELECT *  FROM computer ")
-			.append("LEFT JOIN company ON computer.company_id = company.id");
+			.append("LEFT JOIN company ON computer.company_id = company.id ");
 		if (column != null && way != null) {
 			query.append("ORDER BY ")
 				.append(column.getColumnName()).append(" ")
