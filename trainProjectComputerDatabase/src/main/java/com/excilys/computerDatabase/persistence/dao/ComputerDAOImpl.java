@@ -119,23 +119,16 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		if (column == null) {
-			LOG.error("orderingColumn est à null.");
-			throw new IllegalArgumentException("orderingColumn est à null.");
-		}
-		if (way == null) {
-			LOG.error("way est à null.");
-			throw new IllegalArgumentException("way est à null.");
-		}
 		List<Computer> result = new ArrayList<>();
-		String query = new StringBuilder("SELECT *  FROM computer ")
-			.append("LEFT JOIN company ON computer.company_id = company.id")
-			.append("ORDER BY ")
-			.append(column.getColumnName()).append(" ")
-			.append(way.getWay()).append(" ")
-			.append("LIMIT ? OFFSET ?;")
-			.toString();
-		PreparedStatement ps = con.prepareStatement(query);
+		StringBuilder query = new StringBuilder("SELECT *  FROM computer ")
+			.append("LEFT JOIN company ON computer.company_id = company.id");
+		if (column != null && way != null) {
+			query.append("ORDER BY ")
+				.append(column.getColumnName()).append(" ")
+				.append(way.getWay()).append(" ");
+		}
+		query.append("LIMIT ? OFFSET ?;");
+		PreparedStatement ps = con.prepareStatement(query.toString());
 		int paramIndex = 0;
 		ps.setLong(++paramIndex, limit);
 		ps.setLong(++paramIndex, offset);

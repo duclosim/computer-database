@@ -1,6 +1,5 @@
 package com.excilys.computerDatabase.model.page;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -101,11 +100,18 @@ public abstract class Page<T> {
 		LOG.trace("getPageNum()");
 		return pageNum;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
     public int getStartingPage() {
 		LOG.trace("getStartingPage()");
 		return Integer.max(1, getPageNum() - WIDTH);
 	}
+    /**
+     * 
+     * @return
+     */
 	public int getFinishingPage() {
 		LOG.trace("getFinishingPage()");
 		return Integer.min(getLastPageNb(), getPageNum() + WIDTH);
@@ -149,25 +155,26 @@ public abstract class Page<T> {
 		this.pageNum = pageNum;
 		refresh();
 	}
-	public void setLastPageNb(int lastPageNb) {
-		this.lastPageNb = lastPageNb;
-	}
 
     // OUTILS
 	/**
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	public abstract void refresh();
-	
-	public void nameBasedRefresh(String name) {
-		LOG.trace("nameBasedRefresh()");
-		entities = new ArrayList<>(service.getByNameOrCompanyName(name));
-		lastPageNb = service.countLines() / getMaxNbItemsByPage() + 1;
-		if (pageNum > lastPageNb) {
-			setPageNum(lastPageNb);
+	public void refresh() {
+		LOG.trace("setPageNum(" + pageNum + ")");
+		reloadEntities();
+		lastPageNb = service.countLines() / 
+				maxNbItemsByPage;
+		if (service.countLines() % maxNbItemsByPage != 0) {
+			++lastPageNb;
+		}
+		if (getPageNum() > getLastPageNb()) {
+			setPageNum(getLastPageNb());
 		}
 	}
+	
+	public abstract void reloadEntities();
 	
 	@Override
 	public String toString() {

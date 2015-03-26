@@ -35,13 +35,10 @@ public class NavigationPage<T> extends Page<T> {
 	}
 
 	@Override
-	public void refresh() {
-		LOG.trace("refresh()");
+	public void reloadEntities() {
+		LOG.trace("reloadEntities()");
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
-		setEntities(new ArrayList<>(getService().getAll(getMaxNbItemsByPage(), offset)));
-		setLastPageNb(getService().countLines() / getMaxNbItemsByPage() + 1);
-		if (getPageNum() > getLastPageNb()) {
-			setPageNum(getLastPageNb());
-		}
+		setEntities(new ArrayList<>(getService()
+				.getAll(getMaxNbItemsByPage(), offset)));
 	}
 }

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%@ attribute name="page" required="true" type="com.excilys.computerDatabase.model.page.NavigationPage"%>
+<%@ attribute name="page" required="true" type="com.excilys.computerDatabase.model.page.Page"%>
 
 <div class="container text-center">
 	<ul class="pagination">

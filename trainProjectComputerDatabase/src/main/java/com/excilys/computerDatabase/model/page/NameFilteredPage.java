@@ -22,6 +22,7 @@ public class NameFilteredPage<T> extends Page<T> {
 			.append(searchedName).append(")")
 			.toString());
 		this.searchedName = searchedName;
+		setMaxNbItemsByPage(getTotalNbEntities());
 	}
 
 	public NameFilteredPage(PageableService<T> service, 
@@ -32,6 +33,7 @@ public class NameFilteredPage<T> extends Page<T> {
 			.append(searchedName).append(")")
 			.toString());
 		this.searchedName = searchedName;
+		setMaxNbItemsByPage(getTotalNbEntities());
 	}
 
 	public String getSearchedName() {
@@ -42,15 +44,10 @@ public class NameFilteredPage<T> extends Page<T> {
 	}
 
 	@Override
-	public void refresh() {
-		LOG.trace("refresh()");
+	public void reloadEntities() {
+		LOG.trace("reloadEntities()");
 		setEntities(new ArrayList<>(getService()
 				.getByNameOrCompanyName(searchedName)));
-		setLastPageNb(getService().countLines() / 
-				getMaxNbItemsByPage() + 1);
-		if (getPageNum() > getLastPageNb()) {
-			setPageNum(getLastPageNb());
-		}
 	}
 
 }
