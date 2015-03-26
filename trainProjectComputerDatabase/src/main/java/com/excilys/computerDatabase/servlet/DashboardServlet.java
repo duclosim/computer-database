@@ -1,12 +1,7 @@
 package com.excilys.computerDatabase.servlet;
 
-import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.model.page.NavigationPage;
-import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -15,15 +10,23 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.StringTokenizer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.computerDatabase.model.UserInputsValidator;
+import com.excilys.computerDatabase.model.page.NavigationPage;
+import com.excilys.computerDatabase.model.page.Page;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet implements Servlet {
 	private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = -5526661127455358108L;
 	private ComputerService service;
-	private NavigationPage<ComputerDTO> page;
+	private Page<ComputerDTO> page;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -62,6 +65,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			if (page.getMaxNbItemsByPage() != newItemByPage) {
 				page.setMaxNbItemsByPage(newItemByPage);
 			}
+			page.refresh();
 			// Passage des paramètres de la page dans la requête.
 			req.setAttribute("page", page);
 			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
@@ -90,7 +94,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			deleteDTO.setId(st.nextToken());
 			service.delete(deleteDTO);
 		}
-		page.stdRefresh();
+		page.refresh();
 		req.setAttribute("page", page);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 	}

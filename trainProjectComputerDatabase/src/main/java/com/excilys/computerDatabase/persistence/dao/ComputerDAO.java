@@ -29,4 +29,17 @@ public interface ComputerDAO extends CRUDDao<Computer> {
 	 * @throws SQLException
 	 */
 	List<Computer> getByNameOrCompanyName(String name, Connection con) throws SQLException;
+
+	/**
+	 * 
+	 * @param limit
+	 * @param offset
+	 * @param column
+	 * @param way
+	 * @param con
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Computer> getAll(int limit, int offset, ComputerColumn column,
+			OrderingWay way, Connection con) throws SQLException;
 }

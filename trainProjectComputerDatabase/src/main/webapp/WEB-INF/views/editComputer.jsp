@@ -46,6 +46,7 @@
 								<label for="companyId">Company</label>
 								<select name="companyId"
 									class="form-control" id="companyId">
+									<option value="">-- Select company --</option>
 									<c:forEach var="company" items="${companies}">
 										<c:choose>
 											<c:when test="${company.id == computerBean.companyId}">

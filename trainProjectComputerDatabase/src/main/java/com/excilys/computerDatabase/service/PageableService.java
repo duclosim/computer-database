@@ -3,6 +3,9 @@ package com.excilys.computerDatabase.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
+import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+
 public interface PageableService<T> {
 
 	/**
@@ -28,6 +31,17 @@ public interface PageableService<T> {
 	 * @throws SQLException 
 	 */
 	List<T> getAll(int limit, int offset);
+
+	/**
+	 * 
+	 * @param limit
+	 * @param offset
+	 * @param column
+	 * @param way
+	 * @return
+	 */
+	List<T> getAll(int limit, int offset, 
+			ComputerColumn column, OrderingWay way);
 	
 	/**
 	 * Retourne le nombre de lignes dans la table.
@@ -41,4 +55,5 @@ public interface PageableService<T> {
 	 * @param computer
 	 */
 	void delete(T t);
+
 }

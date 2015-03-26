@@ -1,13 +1,19 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 /**
  * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.
@@ -18,13 +24,6 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
-	
-	public static final String ID_COLUMN_LABEL = "computer.id";
-	public static final String NAME_COLUMN_LABEL = "computer.name";
-	public static final String INTRODUCED_COLUMN_LABEL = "computer.introduced";
-	public static final String DISCONTINUED_COLUMN_LABEL = "computer.discontinued";
-	public static final String COMPANY_ID_COLUMN_LABEL = "computer.company_id";
-	public static final String COMPANY_NAME_COLUMN_LABEL = "company.name";
 	
 	private final ComputerMapper mapper;
 	
@@ -58,11 +57,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
-				+ "WHERE computer.name LIKE %?%"
-				+ "OR company.name LIKE %?%;";
+				+ "WHERE computer.name LIKE ? "
+				+ "OR company.name LIKE ?;";
 		PreparedStatement ps = con.prepareStatement(query);
-		ps.setString(1, name);
-		ps.setString(2, name);
+		ps.setString(1, "%" + name + "%");
+		ps.setString(2, "%" + name + "%");
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
 			result.add(mapper.mapComputer(results));
@@ -72,6 +71,10 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	public List<Computer> getAll(int limit, int offset, Connection con) throws SQLException {
+		LOG.trace(new StringBuilder("getAll(")
+			.append(limit).append(", ")
+			.append(offset).append(")")
+			.toString());
 		if (limit <= 0) {
 			LOG.error("limit est négatif ou nul.");
 			throw new IllegalArgumentException("limit est négatif ou nul.");
@@ -80,12 +83,58 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		List<Computer> result = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "LIMIT ? OFFSET ?;";
+		PreparedStatement ps = con.prepareStatement(query);
+		int paramIndex = 0;
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
+		ResultSet results = ps.executeQuery();
+		while (results.next()) {
+			result.add(mapper.mapComputer(results));
+		}
+		ps.close();
+		return result;
+	}
+	
+	@Override
+	public List<Computer> getAll(int limit, int offset, 
+			ComputerColumn column, OrderingWay way, 
+			Connection con) throws SQLException {
+		LOG.trace(new StringBuilder("getAll(")
+			.append(limit).append(", ")
+			.append(offset).append(",")
+			.append(column).append(",")
+			.append(way).append(")")
+			.toString());
+		// TODO
+		if (limit <= 0) {
+			LOG.error("limit est négatif ou nul.");
+			throw new IllegalArgumentException("limit est négatif ou nul.");
+		}
+		if (offset < 0) {
+			LOG.error("offset est négatif.");
+			throw new IllegalArgumentException("offset est négatif.");
+		}
+		if (column == null) {
+			LOG.error("orderingColumn est à null.");
+			throw new IllegalArgumentException("orderingColumn est à null.");
+		}
+		if (way == null) {
+			LOG.error("way est à null.");
+			throw new IllegalArgumentException("way est à null.");
+		}
+		List<Computer> result = new ArrayList<>();
+		String query = new StringBuilder("SELECT *  FROM computer ")
+			.append("LEFT JOIN company ON computer.company_id = company.id")
+			.append("ORDER BY ")
+			.append(column.getColumnName()).append(" ")
+			.append(way.getWay()).append(" ")
+			.append("LIMIT ? OFFSET ?;")
+			.toString();
 		PreparedStatement ps = con.prepareStatement(query);
 		int paramIndex = 0;
 		ps.setLong(++paramIndex, limit);
@@ -117,17 +166,22 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			throw new IllegalArgumentException("computer est à null.");
 		}
 		LOG.trace("create(" + computer + ")");
-		String query = new StringBuilder("INSERT INTO computer (")
-		.append(NAME_COLUMN_LABEL)
-		.append(", ")
-		.append(INTRODUCED_COLUMN_LABEL)
-		.append(", ")
-		.append(DISCONTINUED_COLUMN_LABEL)
-		.append(", ")
-		.append(COMPANY_ID_COLUMN_LABEL)
-		.append(") VALUES (?, ?, ?, ?);")
-		.toString();
-		PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+		StringBuilder query = new StringBuilder("INSERT INTO computer (")
+			.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
+			.append(", ")
+			.append(ComputerColumn.INTRODUCED_COLUMN_LABEL.getColumnName())
+			.append(", ")
+			.append(ComputerColumn.DISCONTINUED_COLUMN_LABEL.getColumnName());
+		if (computer.getCompany() != null) {
+			query.append(", ")
+				.append(ComputerColumn.COMPANY_ID_COLUMN_LABEL.getColumnName());
+		}
+		query.append(") VALUES (?, ?, ?");
+		if (computer.getCompany() != null) {
+			query.append(", ?");
+		}
+		query.append(");");
+		PreparedStatement ps = con.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
 		int colNb = 0;
 		Timestamp introduced = null;
 		Timestamp discontinued = null;
@@ -140,7 +194,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		ps.setString(++colNb, computer.getName());
 		ps.setTimestamp(++colNb, introduced);
 		ps.setTimestamp(++colNb, discontinued);
-		ps.setLong(++colNb, computer.getCompany().getId());
+		if (computer.getCompany() != null) {
+			ps.setLong(++colNb, computer.getCompany().getId());
+		}
 		ps.executeUpdate();
 		ResultSet generatedKeys = ps.getGeneratedKeys();
         if (generatedKeys.next()) {
@@ -162,15 +218,15 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 		LOG.trace("update(" + computer + ")");
 		StringBuilder query = new StringBuilder("UPDATE computer SET ")
-		.append(NAME_COLUMN_LABEL)
+		.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
 		.append("=?, ")
-		.append(INTRODUCED_COLUMN_LABEL)
+		.append(ComputerColumn.INTRODUCED_COLUMN_LABEL.getColumnName())
 		.append("=?, ")
-		.append(DISCONTINUED_COLUMN_LABEL)
+		.append(ComputerColumn.DISCONTINUED_COLUMN_LABEL.getColumnName())
 		.append("=?");
 		if (computer.getCompany() != null) {
 			query.append(", ")
-			.append(COMPANY_ID_COLUMN_LABEL)
+			.append(ComputerColumn.COMPANY_ID_COLUMN_LABEL.getColumnName())
 			.append("=?");
 		}
 		query.append(" WHERE id = ?;");

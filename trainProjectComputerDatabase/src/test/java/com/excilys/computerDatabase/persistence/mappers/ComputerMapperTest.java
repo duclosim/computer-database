@@ -1,23 +1,24 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
-import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.CompanyServiceImpl;
 
 public class ComputerMapperTest {
 	private ComputerMapper computerMapper = ComputerMapper.INSTANCE;
@@ -38,7 +39,7 @@ public class ComputerMapperTest {
 	@Test
 	public void mapComputerShouldSetProperties() {
 		// Given
-		CompanyDAO companyDAO = CompanyDAOImpl.INSTANCE;
+		CompanyService companyService = CompanyServiceImpl.INSTANCE;
 		Computer result = null;
 		LocalDateTime introducedDate = null;
 		LocalDateTime discontinuedDate = null;
@@ -53,22 +54,26 @@ public class ComputerMapperTest {
 			ps = connection.prepareStatement(query);
 			results = ps.executeQuery();
 			if (results.next()) {
-				if (results.getTimestamp(ComputerDAOImpl.INTRODUCED_COLUMN_LABEL) != null) {
-					introducedDate = results.getTimestamp(ComputerDAOImpl.INTRODUCED_COLUMN_LABEL).toLocalDateTime();
+				Timestamp ts = results.getTimestamp(ComputerColumn.INTRODUCED_COLUMN_LABEL.getColumnName());
+				if (ts != null) {
+					introducedDate = ts.toLocalDateTime();
 				}
-				if (results.getTimestamp(ComputerDAOImpl.DISCONTINUED_COLUMN_LABEL) != null) {
-					discontinuedDate = results.getTimestamp(ComputerDAOImpl.DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
+				ts = results.getTimestamp(ComputerColumn.DISCONTINUED_COLUMN_LABEL.getColumnName());
+				if (ts != null) {
+					discontinuedDate = ts.toLocalDateTime();
 				}
-				if (results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL) != 0) {
-					company = companyDAO.getById(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL), connection);
+				Long l = results.getLong(ComputerColumn.COMPANY_ID_COLUMN_LABEL.getColumnName());
+				if (l != 0) {
+					company = companyService.getById(l);
 				}
-				Computer expectedBean = new Computer(results.getLong(ComputerDAOImpl.ID_COLUMN_LABEL), 
-						results.getString(ComputerDAOImpl.NAME_COLUMN_LABEL), 
+				Computer expectedBean = new Computer(results.getLong(ComputerColumn.ID_COLUMN_LABEL.getColumnName()), 
+						results.getString(ComputerColumn.NAME_COLUMN_LABEL.getColumnName()), 
 						introducedDate,
 						discontinuedDate,
 						company);
 				// When
 				result = computerMapper.mapComputer(results);
+				ps.close();
 				// Then
 				Assert.assertEquals("Erreur sur le bean",  expectedBean, result);
 			}

@@ -27,11 +27,14 @@ public enum ComputerDTOMapper {
 	public Computer DTOToBean(ComputerDTO dto) {
 		LOG.trace("DTOToBean(" + dto + ")");
 		Computer bean = new Computer();
-		bean.setId(Long.parseLong(dto.getId()));
+		bean.setId(null);
 		bean.setName(dto.getName());
 		bean.setIntroducedDate(null);
 		bean.setDiscontinuedDate(null);
 		bean.setCompany(null);
+		if (dto.getId() != null) {
+			bean.setId(Long.parseLong(dto.getId()));
+		}
 		if (dto.getIntroducedDate() != null) {
 			bean.setIntroducedDate(LocalDateTime.parse(dto.getIntroducedDate()));
 		}

@@ -48,6 +48,7 @@ public class CompanyMapperTest {
 						results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 				// When
 				result = companyMapper.mapCompany(results);
+				ps.close();
 				// Then
 				Assert.assertEquals("Erreur sur le bean.", expectedBean, result);
 			}

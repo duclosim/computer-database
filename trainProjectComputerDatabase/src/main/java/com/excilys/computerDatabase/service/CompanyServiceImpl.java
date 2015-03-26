@@ -1,17 +1,20 @@
 package com.excilys.computerDatabase.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
+import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 
 /**
  * 
@@ -55,6 +58,24 @@ public enum CompanyServiceImpl implements CompanyService {
 	public List<Company> getByNameOrCompanyName(String name) {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public List<Company> getAll() {
+		LOG.trace("getAll()");
+		Connection connection = null;
+		List<Company> result = null;
+		try {
+			connection = ConnectionFactory.INSTANCE.getConnection();
+			result = dao.getAll(connection);
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.INSTANCE.closeConnection(connection);
+		}
+		return result;
+	}
 
 	@Override
 	public List<Company> getAll(int limit, int offset) {
@@ -81,23 +102,11 @@ public enum CompanyServiceImpl implements CompanyService {
 		}
 		return result;
 	}
-	
+
 	@Override
-	public List<Company> getAll() {
-		LOG.trace("getAll()");
-		Connection connection = null;
-		List<Company> result = null;
-		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.getAll(connection);
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
-		}
-		return result;
+	public List<Company> getAll(int limit, int offset,
+			ComputerColumn column, OrderingWay way) {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
@@ -132,6 +141,7 @@ public enum CompanyServiceImpl implements CompanyService {
 			ComputerDAOImpl.INSTANCE.deleteByCompanyId(company.getId(), connection);
 			dao.delete(company, connection);
 			connection.commit();
+			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();
@@ -147,6 +157,4 @@ public enum CompanyServiceImpl implements CompanyService {
 			ConnectionFactory.INSTANCE.closeConnection(connection);
 		}
 	}
-
-	
 }

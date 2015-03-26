@@ -1,17 +1,17 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 
 public enum ComputerMapper {
 	INSTANCE;
@@ -24,26 +24,27 @@ public enum ComputerMapper {
 			LOG.error("results est à null.");
 			throw new IllegalArgumentException("results est à null.");
 		}
-		CompanyService companyService = CompanyServiceImpl.INSTANCE;
 		Computer computerBean = null;
 		LocalDateTime introducedDate = null;
 		LocalDateTime discontinuedDate = null;
 		Company company = null;
 		try {
-			if (results.getTimestamp(ComputerDAOImpl.INTRODUCED_COLUMN_LABEL) != null) {
-				introducedDate = results.getTimestamp(ComputerDAOImpl.INTRODUCED_COLUMN_LABEL).toLocalDateTime();
+			Timestamp ts = results.getTimestamp(ComputerColumn.INTRODUCED_COLUMN_LABEL.getColumnName());
+			if (ts != null) {
+				introducedDate = ts.toLocalDateTime();
 			}
-			if (results.getTimestamp(ComputerDAOImpl.DISCONTINUED_COLUMN_LABEL) != null) {
-				discontinuedDate = results.getTimestamp(ComputerDAOImpl.DISCONTINUED_COLUMN_LABEL).toLocalDateTime();
+			ts = results.getTimestamp(ComputerColumn.DISCONTINUED_COLUMN_LABEL.getColumnName());
+			if (ts != null) {
+				discontinuedDate = ts.toLocalDateTime();
 			}
-			if (results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL) != 0) {
+			Long l = results.getLong(ComputerColumn.COMPANY_ID_COLUMN_LABEL.getColumnName());
+			if (l != 0) {
 				company = new Company();
-				company.setId(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL));
-				company.setName(results.getString(ComputerDAOImpl.COMPANY_NAME_COLUMN_LABEL));
-				company = companyService.getById(results.getLong(ComputerDAOImpl.COMPANY_ID_COLUMN_LABEL));
+				company.setId(l);
+				company.setName(results.getString(ComputerColumn.COMPANY_NAME_COLUMN_LABEL.getColumnName()));
 			}
-			computerBean = new Computer(results.getLong(ComputerDAOImpl.ID_COLUMN_LABEL), 
-					results.getString(ComputerDAOImpl.NAME_COLUMN_LABEL), 
+			computerBean = new Computer(results.getLong(ComputerColumn.ID_COLUMN_LABEL.getColumnName()), 
+					results.getString(ComputerColumn.NAME_COLUMN_LABEL.getColumnName()), 
 					introducedDate,
 					discontinuedDate,
 					company);

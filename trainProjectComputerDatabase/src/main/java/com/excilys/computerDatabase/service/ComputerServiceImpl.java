@@ -1,19 +1,22 @@
 package com.excilys.computerDatabase.service;
 
-import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
-import com.excilys.computerDatabase.service.dto.ComputerDTOMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.computerDatabase.model.UserInputsValidator;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import com.excilys.computerDatabase.service.dto.ComputerDTOMapper;
 
 /**
  * 
@@ -53,7 +56,7 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public List<ComputerDTO> getByNameOrCompanyName(String name) {
-		LOG.trace("getByName(" + name + ")");
+		LOG.trace("getByNameOrCompanyName(" + name + ")");
 		Connection connection = null;
 		List<ComputerDTO> result = null;
 		try {
@@ -71,6 +74,10 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public List<ComputerDTO> getAll(int limit, int offset) {
+		LOG.trace(new StringBuilder("getAll(")
+			.append(limit).append(", ")
+			.append(offset).append(")")
+			.toString());
 		Connection connection = null;
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
@@ -85,9 +92,35 @@ public enum ComputerServiceImpl implements ComputerService {
 		}
 		return result;
 	}
+	
+	@Override
+	public List<ComputerDTO> getAll(int limit, int offset, 
+			ComputerColumn column, OrderingWay way) {
+		LOG.trace(new StringBuilder("getAll(")
+			.append(limit).append(", ")
+			.append(offset).append(",")
+			.append(column).append(",")
+			.append(way).append(")")
+			.toString());
+		Connection connection = null;
+		List<ComputerDTO> result = new ArrayList<>();
+		try {
+			connection = ConnectionFactory.INSTANCE.getConnection();
+			result = dtoMapper.BeansToDTOs((dao.getAll(limit, offset,
+					column, way, connection)));
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.INSTANCE.closeConnection(connection);
+		}
+		return result;
+	}
 
 	@Override
 	public int countLines() {
+		LOG.trace("countLines()");
 		Connection connection = null;
 		int result = 0;
 		try {
@@ -105,6 +138,7 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void create(ComputerDTO computer) {
+		LOG.trace("create(" + computer + ")");
 		checkComputerDTO(computer);
 		Connection connection = null;
 		try {
@@ -122,6 +156,7 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void update(ComputerDTO computer) {
+		LOG.trace("update(" + computer + ")");
 		checkComputerDTO(computer);
 		Connection connection = null;
 		try {
@@ -138,6 +173,7 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void delete(ComputerDTO computer) {
+		LOG.trace("delete(" + computer + ")");
 		checkComputerDTO(computer);
 		Connection connection = null;
 		try {
@@ -153,6 +189,7 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 	
 	private void checkComputerDTO(ComputerDTO computer) {
+		LOG.trace("checkComputerDTO(" + computer + ")");
 		if (computer == null) {
 			throw new IllegalArgumentException("computer est à null.");
 		}

@@ -1,13 +1,18 @@
 package com.excilys.computerDatabase.persistence;
 
-import com.mysql.jdbc.Driver;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.*;
-import java.util.Properties;
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
 
 /**
  * Cette classe donne des instances de Connection afin de se 
@@ -18,32 +23,52 @@ import java.util.Properties;
 public enum ConnectionFactory {
 	INSTANCE;
 
-	private static final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
+	private final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
 	private static final String PROPERTIES_FILE = "./db.properties";
-	private String url;
-	private String user;
-	private String password;
 
+    private static final String PROPERTY_URL             = "url";
+    private static final String PROPERTY_DRIVER          = "driver";
+    private static final String PROPERTY_NOM_UTILISATEUR = "username";
+    private static final String PROPERTY_MOT_DE_PASSE    = "password";
+	
+	private BoneCP connectionPool;
+	
 	private ConnectionFactory() {
+		LOG.trace("new ConnectionFactory()");
 		// Chargement du Driver et enregistrement auprès du DriverManager
 		try {
-			Driver driver = new com.mysql.jdbc.Driver();
-			DriverManager.registerDriver(driver);
 			Properties configProp = new Properties();
 			ClassLoader cls = Thread.currentThread().getContextClassLoader();
 			InputStream ips = cls.getResourceAsStream(PROPERTIES_FILE);
 			configProp.load(ips);
-			url = configProp.getProperty("db.url");
-			user = configProp.getProperty("db.username");
-			password = configProp.getProperty("db.password");
-		} catch (SQLException e) {
-			System.err.println("Pas possible de se connecter à la bdd.");
-			e.printStackTrace();
-			throw new IllegalStateException("Problème de connexion.");
+			String url = configProp.getProperty(PROPERTY_URL);
+			String user = configProp.getProperty(PROPERTY_NOM_UTILISATEUR);
+			String password = configProp.getProperty(PROPERTY_MOT_DE_PASSE);
+			Class.forName(configProp.getProperty(PROPERTY_DRIVER));
+			// Création du pool de connection
+			BoneCPConfig config = new BoneCPConfig();
+            /* Mise en place de l'URL, du nom et du mot de passe */
+            config.setJdbcUrl(url);
+            config.setUsername(user);
+            config.setPassword(password);
+            /* Paramétrage de la taille du pool */
+            config.setMinConnectionsPerPartition(5);
+            config.setMaxConnectionsPerPartition(10);
+            config.setPartitionCount(2);
+            /* Création du pool à partir de la configuration, via l'objet BoneCP */
+            connectionPool = new BoneCP(config);
 		} catch (IOException e) {
-			System.err.println("Fichier de propriétés non trouvé.");
+			LOG.error("Fichier de propriétés non trouvé.");
 			e.printStackTrace();
 			throw new IllegalStateException("Pas de fichier de propriété.");
+		} catch (ClassNotFoundException e) {
+			LOG.error("Impossible de charger le driver.");
+			e.printStackTrace();
+			throw new IllegalStateException("Impossible de charger le driver.");
+		} catch (SQLException e) {
+			LOG.error("Pas possible de créer le pool de connections.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas possible de créer le pool de connections.");
 		}
 	}
 	
@@ -58,7 +83,7 @@ public enum ConnectionFactory {
 	public final Connection getConnection() {
 		LOG.trace("getConnection()");
 		try {
-			return DriverManager.getConnection(url, user, password);
+			return connectionPool.getConnection();
 		} catch (SQLException e) {
 			LOG.error("Pas possible de se connecter à la bdd.");
 			e.printStackTrace();

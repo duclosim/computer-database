@@ -47,6 +47,7 @@ public class ComputerDAOTest {
 		results = ps.executeQuery();
 		if (results.next()) {
 			expectedBean = ComputerMapper.INSTANCE.mapComputer(results);
+			ps.close();
 			// When
 			bean = computerDAO.getById(id, con);
 			// Then
@@ -66,9 +67,9 @@ public class ComputerDAOTest {
 		List<Computer> expectedBeansByCompanyName = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
-				+ "LEFT JOIN company ON computer.company_id = company.id"
-				+ "WHERE computer.name LIKE %?% "
-				+ "OR company.name LIKE %?%;";
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "WHERE computer.name LIKE ? "
+				+ "OR company.name LIKE ?;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, computerName);
 		ps.setString(2, computerName);
@@ -78,11 +79,13 @@ public class ComputerDAOTest {
 		}
 		ps.close();
 		ps = con.prepareStatement(query);
-		ps.setString(1, companyName);
-		ps.setString(2, companyName);
+		ps.setString(1, "%" + companyName + "%");
+		ps.setString(2, "%" + companyName + "%");
+		results = ps.executeQuery();
 		while (results.next()) {
 			expectedBeansByCompanyName.add(ComputerMapper.INSTANCE.mapComputer(results));
 		}
+		ps.close();
 		// When
 		beans = computerDAO.getByNameOrCompanyName(computerName, con);
 		beansByCompany = computerDAO.getByNameOrCompanyName(companyName, con);
@@ -94,6 +97,7 @@ public class ComputerDAOTest {
 	@Test
 	public void getAllShouldReturnMultipleBeans() throws SQLException {
 		// Given
+		List<Computer> bean;
 		List<Computer> expectedBeans = new ArrayList<>();
 		int limit = 15;
 		int offset = 5;
@@ -110,7 +114,7 @@ public class ComputerDAOTest {
 		while (results.next()) {
 			expectedBeans.add(ComputerMapper.INSTANCE.mapComputer(results));
 		}
-		List<Computer> bean;
+		ps.close();
 		// When
 		bean = computerDAO.getAll(limit, offset, con);
 		// Then
@@ -128,6 +132,7 @@ public class ComputerDAOTest {
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
 			int expectedSize = results.getInt(1);
+			ps.close();
 			// When
 			nbLines = computerDAO.countLines(con);
 			// Then

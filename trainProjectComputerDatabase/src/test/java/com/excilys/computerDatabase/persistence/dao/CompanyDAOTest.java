@@ -46,6 +46,7 @@ public class CompanyDAOTest {
 		results = ps.executeQuery();
 		if (results.next()) {
 			expectedBean = mapper.mapCompany(results);
+			ps.close();
 			// When
 			bean = commpanyDAO.getById(id, con);
 			// Then
@@ -57,6 +58,7 @@ public class CompanyDAOTest {
 	@Test
 	public void getAllShouldReturnMultipleBeans() throws SQLException {
 		// Given
+		List<Company> bean;
 		List<Company> expectedBeans = new ArrayList<>();
 		int limit = 15;
 		int offset = 5;
@@ -71,7 +73,7 @@ public class CompanyDAOTest {
 		while (results.next()) {
 			expectedBeans.add(mapper.mapCompany(results));
 		}
-		List<Company> bean;
+		ps.close();
 		// When
 		bean = commpanyDAO.getAll(limit, offset, con);
 		// Then
@@ -87,6 +89,7 @@ public class CompanyDAOTest {
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
 			int expectedSize = results.getInt(1);
+			ps.close();
 			// When
 			nbLines = commpanyDAO.countLines(con);
 			// Then
