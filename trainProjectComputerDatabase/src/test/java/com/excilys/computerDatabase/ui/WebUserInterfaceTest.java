@@ -15,7 +15,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
-// TODO
 public class WebUserInterfaceTest {
 	private WebDriver driver;
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";

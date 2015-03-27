@@ -18,7 +18,7 @@
 					<c:if test="${!empty validMessage}">
 						<c:out value="${validMessage}" />
 					</c:if>
-					<form action="addComputer" method="POST">
+					<form id="formAddEditComputer" action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name (required)</label> <input
@@ -58,5 +58,6 @@
 			</div>
 		</div>
 	</section>
+	<%@ include file="/WEB-INF/partials/includeJS.jsp" %>
 </body>
 </html>
