@@ -46,6 +46,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 		LOG.trace(new StringBuilder("doGet(")
 			.append(req).append(", ")
 			.append(resp).append(")").toString());
+		page.refresh();
 		try {
 			// Recherche sur le nom.
 			String searchedName = req.getParameter("search");

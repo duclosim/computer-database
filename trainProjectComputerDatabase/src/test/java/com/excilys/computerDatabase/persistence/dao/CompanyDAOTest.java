@@ -21,14 +21,17 @@ public class CompanyDAOTest {
 	private CompanyMapper mapper;
 	
 	@Before
-	public void initConnection() {
+	public void initConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
+		con.setAutoCommit(false);
 		companyDAO = CompanyDAOImpl.INSTANCE;
 		mapper = CompanyMapper.INSTANCE;
 	}
 	
 	@After
-	public void closeConnection() {
+	public void closeConnection() throws SQLException {
+		con.rollback();
+		con.setAutoCommit(true);
 		ConnectionFactory.INSTANCE.closeConnection(con);
 	}
 	

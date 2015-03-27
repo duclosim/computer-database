@@ -58,7 +58,6 @@ public abstract class Page<T> {
 		this.service = service;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
-		totalNbEntities = service.countLines();
 		refresh();
 	}
 
@@ -164,6 +163,7 @@ public abstract class Page<T> {
 	public void refresh() {
 		LOG.trace("setPageNum(" + pageNum + ")");
 		reloadEntities();
+		totalNbEntities = service.countLines();
 		lastPageNb = service.countLines() / 
 				maxNbItemsByPage;
 		if (service.countLines() % maxNbItemsByPage != 0) {

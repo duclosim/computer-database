@@ -21,12 +21,15 @@ public class ComputerDAOTest {
 	private ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 	
 	@Before
-	public void prepareConnection() {
+	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
+		con.setAutoCommit(false);
 	}
 	
 	@After
-	public void closeConnection() {
+	public void closeConnection() throws SQLException {
+		con.rollback();
+		con.setAutoCommit(true);
 		ConnectionFactory.INSTANCE.closeConnection(con);
 	}
 	
@@ -199,16 +202,16 @@ public class ComputerDAOTest {
 		// Given
 		int nbLines;
 		Long companyId = new Long(1);
-		String query = "SELECT COUNT(*) FROM computer WHERE company_id = ?;";
+		// When
+		computerDAO.deleteByCompanyId(companyId, con);
+		// Then
+		String query = "SELECT COUNT(*) FROM computer WHERE company_id=?;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setLong(1, companyId);
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
 			nbLines = results.getInt(1);
 			ps.close();
-			// When
-			computerDAO.deleteByCompanyId(companyId, con);
-			// Then
 			Assert.assertEquals("Erreur sur le nombre de lignes", 0, nbLines);
 		}
 	}

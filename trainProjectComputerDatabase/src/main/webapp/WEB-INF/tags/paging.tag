@@ -13,7 +13,7 @@
 							<c:param name="column" value="${column}"/>
 							<c:param name="orderWay" value="${orderWay}"/>
 						</c:url>"
-				aria-label="Last"> <span aria-hidden="true">&larrb;</span>
+				aria-label="First" id="First"> <span aria-hidden="true">&larrb;</span>
 			</a></li>
 			<li><a href="<c:url value="dashboard">
 							<c:param name="pageNum" value="${page.pageNum - 1}"/>
@@ -21,7 +21,7 @@
 							<c:param name="column" value="${column}"/>
 							<c:param name="orderWay" value="${orderWay}"/>
 						</c:url>"
-				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				aria-label="Previous" id="Previous"> <span aria-hidden="true">&laquo;</span>
 			</a></li>
 		</c:if>
 
@@ -53,7 +53,7 @@
 							<c:param name="column" value="${column}"/>
 							<c:param name="orderWay" value="${orderWay}"/>
 						</c:url>"
-				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				aria-label="Next" id="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 			<li><a href="<c:url value="dashboard">
 							<c:param name="pageNum" value="${page.lastPageNb}"/>
@@ -61,7 +61,7 @@
 							<c:param name="column" value="${column}"/>
 							<c:param name="orderWay" value="${orderWay}"/>
 						</c:url>"
-				aria-label="Last"> <span aria-hidden="true">&rarrb;</span>
+				aria-label="Last" id="Last"> <span aria-hidden="true">&rarrb;</span>
 			</a></li>
 		</c:if>
 	</ul>

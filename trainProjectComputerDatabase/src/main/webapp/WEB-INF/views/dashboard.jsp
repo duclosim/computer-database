@@ -100,9 +100,10 @@
 				<tbody id="results">
 					<c:forEach var="item" items="${page.entities}">
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
+							<td class="editMode"><input id="computerRm${item.id}" 
+								type="checkbox" name="cb"
 								class="cb" value="${item.id}"></td>
-							<td><a href="<c:url value="editComputer">
+							<td><a id="computer${item.id}" href="<c:url value="editComputer">
 								<c:param name="beanId" value="${item.id}"/>
 							</c:url>" onclick="">${item.name}</a></td>
 							<td>${item.introducedDate}</td>
