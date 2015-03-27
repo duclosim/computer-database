@@ -14,13 +14,6 @@ public interface PageableService<T> {
 	 * @return
 	 */
 	T getById(Long id);
-
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	List<T> getByNameOrCompanyName(String name);
 	
 	/**
 	 * Cette méthode retourne tout le contenu de la table 
@@ -34,13 +27,32 @@ public interface PageableService<T> {
 
 	/**
 	 * 
+	 * @param name
+	 * @return
+	 */
+	List<T> getFiltered(String name, int limit, int offset);
+	
+	/**
+	 * 
 	 * @param limit
 	 * @param offset
 	 * @param column
 	 * @param way
 	 * @return
 	 */
-	List<T> getAll(int limit, int offset, 
+	List<T> getOrdered(int limit, int offset, 
+			ComputerColumn column, OrderingWay way);
+
+	/**
+	 * 
+	 * @param limit
+	 * @param offset
+	 * @param name
+	 * @param column
+	 * @param way
+	 * @return
+	 */
+	List<T> getFilteredAndOrdered(int limit, int offset, String name,
 			ComputerColumn column, OrderingWay way);
 	
 	/**

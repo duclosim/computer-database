@@ -52,47 +52,39 @@
 							</a>
 						</span></th>
 						<th>Computer name
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="computer.name"/>
-								<c:param name="orderWay" value="ASC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="computer.name"/>
-								<c:param name="orderWay" value="DESC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="computer.name" orderWay="ASC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="computer.name" orderWay="DESC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
-							
+						<!-- Table header for Introduced date -->
 						<th>Introduced date
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="computer.introduced"/>
-								<c:param name="orderWay" value="ASC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="computer.introduced"/>
-								<c:param name="orderWay" value="DESC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="computer.introduced" orderWay="ASC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="computer.introduced" orderWay="DESC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Discontinued date
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="computer.discontinued"/>
-								<c:param name="orderWay" value="ASC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="computer.discontinued"/>
-								<c:param name="orderWay" value="DESC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="computer.discontinued" orderWay="ASC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="computer.discontinued" orderWay="DESC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Company -->
 						<th>Company
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="company.name"/>
-								<c:param name="orderWay" value="ASC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<c:url value="dashboard">
-								<c:param name="column" value="company.name"/>
-								<c:param name="orderWay" value="DESC"/>
-							</c:url>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="company.name" orderWay="ASC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
+							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
+								column="company.name" orderWay="DESC" search="${page.search}">
+							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 					</tr>
 				</thead>
@@ -117,7 +109,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<p:paging page="${page}" orderWay="${orderWay}" column="${column}"/>
+		<p:paging page="${page}"/>
 	</footer>
 	<%@ include file="/WEB-INF/partials/includeJS.jsp" %>
 </body>

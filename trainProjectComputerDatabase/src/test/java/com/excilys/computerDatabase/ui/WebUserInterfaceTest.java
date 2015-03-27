@@ -15,6 +15,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
+// TODO finir d'écrire les tests selenium
 public class WebUserInterfaceTest {
 	private WebDriver driver;
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";
@@ -34,7 +35,7 @@ public class WebUserInterfaceTest {
 	public void closeDriver() {
 	    //Close the browser
 	    driver.quit();
-	    List<ComputerDTO> list = ComputerServiceImpl.INSTANCE.getByNameOrCompanyName(beanName);
+	    List<ComputerDTO> list = ComputerServiceImpl.INSTANCE.getFiltered(beanName, 1, 0);
 	    for (ComputerDTO computer : list) {
 	    	ComputerServiceImpl.INSTANCE.delete(computer);
 	    }

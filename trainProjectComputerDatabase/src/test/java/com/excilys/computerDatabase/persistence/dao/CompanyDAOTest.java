@@ -21,18 +21,15 @@ public class CompanyDAOTest {
 	private CompanyMapper mapper;
 	
 	@Before
-	public void initConnection() throws SQLException {
+	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
-		con.setAutoCommit(false);
-		companyDAO = CompanyDAOImpl.INSTANCE;
-		mapper = CompanyMapper.INSTANCE;
+		ConnectionFactory.INSTANCE.startTransaction();
 	}
 	
 	@After
 	public void closeConnection() throws SQLException {
-		con.rollback();
-		con.setAutoCommit(true);
-		ConnectionFactory.INSTANCE.closeConnection(con);
+		ConnectionFactory.INSTANCE.rollback();
+		ConnectionFactory.INSTANCE.closeConnection();
 	}
 	
 	@Test
@@ -51,7 +48,7 @@ public class CompanyDAOTest {
 			expectedBean = mapper.mapCompany(results);
 			ps.close();
 			// When
-			bean = companyDAO.getById(id, con);
+			bean = companyDAO.getById(id);
 			// Then
 			Assert.assertNotNull("Erreur sur le bean.", bean);
 			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
@@ -78,7 +75,7 @@ public class CompanyDAOTest {
 		}
 		ps.close();
 		// When
-		bean = companyDAO.getAll(limit, offset, con);
+		bean = companyDAO.getAll(limit, offset);
 		// Then
 		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
 	}
@@ -94,7 +91,7 @@ public class CompanyDAOTest {
 			int expectedSize = results.getInt(1);
 			ps.close();
 			// When
-			nbLines = companyDAO.countLines(con);
+			nbLines = companyDAO.countLines();
 			// Then
 			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 		}

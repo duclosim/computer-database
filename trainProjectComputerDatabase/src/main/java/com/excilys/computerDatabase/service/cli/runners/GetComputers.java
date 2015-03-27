@@ -1,13 +1,14 @@
 package com.excilys.computerDatabase.service.cli.runners;
 
-import com.excilys.computerDatabase.model.page.NavigationPage;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.PageableService;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import java.util.Scanner;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Scanner;
+import com.excilys.computerDatabase.model.page.Page;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.PageableService;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 /**
  * Cette classe peut lancer la commande de listage des ordinateurs.
@@ -20,7 +21,7 @@ public class GetComputers implements CommandRunner {
 	public void runCommand(Scanner sc) {
 	LOG.trace("runCommand(" + sc + ")");
 		PageableService<ComputerDTO> computerService = ComputerServiceImpl.INSTANCE;
-		NavigationPage<ComputerDTO> page = new NavigationPage<>(computerService, MAX_ITEMS_BY_PAGE, 0);
+		Page<ComputerDTO> page = new Page<>(computerService, MAX_ITEMS_BY_PAGE, 0);
 		System.out.println(page);
 		for (int k = 2; k < page.getLastPageNb(); ++k) {
 			page.setPageNum(k);

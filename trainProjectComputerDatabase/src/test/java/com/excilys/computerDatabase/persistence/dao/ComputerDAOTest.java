@@ -23,14 +23,13 @@ public class ComputerDAOTest {
 	@Before
 	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
-		con.setAutoCommit(false);
+		ConnectionFactory.INSTANCE.startTransaction();
 	}
 	
 	@After
 	public void closeConnection() throws SQLException {
-		con.rollback();
-		con.setAutoCommit(true);
-		ConnectionFactory.INSTANCE.closeConnection(con);
+		ConnectionFactory.INSTANCE.rollback();
+		ConnectionFactory.INSTANCE.closeConnection();
 	}
 	
 	@Test
@@ -52,7 +51,7 @@ public class ComputerDAOTest {
 			expectedBean = ComputerMapper.INSTANCE.mapComputer(results);
 			ps.close();
 			// When
-			bean = computerDAO.getById(id, con);
+			bean = computerDAO.getById(id);
 			// Then
 			Assert.assertNotNull("Erreur sur le bean.", bean);
 			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
@@ -90,8 +89,8 @@ public class ComputerDAOTest {
 		}
 		ps.close();
 		// When
-		beans = computerDAO.getByNameOrCompanyName(computerName, con);
-		beansByCompany = computerDAO.getByNameOrCompanyName(companyName, con);
+		beans = computerDAO.getFiltered(computerName);
+		beansByCompany = computerDAO.getFiltered(companyName);
 		// Then
 		Assert.assertEquals("Erreur sur la liste de beans par nom de computer.", expectedBeansByComputerName, beans);
 		Assert.assertEquals("Erreur sur la liste de beans par nom de company.", expectedBeansByCompanyName, beansByCompany);
@@ -119,7 +118,7 @@ public class ComputerDAOTest {
 		}
 		ps.close();
 		// When
-		bean = computerDAO.getAll(limit, offset, con);
+		bean = computerDAO.getAll(limit, offset);
 		// Then
 		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
 		
@@ -136,7 +135,7 @@ public class ComputerDAOTest {
 			int expectedSize = results.getInt(1);
 			ps.close();
 			// When
-			nbLines = computerDAO.countLines(con);
+			nbLines = computerDAO.countLines();
 			// Then
 			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 		}
@@ -153,10 +152,10 @@ public class ComputerDAOTest {
 		LocalDateTime time = null;
 		bean.setIntroducedDate(time);
 		bean.setDiscontinuedDate(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, con));
+		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId));
 		// When
-		computerDAO.create(bean, con);
-		Computer expectedBean = computerDAO.getById(bean.getId(), con);
+		computerDAO.create(bean);
+		Computer expectedBean = computerDAO.getById(bean.getId());
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -166,14 +165,14 @@ public class ComputerDAOTest {
 		// Given
 		Long id = new Long(10);
 		Computer bean;
-		bean = computerDAO.getById(id, con);
-		Computer expectedBean = computerDAO.getById(id, con);
+		bean = computerDAO.getById(id);
+		Computer expectedBean = computerDAO.getById(id);
 		String name = "new " + bean.getName();
 		bean.setName(name);
 		expectedBean.setName(name);
 		// When
-		computerDAO.update(bean, con);
-		bean = computerDAO.getById(id, con);
+		computerDAO.update(bean);
+		bean = computerDAO.getById(id);
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -188,11 +187,11 @@ public class ComputerDAOTest {
 		LocalDateTime time = null;
 		bean.setIntroducedDate(time);
 		bean.setDiscontinuedDate(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId, con));
-		computerDAO.create(bean, con);
+		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId));
+		computerDAO.create(bean);
 		// When
-		computerDAO.delete(bean, con);
-		bean = computerDAO.getById(bean.getId(), con);
+		computerDAO.delete(bean);
+		bean = computerDAO.getById(bean.getId());
 		// Then
 		Assert.assertNull("Erreur sur le bean", bean);
 	}
@@ -203,7 +202,7 @@ public class ComputerDAOTest {
 		int nbLines;
 		Long companyId = new Long(1);
 		// When
-		computerDAO.deleteByCompanyId(companyId, con);
+		computerDAO.deleteByCompanyId(companyId);
 		// Then
 		String query = "SELECT COUNT(*) FROM computer WHERE company_id=?;";
 		PreparedStatement ps = con.prepareStatement(query);

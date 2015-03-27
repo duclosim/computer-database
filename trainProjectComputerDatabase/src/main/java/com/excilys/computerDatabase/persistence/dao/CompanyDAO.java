@@ -1,10 +1,9 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import com.excilys.computerDatabase.model.beans.Company;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+
+import com.excilys.computerDatabase.model.beans.Company;
 
 /**
  * Cette interface rassemble des méthodes d'accès à la table company.
@@ -18,5 +17,5 @@ public interface CompanyDAO extends CRUDDao<Company> {
 	 * @return
 	 * @throws SQLException 
 	 */
-	List<Company> getAll(Connection con) throws SQLException;
+	List<Company> getAll() throws SQLException;
 }

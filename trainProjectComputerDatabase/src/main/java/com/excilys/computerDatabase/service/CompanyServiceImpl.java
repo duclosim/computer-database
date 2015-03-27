@@ -1,6 +1,5 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -39,40 +38,36 @@ public enum CompanyServiceImpl implements CompanyService {
 			LOG.error("id est à null.");
 			throw new IllegalArgumentException("id est à null.");
 		}
-		Connection connection = null;
 		Company result = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.getById(id, connection);
+			result = dao.getById(id);
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
 
 	@Override
-	public List<Company> getByNameOrCompanyName(String name) {
+	public List<Company> getFiltered(String name, int limit, int offset) {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
 	public List<Company> getAll() {
 		LOG.trace("getAll()");
-		Connection connection = null;
 		List<Company> result = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.getAll(connection);
+			result = dao.getAll();
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -88,41 +83,43 @@ public enum CompanyServiceImpl implements CompanyService {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection connection = null;
 		List<Company> result = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.getAll(limit, offset, connection);
+			result = dao.getAll(limit, offset);
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
 
 	@Override
-	public List<Company> getAll(int limit, int offset,
+	public List<Company> getOrdered(int limit, int offset,
 			ComputerColumn column, OrderingWay way) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<Company> getFilteredAndOrdered(int limit, int offset,
+			String name, ComputerColumn column, OrderingWay way) {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
 	public int countLines() {
 		LOG.trace("countLines()");
-		Connection connection = null;
 		int result = 0;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.countLines(connection);
+			result = dao.countLines();
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -134,27 +131,18 @@ public enum CompanyServiceImpl implements CompanyService {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");
 		}
-		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			connection.setAutoCommit(false);
-			ComputerDAOImpl.INSTANCE.deleteByCompanyId(company.getId(), connection);
-			dao.delete(company, connection);
-			connection.commit();
-			connection.setAutoCommit(true);
+			ConnectionFactory.INSTANCE.startTransaction();
+			ComputerDAOImpl.INSTANCE.deleteByCompanyId(company.getId());
+			dao.delete(company);
+			ConnectionFactory.INSTANCE.commit();
 		} catch (SQLException e) {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOG.error("Impossible de rollback les changements.");
-				e1.printStackTrace();
-				throw new PersistenceException("Impossible de rollback les changements.");
-			}
+			ConnectionFactory.INSTANCE.rollback();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 	}
 }

@@ -24,13 +24,14 @@ public enum ConnectionFactory {
 	INSTANCE;
 
 	private final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
-	private static final String PROPERTIES_FILE = "./db.properties";
+	private final String PROPERTIES_FILE = "./db.properties";
 
-    private static final String PROPERTY_URL             = "url";
-    private static final String PROPERTY_DRIVER          = "driver";
-    private static final String PROPERTY_NOM_UTILISATEUR = "username";
-    private static final String PROPERTY_MOT_DE_PASSE    = "password";
-	
+    private final String PROPERTY_URL		= "url";
+    private final String PROPERTY_DRIVER	= "driver";
+    private final String PROPERTY_USER_NAME	= "username";
+    private final String PROPERTY_PASSWORD	= "password";
+	private final ThreadLocal<Connection> thread = new ThreadLocal<>(); 
+
 	private BoneCP connectionPool;
 	
 	private ConnectionFactory() {
@@ -42,8 +43,8 @@ public enum ConnectionFactory {
 			InputStream ips = cls.getResourceAsStream(PROPERTIES_FILE);
 			configProp.load(ips);
 			String url = configProp.getProperty(PROPERTY_URL);
-			String user = configProp.getProperty(PROPERTY_NOM_UTILISATEUR);
-			String password = configProp.getProperty(PROPERTY_MOT_DE_PASSE);
+			String user = configProp.getProperty(PROPERTY_USER_NAME);
+			String password = configProp.getProperty(PROPERTY_PASSWORD);
 			Class.forName(configProp.getProperty(PROPERTY_DRIVER));
 			// Création du pool de connection
 			BoneCPConfig config = new BoneCPConfig();
@@ -83,11 +84,44 @@ public enum ConnectionFactory {
 	public final Connection getConnection() {
 		LOG.trace("getConnection()");
 		try {
-			return connectionPool.getConnection();
+			Connection res = thread.get();
+			if (res == null) {
+				res = connectionPool.getConnection();
+				thread.set(res);
+			}
 		} catch (SQLException e) {
-			LOG.error("Pas possible de se connecter à la bdd.");
+			LOG.error("Pas possible de prendre une connection dans le pool de connections.");
 			e.printStackTrace();
-			throw new IllegalStateException("Problème de connexion.");
+			throw new IllegalStateException("Pas possible de prendre une connection dans le pool de connections.");
+		}
+		return thread.get();
+	}
+	
+	public final void startTransaction() {
+		LOG.trace("startTransaction()");
+		try {
+			thread.get().setAutoCommit(false);
+		} catch (SQLException e) {
+			LOG.error("Problème interne à la bdd.");
+			e.printStackTrace();
+			throw new IllegalStateException("Problème interne à la bdd.");
+		}
+	}
+	
+	public final void commit() throws SQLException {
+		LOG.trace("commit()");
+		thread.get().commit();
+		thread.get().setAutoCommit(true);
+	}
+	
+	public final void rollback() {
+		LOG.trace("rollback()");
+		try {
+			thread.get().rollback();
+		} catch (SQLException e) {
+			LOG.error("Impossible de rollback.");
+			e.printStackTrace();
+			throw new IllegalStateException("Impossible de rollback.");
 		}
 	}
 	
@@ -95,25 +129,23 @@ public enum ConnectionFactory {
 	 * Ferme la connexion à la base de données.
 	 * @param connection La connexion à refermer.
 	 */
-	public final void closeConnection(Connection connection) {
-		LOG.trace("closeConnection(" + connection + ")");
+	public final void closeConnection() {
+		LOG.trace("closeConnection()");
 		try {
-			connection.close();
+			thread.get().close();
 		} catch (SQLException e) {
-			LOG.error("Erreur : impossible de fermer la "
-					+ "connection à la base de données.");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-    public final void closeConnectionAndStatementAndResults(Connection connection,
-			Statement statement, ResultSet results) {
+    public final void closeConnectionAndStatementAndResults(Statement statement, 
+    		ResultSet results) {
 		LOG.trace("closeConnection(" 
-			+ connection + ", " 
 			+ statement + ", "
 			+ results + ")");
 		try {
-			connection.close();
+			closeConnection();
 			statement.close();
 			results.close();
 		} catch (SQLException e) {

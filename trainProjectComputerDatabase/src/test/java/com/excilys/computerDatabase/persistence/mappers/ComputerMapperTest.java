@@ -82,7 +82,7 @@ public class ComputerMapperTest {
 			e.printStackTrace();
 			throw new PersistenceException("Problème de lecture colonne");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnectionAndStatementAndResults(connection, ps, results);
+			ConnectionFactory.INSTANCE.closeConnectionAndStatementAndResults(ps, results);
 		}
 	}
 

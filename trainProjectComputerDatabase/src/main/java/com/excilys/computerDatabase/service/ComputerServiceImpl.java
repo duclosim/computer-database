@@ -1,6 +1,5 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,35 +38,31 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public ComputerDTO getById(Long id) {
 		LOG.trace("getById(" + id + ")");
-		Connection connection = null;
 		ComputerDTO result = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dtoMapper.BeanToDTO(dao.getById(id, connection));
+			result = dtoMapper.BeanToDTO(dao.getById(id));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
 
 	@Override
-	public List<ComputerDTO> getByNameOrCompanyName(String name) {
+	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
 		LOG.trace("getByNameOrCompanyName(" + name + ")");
-		Connection connection = null;
 		List<ComputerDTO> result = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dtoMapper.BeansToDTOs(dao.getByNameOrCompanyName(name, connection));
+			result = dtoMapper.BeansToDTOs(dao.getFiltered(name));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -78,23 +73,21 @@ public enum ComputerServiceImpl implements ComputerService {
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
-		Connection connection = null;
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dtoMapper.BeansToDTOs((dao.getAll(limit, offset, connection)));
+			result = dtoMapper.BeansToDTOs((dao.getAll(limit, offset)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
 	
 	@Override
-	public List<ComputerDTO> getAll(int limit, int offset, 
+	public List<ComputerDTO> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way) {
 		LOG.trace(new StringBuilder("getAll(")
 			.append(limit).append(", ")
@@ -102,36 +95,56 @@ public enum ComputerServiceImpl implements ComputerService {
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		Connection connection = null;
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dtoMapper.BeansToDTOs((dao.getAll(limit, offset,
-					column, way, connection)));
+			result = dtoMapper.BeansToDTOs((dao.getOrdered(limit, offset,
+					column, way)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
 
 	@Override
-	public int countLines() {
-		LOG.trace("countLines()");
-		Connection connection = null;
-		int result = 0;
+	public List<ComputerDTO> getFilteredAndOrdered(int limit, int offset,
+			String name, ComputerColumn column, OrderingWay way) {
+		LOG.trace(new StringBuilder("getAll(")
+			.append(limit).append(", ")
+			.append(offset).append(",")
+			.append(name).append(", ")
+			.append(column).append(",")
+			.append(way).append(")")
+			.toString());
+		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			result = dao.countLines(connection);
+			result = dtoMapper.BeansToDTOs((dao.getFilteredAndOrdered(
+					limit, offset, name, column, way)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
+		}
+		return result;
+	}
+	
+	@Override
+	public int countLines() {
+		LOG.trace("countLines()");
+		int result = 0;
+		try {
+			result = dao.countLines();
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -140,16 +153,14 @@ public enum ComputerServiceImpl implements ComputerService {
 	public void create(ComputerDTO computer) {
 		LOG.trace("create(" + computer + ")");
 		checkComputerDTO(computer);
-		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			dao.create(dtoMapper.DTOToBean(computer), connection);
+			dao.create(dtoMapper.DTOToBean(computer));
 		} catch (SQLException e) {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 
 	}
@@ -158,16 +169,14 @@ public enum ComputerServiceImpl implements ComputerService {
 	public void update(ComputerDTO computer) {
 		LOG.trace("update(" + computer + ")");
 		checkComputerDTO(computer);
-		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			dao.update(dtoMapper.DTOToBean(computer), connection);
+			dao.update(dtoMapper.DTOToBean(computer));
 		} catch (SQLException e) {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 	}
 
@@ -175,16 +184,14 @@ public enum ComputerServiceImpl implements ComputerService {
 	public void delete(ComputerDTO computer) {
 		LOG.trace("delete(" + computer + ")");
 		checkComputerDTO(computer);
-		Connection connection = null;
 		try {
-			connection = ConnectionFactory.INSTANCE.getConnection();
-			dao.delete(dtoMapper.DTOToBean(computer), connection);
+			dao.delete(dtoMapper.DTOToBean(computer));
 		} catch (SQLException e) {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection(connection);
+			ConnectionFactory.INSTANCE.closeConnection();
 		}
 	}
 	
