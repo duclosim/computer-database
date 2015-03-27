@@ -36,7 +36,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 		service = ComputerServiceImpl.INSTANCE;
 		page = new Page<>(service);
 	}
-	// TODO corriger avec nouvelle page
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -76,10 +76,8 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			String orderWayStr = req.getParameter("orderWay");
 			ComputerColumn column = null;
 			OrderingWay way = null;
-			if (computerColumnStr != null 
-					&& orderWayStr != null
-					&& !computerColumnStr.trim().isEmpty()
-					&& !orderWayStr.trim().isEmpty()) {
+			if (UserInputsValidator.isValidString(computerColumnStr)
+					&& UserInputsValidator.isValidString(orderWayStr)) {
 				int k = 0;
 				ComputerColumn c = ComputerColumn.values()[k];
 				while (!c.getColumnName().equals(computerColumnStr)
@@ -106,7 +104,7 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			}
 			// Recherche sur le nom.
 			String searchedName = req.getParameter("search");
-			if (searchedName != null && !searchedName.trim().isEmpty()) {
+			if (UserInputsValidator.isValidString(searchedName)) {
 				page = new Page<ComputerDTO>(service);
 				page.setSearchedName(searchedName);
 			}

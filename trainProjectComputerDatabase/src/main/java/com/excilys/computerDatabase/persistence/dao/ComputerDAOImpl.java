@@ -149,7 +149,6 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public List<Computer> getFilteredAndOrdered(int limit, int offset,
 			String name, ComputerColumn column, OrderingWay way)
 			throws SQLException {
-		// TODO Auto-generated method stub
 		LOG.trace(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")

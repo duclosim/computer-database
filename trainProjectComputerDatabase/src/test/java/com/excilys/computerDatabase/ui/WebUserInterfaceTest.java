@@ -90,7 +90,7 @@ public class WebUserInterfaceTest {
 	    // Supprimer les ordinateurs séléctionnés.
 	    element = driver.findElement(By.id(rmButtonId));
 	    element.click();
-	    // TODO valider la fenêtre javascript
+	    driver.switchTo().alert().accept();
 	    // Then
 	    element = driver.findElement(By.id(itemsCount));
 	    int nbItems = Integer.parseInt(element.getText());

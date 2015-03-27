@@ -30,8 +30,8 @@ public enum ConnectionFactory {
     private final String PROPERTY_DRIVER	= "driver";
     private final String PROPERTY_USER_NAME	= "username";
     private final String PROPERTY_PASSWORD	= "password";
-	private final ThreadLocal<Connection> thread = new ThreadLocal<>(); 
-
+    
+	private ThreadLocal<Connection> thread;
 	private BoneCP connectionPool;
 	
 	private ConnectionFactory() {
@@ -58,6 +58,7 @@ public enum ConnectionFactory {
             config.setPartitionCount(2);
             /* Création du pool à partir de la configuration, via l'objet BoneCP */
             connectionPool = new BoneCP(config);
+            thread = new ThreadLocal<>();
 		} catch (IOException e) {
 			LOG.error("Fichier de propriétés non trouvé.");
 			e.printStackTrace();
@@ -83,10 +84,12 @@ public enum ConnectionFactory {
 	 */
 	public final Connection getConnection() {
 		LOG.trace("getConnection()");
+		Connection res = null;
 		try {
-			Connection res = thread.get();
+			res = thread.get();
 			if (res == null) {
 				res = connectionPool.getConnection();
+				res.setAutoCommit(true);
 				thread.set(res);
 			}
 		} catch (SQLException e) {
@@ -94,7 +97,7 @@ public enum ConnectionFactory {
 			e.printStackTrace();
 			throw new IllegalStateException("Pas possible de prendre une connection dans le pool de connections.");
 		}
-		return thread.get();
+		return res;
 	}
 	
 	public final void startTransaction() {
@@ -134,8 +137,11 @@ public enum ConnectionFactory {
 		try {
 			thread.get().close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			LOG.error("Erreur : impossible de fermer la "
+					+ "connection à la base de données.");
 			e.printStackTrace();
+			throw new IllegalStateException("Impossible de fermer la "
+					+ "connection à la base de données.");
 		}
 	}
 
@@ -152,6 +158,8 @@ public enum ConnectionFactory {
 			LOG.error("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");
 			e.printStackTrace();
+			throw new IllegalStateException("Impossible de fermer la "
+					+ "connection à la base de données.");
 		}
 	}
 }

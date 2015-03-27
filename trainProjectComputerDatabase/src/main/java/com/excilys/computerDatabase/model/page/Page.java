@@ -169,7 +169,6 @@ public class Page<T> {
 	}
 	
 	public void reloadEntities() {
-		// TODO écrire code des getAll()
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
