@@ -1,13 +1,14 @@
 package com.excilys.computerDatabase.service.dto;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.beans.Computer;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
 
 /**
  * 
@@ -35,11 +36,14 @@ public enum ComputerDTOMapper {
 		if (dto.getId() != null) {
 			bean.setId(Long.parseLong(dto.getId()));
 		}
+		LocalDate lDate;
 		if (dto.getIntroducedDate() != null) {
-			bean.setIntroducedDate(LocalDateTime.parse(dto.getIntroducedDate()));
+			lDate = LocalDate.parse(dto.getIntroducedDate());
+			bean.setIntroducedDate(lDate.atStartOfDay());
 		}
 		if (dto.getDiscontinuedDate() != null) {
-			bean.setDiscontinuedDate(LocalDateTime.parse(dto.getDiscontinuedDate()));
+			lDate = LocalDate.parse(dto.getDiscontinuedDate());
+			bean.setDiscontinuedDate(lDate.atStartOfDay());
 		}
 		if ((dto.getCompanyId() != null) && (dto.getCompanyName() != null)) {
 			bean.setCompany(new Company(Long.parseLong(dto.getCompanyId()), dto.getCompanyName()));
