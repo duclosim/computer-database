@@ -18,12 +18,13 @@ import java.util.List;
 
 public class ComputerDAOTest {
 	private Connection con;
-	private ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
+	private ComputerDAO computerDAO;
 	
 	@Before
 	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
 		ConnectionFactory.INSTANCE.startTransaction();
+		computerDAO = ComputerDAOImpl.INSTANCE;
 	}
 	
 	@After
@@ -67,30 +68,39 @@ public class ComputerDAOTest {
 		List<Computer> beansByCompany;
 		List<Computer> expectedBeansByComputerName = new ArrayList<>();
 		List<Computer> expectedBeansByCompanyName = new ArrayList<>();
+		int limit = 15;
+		int offset = 5;
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.name LIKE ? "
-				+ "OR company.name LIKE ?;";
+				+ "OR company.name LIKE ? "
+				+ "LIMIT ? OFFSET ?;";
 		PreparedStatement ps = con.prepareStatement(query);
-		ps.setString(1, computerName);
-		ps.setString(2, computerName);
+		int paramIndex = 0;
+		ps.setString(++paramIndex, "%" + computerName + "%");
+		ps.setString(++paramIndex, "%" + computerName + "%");
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
 			expectedBeansByComputerName.add(ComputerMapper.INSTANCE.mapComputer(results));
 		}
 		ps.close();
 		ps = con.prepareStatement(query);
-		ps.setString(1, "%" + companyName + "%");
-		ps.setString(2, "%" + companyName + "%");
+		paramIndex = 0;
+		ps.setString(++paramIndex, "%" + companyName + "%");
+		ps.setString(++paramIndex, "%" + companyName + "%");
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
 			expectedBeansByCompanyName.add(ComputerMapper.INSTANCE.mapComputer(results));
 		}
 		ps.close();
 		// When
-		beans = computerDAO.getFiltered(computerName);
-		beansByCompany = computerDAO.getFiltered(companyName);
+		beans = computerDAO.getFiltered(limit, offset, computerName);
+		beansByCompany = computerDAO.getFiltered(limit, offset, companyName);
 		// Then
 		Assert.assertEquals("Erreur sur la liste de beans par nom de computer.", expectedBeansByComputerName, beans);
 		Assert.assertEquals("Erreur sur la liste de beans par nom de company.", expectedBeansByCompanyName, beansByCompany);

@@ -87,7 +87,7 @@ public enum ConnectionFactory {
 		Connection res = null;
 		try {
 			res = thread.get();
-			if (res == null) {
+			if ((res == null) || (res.isClosed())) {
 				res = connectionPool.getConnection();
 				res.setAutoCommit(true);
 				thread.set(res);
@@ -151,9 +151,9 @@ public enum ConnectionFactory {
 			+ statement + ", "
 			+ results + ")");
 		try {
-			closeConnection();
-			statement.close();
 			results.close();
+			statement.close();
+			closeConnection();
 		} catch (SQLException e) {
 			LOG.error("Erreur : impossible de fermer la "
 					+ "connection à la base de données.");

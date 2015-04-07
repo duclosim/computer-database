@@ -85,19 +85,26 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getFiltered(String name)
+	public List<Computer> getFiltered(int limit, int offset, String name)
 			throws SQLException {
-		LOG.trace("getByNameOrCompanyName(" + name + ")");
+		LOG.trace(new StringBuilder("getByNameOrCompanyName(")
+			.append(limit).append(", ")
+			.append(offset).append(",")
+			.append(name).append(")").toString());
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		List<Computer> result = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.name LIKE ? "
-				+ "OR company.name LIKE ?;";
+				+ "OR company.name LIKE ? "
+				+ "LIMIT ? OFFSET ?;";
 		PreparedStatement ps = con.prepareStatement(query);
-		ps.setString(1, "%" + name + "%");
-		ps.setString(2, "%" + name + "%");
+		int paramIndex = 0;
+		ps.setString(++paramIndex, "%" + name + "%");
+		ps.setString(++paramIndex, "%" + name + "%");
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
 			result.add(mapper.mapComputer(results));
@@ -180,9 +187,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 		query.append("LIMIT ? OFFSET ?;");
 		PreparedStatement ps = con.prepareStatement(query.toString());
-		if (column != null && way != null) {
-			ps.setString(++paramIndex, "%" + column + "%");
-			ps.setString(++paramIndex, "%" + column + "%");
+		if (name != null) {
+			ps.setString(++paramIndex, "%" + name + "%");
+			ps.setString(++paramIndex, "%" + name + "%");
 		}
 		ps.setLong(++paramIndex, limit);
 		ps.setLong(++paramIndex, offset);
@@ -200,6 +207,26 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		Connection con = ConnectionFactory.INSTANCE.getConnection();
 		String query = "SELECT COUNT(*) FROM computer;";
 		PreparedStatement ps = con.prepareStatement(query);
+		ResultSet results = ps.executeQuery();
+		if (results.next()) {
+			return results.getInt(1);
+		}
+		releaseResources(con, ps);
+		return 0;
+	}
+
+	@Override
+	public int countFilteredLines(String name) throws SQLException {
+		LOG.trace("countFilteredLines(" + name + ")");
+		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		String query = "SELECT COUNT(*) "
+				+ "FROM computer "
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "WHERE computer.name LIKE ? "
+				+ "OR company.name LIKE ?;";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, "%" + name + "%");
+		ps.setString(2, "%" + name + "%");
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
 			return results.getInt(1);

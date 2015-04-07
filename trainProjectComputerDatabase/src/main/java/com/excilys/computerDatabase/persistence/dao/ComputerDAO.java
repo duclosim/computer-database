@@ -12,6 +12,14 @@ import com.excilys.computerDatabase.model.beans.Computer;
 public interface ComputerDAO extends CRUDDao<Computer> {
 
 	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws SQLException 
+	 */
+	int countFilteredLines(String name) throws SQLException;
+	
+	/**
 	 * Cette méthode supprime tous les computer avec un certain company_id.
 	 * @param companyId L'id de company dont les computers qui l'ont 
 	 *   comme company seront supprimés.

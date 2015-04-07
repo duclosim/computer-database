@@ -28,7 +28,7 @@ public class PageTest {
 		int expectedCurrentPageNum = DEFAULT_OFFSET / DEFAULT_LIMIT + 1;
 		int offset = (expectedCurrentPageNum - 1) * DEFAULT_LIMIT;
 		List<Company> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, offset));
-		int expectedLastPageNb = (service.countLines() - offset) / DEFAULT_LIMIT + 1;
+		int expectedLastPageNb = (service.countAllLines() - offset) / DEFAULT_LIMIT + 1;
 		if (expectedEntities.size() % DEFAULT_LIMIT != 0) {
 			++expectedLastPageNb;
 		}
@@ -91,7 +91,7 @@ public class PageTest {
 		
 		int newLimit = 10;
 		int newOffset = (page.getPageNum() - 1) * newLimit;
-		int expectedLastPageNb = (service.countLines() - newOffset) / newLimit + 1;
+		int expectedLastPageNb = (service.countAllLines() - newOffset) / newLimit + 1;
 		List<Company> expectedEntities = new ArrayList<>(service.getAll(newLimit, newOffset));
 		if (expectedEntities.size() % newLimit != 0) {
 			++expectedLastPageNb;
@@ -127,7 +127,7 @@ public class PageTest {
 		int newPageNum = 2;
 		int newOffset = (newPageNum - 1) * DEFAULT_LIMIT;
 		List<Company> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, newOffset));
-		int expectedLastPageNb = service.countLines() / DEFAULT_LIMIT + 1;
+		int expectedLastPageNb = service.countAllLines() / DEFAULT_LIMIT + 1;
 		if (expectedEntities.size() % DEFAULT_LIMIT != 0) {
 			++expectedLastPageNb;
 		}

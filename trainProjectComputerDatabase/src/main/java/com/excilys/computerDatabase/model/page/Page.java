@@ -65,7 +65,7 @@ public class Page<T> {
 		this.service = service;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
-		refresh();
+		reloadEntities();
 	}
 	
 	// Requetes
@@ -73,6 +73,7 @@ public class Page<T> {
 		return service;
 	}
 	public List<T> getEntities() {
+		reloadEntities();
 		return entities;
 	}
 	public String getSearchedName() {
@@ -85,21 +86,35 @@ public class Page<T> {
 		return pageNum;
 	}
 	public int getTotalNbEntities() {
-		return service.countLines();
+		int result = 0;
+		if (UserInputsValidator.isValidString(searchedName)) {
+			result = service.countFilteredLines(searchedName);
+		} else {
+			result = service.countAllLines();
+		}
+		return result;
 	}
 	public int getLastPageNb() {
-		int lastPageNb = service.countLines() / 
+		int lastPageNb = getTotalNbEntities() / 
 				maxNbItemsByPage;
-		if (service.countLines() % maxNbItemsByPage != 0) {
+		if (getTotalNbEntities() % maxNbItemsByPage != 0) {
 			++lastPageNb;
 		}
 		return lastPageNb;
 	}
 	public String getColumn() {
-		return column.getColumnName();
+		if (column == null) {
+			return null;
+		} else {
+			return column.getColumnName();
+		}
 	}
 	public String getWay() {
-		return way.getWay();
+		if (column == null) {
+			return null;
+		} else {
+			return way.getWay();
+		}
 	}
     public int getStartingPage() {
 		LOG.trace("getStartingPage()");
@@ -113,19 +128,15 @@ public class Page<T> {
 	// Commandes
 	public void setService(PageableService<T> service) {
 		this.service = service;
-		refresh();
 	}
 	public void setSearchedName(String searchedName) {
 		this.searchedName = searchedName;
-		refresh();
 	}
 	public void setColumn(ComputerColumn column) {
 		this.column = column;
-		refresh();
 	}
 	public void setWay(OrderingWay way) {
 		this.way = way;
-		refresh();
 	}
 
 	/**
@@ -142,7 +153,6 @@ public class Page<T> {
 		if (getPageNum() > getLastPageNb()) {
 			setPageNum(getLastPageNb());
 		}
-		refresh();
 	}
 	/**
 	 * Se déplace de la page en cours vers une nouvelle page.
@@ -155,7 +165,6 @@ public class Page<T> {
 			throw new IllegalArgumentException("pageNum est hors-limites.");
 		}
 		this.pageNum = pageNum;
-		refresh();
 	}
 
     // OUTILS
@@ -163,12 +172,7 @@ public class Page<T> {
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	public void refresh() {
-		LOG.trace("setPageNum(" + pageNum + ")");
-		reloadEntities();
-	}
-	
-	public void reloadEntities() {
+	private void reloadEntities() {
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();

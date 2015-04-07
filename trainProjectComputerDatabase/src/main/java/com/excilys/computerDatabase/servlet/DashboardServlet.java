@@ -43,80 +43,75 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 		LOG.trace(new StringBuilder("doGet(")
 			.append(req).append(", ")
 			.append(resp).append(")").toString());
-		page.refresh();
-		try {
-			// Numéro de page.
-			String numParam = req.getParameter("pageNum");
-			int newPageNum = Page.DEFAULT_PAGE_NUM;
-			if ((numParam != null) 
-					&& (!UserInputsValidator.isValidNumber(numParam))) {
+		if (req.getParameterMap().values().isEmpty()) {
+			page.setColumn(null);
+			page.setSearchedName(null);
+			page.setWay(null);
+		}
+		// Numéro de page.
+		String numParam = req.getParameter("pageNum");
+		int newPageNum = Page.DEFAULT_PAGE_NUM;
+		if (numParam != null) {
+			if (!UserInputsValidator.isValidNumber(numParam)) {
 				numParam = null;
-			}
-			if (numParam != null) {
+			} else {
 				newPageNum = Integer.parseInt(numParam);
 			}
-			if (page.getPageNum() != newPageNum) {
-				page.setPageNum(newPageNum);
-			}
-			// Nombre d'objets par page.
-			String maxItemPageParam = req.getParameter("itemByPage");
-			int newItemByPage = Page.DEFAULT_LIMIT;
-			if ((maxItemPageParam != null) 
-					&& (!UserInputsValidator.isValidNumber(maxItemPageParam))) {
+		}
+		if (page.getPageNum() != newPageNum) {
+			page.setPageNum(newPageNum);
+		}
+		// Nombre d'objets par page.
+		String maxItemPageParam = req.getParameter("itemByPage");
+		int newItemByPage = Page.DEFAULT_LIMIT;
+		if (maxItemPageParam != null) {
+			if (!UserInputsValidator.isValidNumber(maxItemPageParam)) {
 				maxItemPageParam = null;
-			}
-			if (maxItemPageParam != null) {
+			} else {
 				newItemByPage = Integer.parseInt(maxItemPageParam);
 			}
-			if (page.getMaxNbItemsByPage() != newItemByPage) {
-				page.setMaxNbItemsByPage(newItemByPage);
-			}
-			// Tri
-			String computerColumnStr = req.getParameter("column");
-			String orderWayStr = req.getParameter("orderWay");
-			ComputerColumn column = null;
-			OrderingWay way = null;
-			if (UserInputsValidator.isValidString(computerColumnStr)
-					&& UserInputsValidator.isValidString(orderWayStr)) {
-				int k = 0;
-				ComputerColumn c = ComputerColumn.values()[k];
-				while (!c.getColumnName().equals(computerColumnStr)
-						&& k < ComputerColumn.values().length) {
-					++k;
-					c = ComputerColumn.values()[k];
-				}
-				if (c.getColumnName().equals(computerColumnStr)) {
-					column = c;
-				}
-				k = 0;
-				OrderingWay ow = OrderingWay.values()[k];
-				while (!ow.getWay().equals(orderWayStr)
-						&& k < OrderingWay.values().length) {
-					++k;
-					ow = OrderingWay.values()[k];
-				}
-				if (ow.getWay().equals(orderWayStr)) {
-					way = ow;
-				}
-				page = new Page<ComputerDTO>(service);
-				page.setColumn(column);
-				page.setWay(way);
-			}
-			// Recherche sur le nom.
-			String searchedName = req.getParameter("search");
-			if (UserInputsValidator.isValidString(searchedName)) {
-				page = new Page<ComputerDTO>(service);
-				page.setSearchedName(searchedName);
-			}
-			page.refresh();
-			// Passage des paramètres de la page dans la requête.
-			req.setAttribute("page", page);
-			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
-		} catch (NumberFormatException e) {
-			LOG.error("Erreur de parsing du numéro de page.");
-			e.printStackTrace();
-			throw new IllegalArgumentException("Pas de numéro de page valide");
 		}
+		if (page.getMaxNbItemsByPage() != newItemByPage) {
+			page.setMaxNbItemsByPage(newItemByPage);
+		}
+		// Tri
+		String computerColumnStr = req.getParameter("column");
+		String orderWayStr = req.getParameter("orderWay");
+		ComputerColumn column = null;
+		OrderingWay way = null;
+		if (UserInputsValidator.isValidString(computerColumnStr)
+				&& UserInputsValidator.isValidString(orderWayStr)) {
+			int k = 0;
+			ComputerColumn c = ComputerColumn.values()[k];
+			while (!c.getColumnName().equals(computerColumnStr)
+					&& k < ComputerColumn.values().length) {
+				++k;
+				c = ComputerColumn.values()[k];
+			}
+			if (c.getColumnName().equals(computerColumnStr)) {
+				column = c;
+			}
+			k = 0;
+			OrderingWay ow = OrderingWay.values()[k];
+			while (!ow.getWay().equals(orderWayStr)
+					&& k < OrderingWay.values().length) {
+				++k;
+				ow = OrderingWay.values()[k];
+			}
+			if (ow.getWay().equals(orderWayStr)) {
+				way = ow;
+			}
+			page.setColumn(column);
+			page.setWay(way);
+		}
+		// Recherche sur le nom.
+		String searchedName = req.getParameter("search");
+		if (UserInputsValidator.isValidString(searchedName)) {
+			page.setSearchedName(searchedName);
+		}
+		// Passage des paramètres de la page dans la requête.
+		req.setAttribute("page", page);
+		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -137,7 +132,6 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			deleteDTO.setId(st.nextToken());
 			service.delete(deleteDTO);
 		}
-		page.refresh();
 		req.setAttribute("page", page);
 		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 	}

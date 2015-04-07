@@ -52,38 +52,38 @@
 							</a>
 						</span></th>
 						<th>Computer name
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="computer.name" orderWay="ASC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="computer.name" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="computer.name" orderWay="DESC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="computer.name" orderWay="DESC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Introduced date -->
 						<th>Introduced date
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="computer.introduced" orderWay="ASC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="computer.introduced" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="computer.introduced" orderWay="DESC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="computer.introduced" orderWay="DESC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Discontinued date
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="computer.discontinued" orderWay="ASC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="computer.discontinued" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="computer.discontinued" orderWay="DESC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="computer.discontinued" orderWay="DESC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Company -->
 						<th>Company
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="company.name" orderWay="ASC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="company.name" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
-							<a href="<p:navLink pageNum="${page.pageNum + 1}" itemByPage="${page.maxNbItemByPage}" 
-								column="company.name" orderWay="DESC" search="${page.search}">
+							<a href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
+								column="company.name" orderWay="DESC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 					</tr>

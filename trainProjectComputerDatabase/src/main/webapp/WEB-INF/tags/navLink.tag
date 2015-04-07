@@ -6,7 +6,7 @@
 <%@ attribute name="orderWay" required="false" type="java.lang.String" %>
 <%@ attribute name="column" required="false" type="java.lang.String" %>
 
-<%@ attribute name="search" required="false" type="java.lang.string" %>
+<%@ attribute name="search" required="false" type="java.lang.String" %>
 
 <c:url value="dashboard">
 	<c:param name="pageNum" value="${pageNum}"/>

@@ -56,7 +56,7 @@ public enum ComputerServiceImpl implements ComputerService {
 		LOG.trace("getByNameOrCompanyName(" + name + ")");
 		List<ComputerDTO> result = null;
 		try {
-			result = dtoMapper.BeansToDTOs(dao.getFiltered(name));
+			result = dtoMapper.BeansToDTOs(dao.getFiltered(limit, offset, name));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -134,11 +134,27 @@ public enum ComputerServiceImpl implements ComputerService {
 	}
 	
 	@Override
-	public int countLines() {
+	public int countAllLines() {
 		LOG.trace("countLines()");
 		int result = 0;
 		try {
 			result = dao.countLines();
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			ConnectionFactory.INSTANCE.closeConnection();
+		}
+		return result;
+	}
+
+	@Override
+	public int countFilteredLines(String name) {
+		LOG.trace("countFilteredLines(" + name + ")");
+		int result = 0;
+		try {
+			result = dao.countFilteredLines(name);
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();

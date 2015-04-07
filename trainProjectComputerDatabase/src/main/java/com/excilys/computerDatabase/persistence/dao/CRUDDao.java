@@ -33,12 +33,13 @@ public interface CRUDDao<T> {
 	List<T> getAll(int limit, int offset) throws SQLException;
 	/**
 	 * 
+	 * @param limit
+	 * @param offset
 	 * @param name
-	 * @param con
 	 * @return
 	 * @throws SQLException
 	 */
-	List<T> getFiltered(String name) throws SQLException;
+	List<T> getFiltered(int limit, int offset, String name) throws SQLException;
 
 	/**
 	 * 

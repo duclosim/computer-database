@@ -60,7 +60,13 @@ public interface PageableService<T> {
 	 * @return Le nombre total de lignes dans la table.
 	 * @throws SQLException 
 	 */
-	int countLines();
+	int countAllLines();
+	
+	/**
+	 * Retourne le nombre de lignes dans la table, filtrée sur le nom.
+	 * @return
+	 */
+	int countFilteredLines(String name);
 	
 	/**
 	 * 

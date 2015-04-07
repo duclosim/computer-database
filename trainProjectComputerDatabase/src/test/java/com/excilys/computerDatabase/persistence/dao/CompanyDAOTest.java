@@ -24,6 +24,8 @@ public class CompanyDAOTest {
 	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
 		ConnectionFactory.INSTANCE.startTransaction();
+		companyDAO = CompanyDAOImpl.INSTANCE;
+		mapper = CompanyMapper.INSTANCE;
 	}
 	
 	@After

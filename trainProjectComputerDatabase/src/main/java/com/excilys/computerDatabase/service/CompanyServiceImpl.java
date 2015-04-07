@@ -109,7 +109,7 @@ public enum CompanyServiceImpl implements CompanyService {
 	}
 	
 	@Override
-	public int countLines() {
+	public int countAllLines() {
 		LOG.trace("countLines()");
 		int result = 0;
 		try {
@@ -122,6 +122,11 @@ public enum CompanyServiceImpl implements CompanyService {
 			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
+	}
+
+	@Override
+	public int countFilteredLines(String name) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
