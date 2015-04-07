@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.model.beans;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author excilys
  *
  */
+@Component
 public class Company {
 	private static final Logger LOG = LoggerFactory.getLogger(Company.class);
 	

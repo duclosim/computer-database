@@ -1,16 +1,18 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public enum CompanyMapper {
-	INSTANCE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
+
+@Component
+public class CompanyMapper {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 

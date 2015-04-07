@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
@@ -21,16 +23,13 @@ import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
  * @author excilys
  *
  */
-public enum ComputerDAOImpl implements ComputerDAO {
-	INSTANCE;
+@Repository
+public class ComputerDAOImpl implements ComputerDAO {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
 	
-	private final ComputerMapper mapper;
-	
-	private ComputerDAOImpl() {
-		mapper = ComputerMapper.INSTANCE;
-	}
+	@Autowired
+	private ComputerMapper mapper;
 	
 	@Override
 	public Computer getById(Long id) throws SQLException {

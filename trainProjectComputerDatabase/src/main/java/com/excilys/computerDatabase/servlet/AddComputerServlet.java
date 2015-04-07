@@ -1,13 +1,6 @@
 package com.excilys.computerDatabase.servlet;
 
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
-import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.cli.runners.DeleteCompany;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -16,22 +9,30 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.cli.runners.DeleteCompany;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet implements Servlet {
 	private static final Logger LOG = LoggerFactory.getLogger(DeleteCompany.class);
 	private static final long serialVersionUID = 6902766188799864148L;
 	
-	private CompanyService companyService = CompanyServiceImpl.INSTANCE;
-	private ComputerService computerService = ComputerServiceImpl.INSTANCE;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		LOG.trace("init(" + config + ")");
-		companyService = CompanyServiceImpl.INSTANCE;
-		computerService = ComputerServiceImpl.INSTANCE;
 	}
 	
 	@Override

@@ -11,8 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 // TODO finir d'écrire les tests selenium
@@ -21,11 +22,14 @@ public class WebUserInterfaceTest {
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";
 	private static final String beanName = "seleniumBean";
 	
+	@Autowired
+	ComputerService computerService;
+	
 	@Before
 	public void initDriver() {
 		ComputerDTO c = new ComputerDTO();
 		c.setName(beanName);
-		ComputerServiceImpl.INSTANCE.create(c);
+		computerService.create(c);
 		// Create a new instance of the Firefox driver
 		driver = new FirefoxDriver();
 	    driver.get(HOME_PAGE);
@@ -35,9 +39,9 @@ public class WebUserInterfaceTest {
 	public void closeDriver() {
 	    //Close the browser
 	    driver.quit();
-	    List<ComputerDTO> list = ComputerServiceImpl.INSTANCE.getFiltered(beanName, 1, 0);
+	    List<ComputerDTO> list = computerService.getFiltered(beanName, 1, 0);
 	    for (ComputerDTO computer : list) {
-	    	ComputerServiceImpl.INSTANCE.delete(computer);
+	    	computerService.delete(computer);
 	    }
 	}
 

@@ -4,12 +4,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 import com.excilys.computerDatabase.service.PageableService;
 
+@Component
+@Scope("prototype")
 public class Page<T> {
 	private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 	private static final int WIDTH = 3;
@@ -18,8 +23,8 @@ public class Page<T> {
 	private static final int DEFAULT_OFFSET = 0;
 	public static final int DEFAULT_PAGE_NUM = 1;
 	
+	@Autowired
 	private PageableService<T> service;
-	private List<T> entities;
 	private int maxNbItemsByPage;
 	private int pageNum;
     
@@ -29,15 +34,6 @@ public class Page<T> {
 	private OrderingWay way;
 
 	// Constructeurs
-	/**
-	 * 
-	 * @param service
-	 */
-	public Page(PageableService<T> service) {
-		this(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
-		LOG.trace("new Page(" + service + ")");
-	}
-	
 	/**
 	 * 
 	 * @param service
@@ -65,7 +61,24 @@ public class Page<T> {
 		this.service = service;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
-		reloadEntities();
+	}
+	
+	/**
+	 * 
+	 * @param service
+	 */
+	public Page(PageableService<T> service) {
+		this(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
+		LOG.trace("new Page(" + service + ")");
+	}
+	
+	/**
+	 * 
+	 */
+	public Page() {
+		LOG.trace("new Page()");
+		setMaxNbItemsByPage(DEFAULT_LIMIT);
+		setPageNum(DEFAULT_OFFSET / getMaxNbItemsByPage() + 1);
 	}
 	
 	// Requetes
@@ -73,8 +86,7 @@ public class Page<T> {
 		return service;
 	}
 	public List<T> getEntities() {
-		reloadEntities();
-		return entities;
+		return reloadEntities();
 	}
 	public String getSearchedName() {
 		return searchedName;
@@ -172,7 +184,8 @@ public class Page<T> {
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	private void reloadEntities() {
+	private List<T> reloadEntities() {
+		List<T> entities = null;
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
@@ -197,12 +210,13 @@ public class Page<T> {
 				entities = service.getAll(getMaxNbItemsByPage(), offset);
 			}
 		}
+		return entities;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder res = new StringBuilder();
-		for (T entity : entities) {
+		for (T entity : getEntities()) {
 			res.append(entity).append('\n');
 		}
 		return res.toString();

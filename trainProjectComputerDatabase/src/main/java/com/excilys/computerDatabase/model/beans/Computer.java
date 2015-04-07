@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @author excilys
  *
  */
+@Component
 public class Computer {
 	private static final Logger LOG = LoggerFactory.getLogger(Computer.class);
 	
@@ -18,6 +21,7 @@ public class Computer {
 	private String name;
 	private LocalDateTime introducedDate;
 	private LocalDateTime discontinuedDate;
+	@Autowired
 	private Company company;
 
 	public Computer(Long id, String name, LocalDateTime introduced,

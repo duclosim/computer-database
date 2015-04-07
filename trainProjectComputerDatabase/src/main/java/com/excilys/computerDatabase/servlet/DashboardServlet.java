@@ -13,27 +13,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.model.page.Page;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet implements Servlet {
 	private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = -5526661127455358108L;
+	
+	@Autowired
 	private ComputerService service;
+	@Autowired
 	private Page<ComputerDTO> page;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		LOG.trace("init(" + config + ")");
-		service = ComputerServiceImpl.INSTANCE;
 		page = new Page<>(service);
 	}
 	

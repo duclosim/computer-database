@@ -5,14 +5,15 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 
 /**
@@ -20,17 +21,16 @@ import com.excilys.computerDatabase.persistence.dao.OrderingWay;
  * @author excilys
  *
  */
-public enum CompanyServiceImpl implements CompanyService {
-	INSTANCE;
+@Service
+public class CompanyServiceImpl implements CompanyService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
 	
-	private final CompanyDAO dao;
+	@Autowired
+	private CompanyDAO dao;
+	@Autowired
+	private ComputerDAO computerDAO;
 	
-	private CompanyServiceImpl() {
-		dao = CompanyDAOImpl.INSTANCE;
-	}
-
 	@Override
 	public Company getById(Long id) {
 		LOG.trace("getById(" + id + ")");
@@ -138,7 +138,7 @@ public enum CompanyServiceImpl implements CompanyService {
 		}
 		try {
 			ConnectionFactory.INSTANCE.startTransaction();
-			ComputerDAOImpl.INSTANCE.deleteByCompanyId(company.getId());
+			computerDAO.deleteByCompanyId(company.getId());
 			dao.delete(company);
 			ConnectionFactory.INSTANCE.commit();
 		} catch (SQLException e) {

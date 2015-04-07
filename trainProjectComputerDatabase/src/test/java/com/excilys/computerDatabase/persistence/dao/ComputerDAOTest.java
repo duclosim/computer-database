@@ -3,10 +3,12 @@ package com.excilys.computerDatabase.persistence.dao;
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,13 +20,20 @@ import java.util.List;
 
 public class ComputerDAOTest {
 	private Connection con;
+	
+	@Autowired
+	private CompanyDAO companyDAO;
+	
+	@Autowired
 	private ComputerDAO computerDAO;
+	
+	@Autowired
+	private ComputerMapper computerMapper;
 	
 	@Before
 	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
 		ConnectionFactory.INSTANCE.startTransaction();
-		computerDAO = ComputerDAOImpl.INSTANCE;
 	}
 	
 	@After
@@ -49,7 +58,7 @@ public class ComputerDAOTest {
 		ps.setLong(1, id);
 		results = ps.executeQuery();
 		if (results.next()) {
-			expectedBean = ComputerMapper.INSTANCE.mapComputer(results);
+			expectedBean = computerMapper.mapComputer(results);
 			ps.close();
 			// When
 			bean = computerDAO.getById(id);
@@ -84,7 +93,7 @@ public class ComputerDAOTest {
 		ps.setLong(++paramIndex, offset);
 		ResultSet results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeansByComputerName.add(ComputerMapper.INSTANCE.mapComputer(results));
+			expectedBeansByComputerName.add(computerMapper.mapComputer(results));
 		}
 		ps.close();
 		ps = con.prepareStatement(query);
@@ -95,7 +104,7 @@ public class ComputerDAOTest {
 		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeansByCompanyName.add(ComputerMapper.INSTANCE.mapComputer(results));
+			expectedBeansByCompanyName.add(computerMapper.mapComputer(results));
 		}
 		ps.close();
 		// When
@@ -124,7 +133,7 @@ public class ComputerDAOTest {
 		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeans.add(ComputerMapper.INSTANCE.mapComputer(results));
+			expectedBeans.add(computerMapper.mapComputer(results));
 		}
 		ps.close();
 		// When
@@ -162,7 +171,7 @@ public class ComputerDAOTest {
 		LocalDateTime time = null;
 		bean.setIntroducedDate(time);
 		bean.setDiscontinuedDate(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId));
+		bean.setCompany(companyDAO.getById(companyId));
 		// When
 		computerDAO.create(bean);
 		Computer expectedBean = computerDAO.getById(bean.getId());
@@ -197,7 +206,7 @@ public class ComputerDAOTest {
 		LocalDateTime time = null;
 		bean.setIntroducedDate(time);
 		bean.setDiscontinuedDate(time);
-		bean.setCompany(CompanyDAOImpl.INSTANCE.getById(companyId));
+		bean.setCompany(companyDAO.getById(companyId));
 		computerDAO.create(bean);
 		// When
 		computerDAO.delete(bean);

@@ -6,13 +6,14 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAOImpl;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 import com.excilys.computerDatabase.service.dto.ComputerDTOMapper;
@@ -22,18 +23,15 @@ import com.excilys.computerDatabase.service.dto.ComputerDTOMapper;
  * @author excilys
  *
  */
-public enum ComputerServiceImpl implements ComputerService {
-	INSTANCE;
+@Service
+public class ComputerServiceImpl implements ComputerService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
 	
-	private final ComputerDAO dao;
-	private final ComputerDTOMapper dtoMapper;
-	
-	private ComputerServiceImpl() {
-		dao = ComputerDAOImpl.INSTANCE;
-		dtoMapper = ComputerDTOMapper.INSTANCE;
-	}
+	@Autowired
+	private ComputerDAO dao;
+	@Autowired
+	private ComputerDTOMapper dtoMapper;
 	
 	@Override
 	public ComputerDTO getById(Long id) {

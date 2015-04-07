@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
@@ -19,19 +21,16 @@ import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
  * @author excilys
  *
  */
-public enum CompanyDAOImpl implements CompanyDAO {
-	INSTANCE;
+@Repository
+public class CompanyDAOImpl implements CompanyDAO {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	public static final String ID_COLUMN_LABEL = "id";
 	public static final String NAME_COLUMN_LABEL = "name";
 
-	private final CompanyMapper mapper;
-	
-	private CompanyDAOImpl() {
-		mapper = CompanyMapper.INSTANCE;
-	}
+	@Autowired
+	private CompanyMapper mapper;
 	
 	@Override
 	public Company getById(Long id) throws SQLException {

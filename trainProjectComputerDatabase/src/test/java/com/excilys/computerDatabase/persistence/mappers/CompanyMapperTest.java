@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
@@ -17,7 +18,8 @@ import com.excilys.computerDatabase.persistence.dao.CompanyDAOImpl;
 
 public class CompanyMapperTest {
 	
-	CompanyMapper companyMapper = CompanyMapper.INSTANCE;
+	@Autowired
+	CompanyMapper companyMapper;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();

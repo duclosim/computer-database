@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
@@ -18,10 +19,13 @@ import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
 
 public class ComputerMapperTest {
-	private ComputerMapper computerMapper = ComputerMapper.INSTANCE;
+	@Autowired
+	private ComputerMapper computerMapper;
+	
+	@Autowired
+	private CompanyService companyService;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -39,7 +43,6 @@ public class ComputerMapperTest {
 	@Test
 	public void mapComputerShouldSetProperties() {
 		// Given
-		CompanyService companyService = CompanyServiceImpl.INSTANCE;
 		Computer result = null;
 		LocalDateTime introducedDate = null;
 		LocalDateTime discontinuedDate = null;

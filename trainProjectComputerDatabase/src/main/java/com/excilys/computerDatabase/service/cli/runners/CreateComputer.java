@@ -1,13 +1,14 @@
 package com.excilys.computerDatabase.service.cli.runners;
 
-import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 /**
  * Cette classe peut lancer la commande de création de nouveaux ordinateurs.
@@ -15,11 +16,13 @@ import java.util.Scanner;
  *
  */
 public class CreateComputer implements CommandRunner {
+	@Autowired
+	private ComputerService computerService;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(CreateComputer.class);
 	
 	public void runCommand(Scanner sc) {
 		LOG.trace("runCommand(" + sc + ")");
-		ComputerService computerService = ComputerServiceImpl.INSTANCE;
 		ComputerDTO computer = new ComputerDTO();
 		System.out.println("Nom du nouvel ordinateur : ");
 		String args = sc.next();

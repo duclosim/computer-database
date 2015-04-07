@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
@@ -15,8 +16,8 @@ import com.excilys.computerDatabase.model.beans.Computer;
  * @author excilys
  *
  */
-public enum ComputerDTOMapper {
-	INSTANCE;
+@Component
+public class ComputerDTOMapper {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOMapper.class);
 	

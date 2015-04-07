@@ -3,10 +3,12 @@ package com.excilys.computerDatabase.persistence.dao;
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,15 +19,17 @@ import java.util.List;
 
 public class CompanyDAOTest {
 	private Connection con;
+	
+	@Autowired
 	private CompanyDAO companyDAO;
+	
+	@Autowired
 	private CompanyMapper mapper;
 	
 	@Before
 	public void prepareConnection() throws SQLException {
 		con = ConnectionFactory.INSTANCE.getConnection();
 		ConnectionFactory.INSTANCE.startTransaction();
-		companyDAO = CompanyDAOImpl.INSTANCE;
-		mapper = CompanyMapper.INSTANCE;
 	}
 	
 	@After

@@ -13,8 +13,7 @@ import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 
-public enum ComputerMapper {
-	INSTANCE;
+public class ComputerMapper {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
 	
