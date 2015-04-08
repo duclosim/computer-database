@@ -1,51 +1,84 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys</groupId>
-	<artifactId>computerDatabase</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
-	<url>http://maven.apache.org</url>
+	<artifactId>computer-database</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>computer-database</name>
 
 	<properties>
-		<slf4j.version>1.7.10</slf4j.version>
-		<logback.version>1.1.2</logback.version>
-		<mysql-driver.version>5.1.34</mysql-driver.version>
-		<boneCP.version>0.8.0.RELEASE</boneCP.version>
+		<assertj.version>2.0.0</assertj.version>
+		<commons-dbcp2.version>2.1</commons-dbcp2.version>
+		<dbunit.version>2.5.0</dbunit.version>
+		<h2database.version>1.4.186</h2database.version>
 		<junit.version>4.12</junit.version>
-		<mockito.version>1.9.5</mockito.version>
-		<selenium.version>2.45.0</selenium.version>
-		<javax-servlet.version>3.0.1</javax-servlet.version>
+		<java.version>1.8</java.version>
+		<javax.servlet.version>3.1.0</javax.servlet.version>
+		<jsp-api.version>2.2</jsp-api.version>
 		<jstl.version>1.2</jstl.version>
-		<spring.version>4.1.6.RELEASE</spring.version>
+		<logback.version>1.1.3</logback.version>
+		<mockito.version>1.10.19</mockito.version>
+		<mysql.version>5.1.34</mysql.version>
+		<selenium.version>2.45.0</selenium.version>
+		<slf4j.version>1.7.12</slf4j.version>
 	</properties>
 
 	<dependencies>
-		<!-- Logging -->
-	    <dependency>
-	        <groupId>org.slf4j</groupId>
-	        <artifactId>jcl-over-slf4j</artifactId>
-	        <version>${slf4j.version}</version>
-	    </dependency>
+		<!-- Spring -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
-		<!-- Database connection -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		<!-- DBCP connection pooling -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons-dbcp2.version}</version>
+		</dependency>
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Views -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${jsp-api.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Database -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-driver.version}</version>
+			<version>${mysql.version}</version>
+			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>${boneCP.version}</version>
-		</dependency>
-		
-		<!-- Tests -->
+		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -64,47 +97,53 @@
 			<version>${selenium.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- Web application -->
+		<!-- Logging -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax-servlet.version}</version>
-			<scope>provided</scope>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>runtime</scope>
 		</dependency>
-		
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-context</artifactId>
-	        <version>${spring.version}</version><exclusions>
-            <exclusion>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-            </exclusion>
-        </exclusions>
-	    </dependency>
 	</dependencies>
 
+	<!-- Bill of Materials for Spring -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>4.1.6.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- Repo for Spring releases -->
+	<repositories>
+		<repository>
+			<id>io.spring.repo.maven.release</id>
+			<url>http://repo.spring.io/release/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<build>
+		<finalName>computer-database</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 		</plugins>

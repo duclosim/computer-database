@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
@@ -14,6 +15,7 @@ import com.excilys.computerDatabase.service.dto.ComputerDTO;
  * @author excilys
  *
  */
+@Component
 public class DetailComputer implements CommandRunner {
 	@Autowired
 	private ComputerService computerService;

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
@@ -27,13 +28,13 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
-	@Autowired
 	private ComputerDTO computer;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		LOG.trace("init(" + config + ")");
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 	
 	@Override

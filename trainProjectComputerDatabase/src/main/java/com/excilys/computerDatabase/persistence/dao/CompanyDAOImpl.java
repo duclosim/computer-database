@@ -31,11 +31,13 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	@Autowired
 	private CompanyMapper mapper;
+	@Autowired
+	private ConnectionFactory connectionFactory;
 	
 	@Override
 	public Company getById(Long id) throws SQLException {
 		LOG.trace("getById(" + id + ")");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		Company result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -51,7 +53,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll(int limit, int offset) throws SQLException {
 		LOG.trace("getAll(" + limit + ", " + offset + ")");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -69,7 +71,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll() throws SQLException {
 		LOG.trace("getAll()");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company;";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -103,7 +105,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public int countLines() throws SQLException {
 		LOG.trace("countLine()");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) FROM company;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ResultSet results = ps.executeQuery();
@@ -133,7 +135,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		String deleteCompanyQuery = "DELETE FROM company WHERE id=?";
 		PreparedStatement delCompaniesStatement = con.prepareStatement(deleteCompanyQuery);
 		delCompaniesStatement.setLong(1, company.getId());
@@ -145,7 +147,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			PreparedStatement ps) throws SQLException {
 		ps.close();
 		if (connection.getAutoCommit()) {
-			ConnectionFactory.INSTANCE.closeConnection();
+			connection.close();
 		}
 	}
 }

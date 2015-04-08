@@ -6,6 +6,19 @@
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         >
 	<display-name>Computer Database</display-name>
+
+	<!-- Spring container configuration -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/application-context.xml</param-value>
+	</context-param>
+	
+	<listener>
+   		<listener-class>
+        	org.springframework.web.context.ContextLoaderListener
+  	 	</listener-class>
+	</listener> 
+	
 	<error-page>
 	  <error-code>403</error-code>
 	  <location>/403</location>

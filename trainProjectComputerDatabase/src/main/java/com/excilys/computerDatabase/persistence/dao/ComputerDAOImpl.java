@@ -30,11 +30,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	
 	@Autowired
 	private ComputerMapper mapper;
+	@Autowired
+	private ConnectionFactory connectionFactory;
 	
 	@Override
 	public Computer getById(Long id) throws SQLException {
 		LOG.trace("getById(" + id + ")");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		Computer result = null;
 		String query = "SELECT * "
 				+ "FROM computer "
@@ -65,7 +67,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		List<Computer> result = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
@@ -90,7 +92,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(")").toString());
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		List<Computer> result = new ArrayList<>();
 		String query = "SELECT * "
 				+ "FROM computer "
@@ -129,7 +131,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		List<Computer> result = new ArrayList<>();
 		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
 			.append("LEFT JOIN company ON computer.company_id = company.id ");
@@ -170,7 +172,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		int paramIndex = 0;
 		List<Computer> result = new ArrayList<>();
 		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
@@ -203,7 +205,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public int countLines() throws SQLException {
 		LOG.trace("countLine()");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) FROM computer;";
 		PreparedStatement ps = con.prepareStatement(query);
 		ResultSet results = ps.executeQuery();
@@ -217,7 +219,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public int countFilteredLines(String name) throws SQLException {
 		LOG.trace("countFilteredLines(" + name + ")");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
@@ -241,7 +243,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		StringBuilder query = new StringBuilder("INSERT INTO computer (")
 			.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
 			.append(", ")
@@ -294,7 +296,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computerName est à null.");
 			throw new IllegalArgumentException("computerName est à null.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		StringBuilder query = new StringBuilder("UPDATE computer SET ")
 		.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
 		.append("=?, ")
@@ -341,7 +343,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		String query = "DELETE FROM computer WHERE id=?";
 		PreparedStatement ps = con.prepareStatement(query);
 		if (computer.getId() != null) {
@@ -354,7 +356,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public void deleteByCompanyId(Long companyId) throws SQLException {
 		LOG.trace("deleteByCompanyId(" + companyId + ")");
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		String deleteComputersQuery = "DELETE FROM computer WHERE company_id=?";
 		PreparedStatement delComputersStatement = con.prepareStatement(deleteComputersQuery);
 		if (companyId != null) {
@@ -368,7 +370,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			PreparedStatement ps) throws SQLException {
 		ps.close();
 		if (connection.getAutoCommit()) {
-			ConnectionFactory.INSTANCE.closeConnection();
+			connection.close();
 		}
 	}
 }

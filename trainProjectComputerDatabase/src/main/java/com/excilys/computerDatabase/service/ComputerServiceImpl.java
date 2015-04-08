@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
@@ -43,8 +42,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -59,8 +56,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -78,8 +73,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -101,8 +94,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -125,8 +116,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -141,8 +130,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -157,8 +144,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 		return result;
 	}
@@ -173,8 +158,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 
 	}
@@ -189,8 +172,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Ecriture impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 	}
 
@@ -204,8 +185,6 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
-		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
 		}
 	}
 	

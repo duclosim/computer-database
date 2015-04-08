@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
@@ -14,7 +13,6 @@ import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 import com.excilys.computerDatabase.service.PageableService;
 
 @Component
-@Scope("prototype")
 public class Page<T> {
 	private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 	private static final int WIDTH = 3;

@@ -1,13 +1,14 @@
 package com.excilys.computerDatabase.service.cli.runners;
 
+import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.page.Page;
 import com.excilys.computerDatabase.service.CompanyService;
 
 /**
@@ -15,6 +16,7 @@ import com.excilys.computerDatabase.service.CompanyService;
  * @author excilys
  *
  */
+@Component
 public class GetCompanies implements CommandRunner {
 	@Autowired
 	private CompanyService companyService;
@@ -23,12 +25,7 @@ public class GetCompanies implements CommandRunner {
 
 	public void runCommand(Scanner sc) {
 		LOG.trace("runCommand(" + sc + ")");
-		Page<Company> page = new Page<>(companyService, MAX_ITEMS_BY_PAGE, 0);
+		List<Company> page = companyService.getAll();
 		System.out.println(page);
-		for (int k = 2; k < page.getLastPageNb(); ++k) {
-			page = new Page<>(companyService);
-			System.out.println(page);
-			sc.nextLine();
-		}
 	}
 }
