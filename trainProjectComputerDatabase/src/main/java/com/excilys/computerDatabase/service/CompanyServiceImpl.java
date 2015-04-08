@@ -121,7 +121,7 @@ public class CompanyServiceImpl implements CompanyService {
 		throw new UnsupportedOperationException();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = SQLException.class)
 	@Override
 	public void delete(Company company) {
 		LOG.trace("delete(" + company + ")");

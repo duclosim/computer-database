@@ -17,12 +17,11 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.cli.runners.DeleteCompany;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet implements Servlet {
-	private static final Logger LOG = LoggerFactory.getLogger(DeleteCompany.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AddComputerServlet.class);
 	private static final long serialVersionUID = 6902766188799864148L;
 	
 	@Autowired

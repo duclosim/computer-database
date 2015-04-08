@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,28 +19,28 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional(rollbackFor = SQLException.class)
 public class ComputerDAOTest {
 	private Connection con;
 	
 	@Autowired
 	private CompanyDAO companyDAO;
-	
 	@Autowired
 	private ComputerDAO computerDAO;
-	
 	@Autowired
 	private ComputerMapper computerMapper;
+	@Autowired
+	private ConnectionFactory connection;
 	
 	@Before
 	public void prepareConnection() throws SQLException {
-		con = ConnectionFactory.INSTANCE.getConnection();
-		ConnectionFactory.INSTANCE.startTransaction();
+		con = connection.getConnection();
 	}
 	
 	@After
 	public void closeConnection() throws SQLException {
-		ConnectionFactory.INSTANCE.rollback();
-		ConnectionFactory.INSTANCE.closeConnection();
+		con.close();
+		throw new SQLException("Fin de test");
 	}
 	
 	@Test

@@ -20,6 +20,8 @@ public class CompanyMapperTest {
 	
 	@Autowired
 	CompanyMapper companyMapper;
+	@Autowired
+	ConnectionFactory connectionFactory;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -35,13 +37,13 @@ public class CompanyMapperTest {
 	}
 
 	@Test
-	public void mapCompanyShouldSetProperties() {
+	public void mapCompanyShouldSetProperties() throws SQLException {
 		// Given
 		Company result = null;
 		Long id = new Long(1);
 		String query = "SELECT * FROM company WHERE id=" + id + ";";
 		ResultSet results;
-		Connection con = ConnectionFactory.INSTANCE.getConnection();
+		Connection con = connectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			results = ps.executeQuery();
@@ -50,6 +52,7 @@ public class CompanyMapperTest {
 						results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 				// When
 				result = companyMapper.mapCompany(results);
+				results.close();
 				ps.close();
 				// Then
 				Assert.assertEquals("Erreur sur le bean.", expectedBean, result);
@@ -59,7 +62,7 @@ public class CompanyMapperTest {
 			e.printStackTrace();
 			throw new PersistenceException("Lecture impossible dans la bdd.");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnection();
+			con.close();
 		}
 	}
 }

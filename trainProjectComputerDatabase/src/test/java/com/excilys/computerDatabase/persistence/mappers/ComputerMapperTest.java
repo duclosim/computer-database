@@ -23,9 +23,10 @@ import com.excilys.computerDatabase.service.CompanyService;
 public class ComputerMapperTest {
 	@Autowired
 	private ComputerMapper computerMapper;
-	
 	@Autowired
 	private CompanyService companyService;
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -41,7 +42,7 @@ public class ComputerMapperTest {
 	}
 
 	@Test
-	public void mapComputerShouldSetProperties() {
+	public void mapComputerShouldSetProperties() throws SQLException {
 		// Given
 		Computer result = null;
 		LocalDateTime introducedDate = null;
@@ -52,7 +53,7 @@ public class ComputerMapperTest {
 		String query = "SELECT * FROM computer WHERE id=" + id + ";";
 		ResultSet results = null;
 		PreparedStatement ps = null;
-		Connection connection = ConnectionFactory.INSTANCE.getConnection();
+		Connection connection = connectionFactory.getConnection();
 		try {
 			ps = connection.prepareStatement(query);
 			results = ps.executeQuery();
@@ -85,7 +86,9 @@ public class ComputerMapperTest {
 			e.printStackTrace();
 			throw new PersistenceException("Problème de lecture colonne");
 		} finally {
-			ConnectionFactory.INSTANCE.closeConnectionAndStatementAndResults(ps, results);
+			results.close();
+			ps.close();
+			connection.close();
 		}
 	}
 

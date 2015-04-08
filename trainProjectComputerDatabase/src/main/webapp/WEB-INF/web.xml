@@ -2,9 +2,7 @@
 <!DOCTYPE xml>
 
 <web-app id="WebApp_ID" version="2.4"
-	 xmlns="http://java.sun.com/xml/ns/j2ee" 
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        >
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display-name>Computer Database</display-name>
 
 	<!-- Spring container configuration -->
@@ -12,26 +10,27 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/application-context.xml</param-value>
 	</context-param>
-	
+
 	<listener>
-   		<listener-class>
-        	org.springframework.web.context.ContextLoaderListener
-  	 	</listener-class>
-	</listener> 
-	
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<!-- Mapping error pages -->
 	<error-page>
-	  <error-code>403</error-code>
-	  <location>/403</location>
+		<error-code>403</error-code>
+		<location>/403</location>
 	</error-page>
 	<error-page>
-	  <error-code>404</error-code>
-	  <location>/404</location>
+		<error-code>404</error-code>
+		<location>/404</location>
 	</error-page>
 	<error-page>
-	  <error-code>500</error-code>
-	  <location>/500</location>
+		<error-code>500</error-code>
+		<location>/500</location>
 	</error-page>
+	<!-- Welcome file -->
 	<welcome-file-list>
-        <welcome-file>dashboard</welcome-file>
-    </welcome-file-list>
+		<welcome-file>dashboard</welcome-file>
+	</welcome-file-list>
 </web-app>
