@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 /**
@@ -34,7 +35,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private ConnectionFactory connectionFactory;
 	
 	@Override
-	public Computer getById(Long id) throws SQLException {
+	public Computer getById(Long id) throws SQLException  {
 		LOG.info("getById(" + id + ")");
 		Connection con = connectionFactory.getConnection();
 		Computer result = null;
@@ -42,19 +43,29 @@ public class ComputerDAOImpl implements ComputerDAO {
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.id=?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, id);
-		ResultSet results = ps.executeQuery();
-		if (results.next()) {
-			result = mapper.mapComputer(results);
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			int paramIndex = 0;
+			ps.setLong(++paramIndex, id);
+			results = ps.executeQuery();
+			if (results.next()) {
+				result = mapper.mapComputer(results);
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 
 	@Override
-	public List<Computer> getAll(int limit, int offset) throws SQLException {
+	public List<Computer> getAll(int limit, int offset) 
+			throws SQLException  {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
@@ -73,20 +84,29 @@ public class ComputerDAOImpl implements ComputerDAO {
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "LIMIT ? OFFSET ?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapComputer(results));
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			int paramIndex = 0;
+			ps.setLong(++paramIndex, limit);
+			ps.setLong(++paramIndex, offset);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(mapper.mapComputer(results));
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 
 	@Override
-	public List<Computer> getFiltered(int limit, int offset, String name)
+	public List<Computer> getFiltered(int limit, int offset, String name) 
 			throws SQLException {
 		LOG.info(new StringBuilder("getByNameOrCompanyName(")
 			.append(limit).append(", ")
@@ -100,23 +120,32 @@ public class ComputerDAOImpl implements ComputerDAO {
 				+ "WHERE computer.name LIKE ? "
 				+ "OR company.name LIKE ? "
 				+ "LIMIT ? OFFSET ?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		int paramIndex = 0;
-		ps.setString(++paramIndex, "%" + name + "%");
-		ps.setString(++paramIndex, "%" + name + "%");
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapComputer(results));
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			int paramIndex = 0;
+			ps.setString(++paramIndex, "%" + name + "%");
+			ps.setString(++paramIndex, "%" + name + "%");
+			ps.setLong(++paramIndex, limit);
+			ps.setLong(++paramIndex, offset);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(mapper.mapComputer(results));
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 	
 	@Override
 	public List<Computer> getOrdered(int limit, int offset, 
-			ComputerColumn column, OrderingWay way) throws SQLException {
+			ComputerColumn column, OrderingWay way) throws SQLException  {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
@@ -141,22 +170,31 @@ public class ComputerDAOImpl implements ComputerDAO {
 				.append(way.getWay()).append(" ");
 		}
 		query.append("LIMIT ? OFFSET ?;");
-		PreparedStatement ps = con.prepareStatement(query.toString());
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapComputer(results));
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query.toString());
+			int paramIndex = 0;
+			ps.setLong(++paramIndex, limit);
+			ps.setLong(++paramIndex, offset);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(mapper.mapComputer(results));
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 
 	@Override
 	public List<Computer> getFilteredAndOrdered(int limit, int offset,
-			String name, ComputerColumn column, OrderingWay way)
-			throws SQLException {
+			String name, ComputerColumn column, OrderingWay way) 
+				throws SQLException {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
@@ -187,18 +225,27 @@ public class ComputerDAOImpl implements ComputerDAO {
 				.append(way.getWay()).append(" ");
 		}
 		query.append("LIMIT ? OFFSET ?;");
-		PreparedStatement ps = con.prepareStatement(query.toString());
-		if (name != null) {
-			ps.setString(++paramIndex, "%" + name + "%");
-			ps.setString(++paramIndex, "%" + name + "%");
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query.toString());
+			if (name != null) {
+				ps.setString(++paramIndex, "%" + name + "%");
+				ps.setString(++paramIndex, "%" + name + "%");
+			}
+			ps.setLong(++paramIndex, limit);
+			ps.setLong(++paramIndex, offset);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(mapper.mapComputer(results));
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapComputer(results));
-		}
-		releaseResources(con, ps);
 		return result;
 	}
 
@@ -207,12 +254,21 @@ public class ComputerDAOImpl implements ComputerDAO {
 		LOG.info("countLine()");
 		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) FROM computer;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ResultSet results = ps.executeQuery();
-		if (results.next()) {
-			return results.getInt(1);
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			results = ps.executeQuery();
+			if (results.next()) {
+				return results.getInt(1);
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return 0;
 	}
 
@@ -225,14 +281,23 @@ public class ComputerDAOImpl implements ComputerDAO {
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.name LIKE ? "
 				+ "OR company.name LIKE ?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ps.setString(1, "%" + name + "%");
-		ps.setString(2, "%" + name + "%");
-		ResultSet results = ps.executeQuery();
-		if (results.next()) {
-			return results.getInt(1);
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, "%" + name + "%");
+			ps.setString(2, "%" + name + "%");
+			results = ps.executeQuery();
+			if (results.next()) {
+				return results.getInt(1);
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return 0;
 	}
 
@@ -259,30 +324,39 @@ public class ComputerDAOImpl implements ComputerDAO {
 			query.append(", ?");
 		}
 		query.append(");");
-		PreparedStatement ps = con.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
-		int colNb = 0;
-		Timestamp introduced = null;
-		Timestamp discontinued = null;
-		if (computer.getIntroducedDate() != null) {
-			introduced = Timestamp.valueOf(computer.getIntroducedDate());
+		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
+		try {
+			ps = con.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
+			int colNb = 0;
+			Timestamp introduced = null;
+			Timestamp discontinued = null;
+			if (computer.getIntroducedDate() != null) {
+				introduced = Timestamp.valueOf(computer.getIntroducedDate());
+			}
+			if (computer.getDiscontinuedDate() != null) {
+				discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
+			}
+			ps.setString(++colNb, computer.getName());
+			ps.setTimestamp(++colNb, introduced);
+			ps.setTimestamp(++colNb, discontinued);
+			if (computer.getCompany() != null) {
+				ps.setLong(++colNb, computer.getCompany().getId());
+			}
+			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+	        if (generatedKeys.next()) {
+	        	computer.setId(generatedKeys.getLong(1));
+	        } else {
+	        	throw new SQLException();
+	        }
+		} catch (SQLException e) {
+			LOG.error("Ecriture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Ecriture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, generatedKeys);
 		}
-		if (computer.getDiscontinuedDate() != null) {
-			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
-		}
-		ps.setString(++colNb, computer.getName());
-		ps.setTimestamp(++colNb, introduced);
-		ps.setTimestamp(++colNb, discontinued);
-		if (computer.getCompany() != null) {
-			ps.setLong(++colNb, computer.getCompany().getId());
-		}
-		ps.executeUpdate();
-		ResultSet generatedKeys = ps.getGeneratedKeys();
-        if (generatedKeys.next()) {
-        	computer.setId(generatedKeys.getLong(1));
-        } else {
-        	throw new SQLException();
-        }
-		releaseResources(con, ps);
 	}
 
 	@Override
@@ -310,30 +384,38 @@ public class ComputerDAOImpl implements ComputerDAO {
 			.append("=?");
 		}
 		query.append(" WHERE id = ?;");
-		PreparedStatement ps = con.prepareStatement(query.toString());
-		int colNb = 0;
-		Timestamp introduced = null;
-		Timestamp discontinued = null;
-		if (computer.getIntroducedDate() != null) {
-			introduced = Timestamp.valueOf(computer.getIntroducedDate());
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(query.toString());
+			int colNb = 0;
+			Timestamp introduced = null;
+			Timestamp discontinued = null;
+			if (computer.getIntroducedDate() != null) {
+				introduced = Timestamp.valueOf(computer.getIntroducedDate());
+			}
+			if (computer.getDiscontinuedDate() != null) {
+				discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
+			}
+			// name
+			ps.setString(++colNb, computer.getName());
+			// introduced date
+			ps.setTimestamp(++colNb, introduced);
+			// discontinued date
+			ps.setTimestamp(++colNb, discontinued);
+			// company id
+			if (computer.getCompany() != null) {
+				ps.setLong(++colNb, computer.getCompany().getId());
+			}
+			// id
+			ps.setLong(++colNb, computer.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			LOG.error("Ecriture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Ecriture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, null);
 		}
-		if (computer.getDiscontinuedDate() != null) {
-			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
-		}
-		// name
-		ps.setString(++colNb, computer.getName());
-		// introduced date
-		ps.setTimestamp(++colNb, introduced);
-		// discontinued date
-		ps.setTimestamp(++colNb, discontinued);
-		// company id
-		if (computer.getCompany() != null) {
-			ps.setLong(++colNb, computer.getCompany().getId());
-		}
-		// id
-		ps.setLong(++colNb, computer.getId());
-		ps.executeUpdate();
-		releaseResources(con, ps);
 	}
 
 	@Override
@@ -345,12 +427,20 @@ public class ComputerDAOImpl implements ComputerDAO {
 		}
 		Connection con = connectionFactory.getConnection();
 		String query = "DELETE FROM computer WHERE id=?";
-		PreparedStatement ps = con.prepareStatement(query);
-		if (computer.getId() != null) {
-			ps.setLong(1, computer.getId());
-			ps.executeUpdate();
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(query);
+			if (computer.getId() != null) {
+				ps.setLong(1, computer.getId());
+				ps.executeUpdate();
+			}
+		} catch (SQLException e) {
+			LOG.error("Suppression impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Suppression impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, null);
 		}
-		releaseResources(con, ps);
 	}
 
 	@Override
@@ -358,19 +448,33 @@ public class ComputerDAOImpl implements ComputerDAO {
 		LOG.info("deleteByCompanyId(" + companyId + ")");
 		Connection con = connectionFactory.getConnection();
 		String deleteComputersQuery = "DELETE FROM computer WHERE company_id=?";
-		PreparedStatement delComputersStatement = con.prepareStatement(deleteComputersQuery);
-		if (companyId != null) {
-			delComputersStatement.setLong(1, companyId);
-			delComputersStatement.executeUpdate();
+		PreparedStatement delComputersStatement = null;
+		try {
+			delComputersStatement = con.prepareStatement(deleteComputersQuery);
+			if (companyId != null) {
+				delComputersStatement.setLong(1, companyId);
+				delComputersStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			LOG.error("Suppression impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Suppression impossible dans la bdd.");
+		} finally {
+			releaseResources(delComputersStatement, null);
 		}
-		releaseResources(con, delComputersStatement);
 	}
 	
-	private void releaseResources(Connection connection, 
-			PreparedStatement ps) throws SQLException {
-		ps.close();
-		if (connection.getAutoCommit()) {
-			connection.close();
+	private void releaseResources(PreparedStatement ps,
+			ResultSet results) throws SQLException {
+		if (results != null) {
+			results.close();
+		}
+		if (ps != null) {
+			ps.close();
+		}
+		Connection con = connectionFactory.getConnection();
+		if (con != null && con.getAutoCommit()) {
+			con.close();
 		}
 	}
 }

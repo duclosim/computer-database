@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 /**
@@ -35,51 +36,78 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private ConnectionFactory connectionFactory;
 	
 	@Override
-	public Company getById(Long id) throws SQLException {
+	public Company getById(Long id) throws SQLException  {
 		LOG.info("getById(" + id + ")");
 		Connection con = connectionFactory.getConnection();
 		Company result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ps.setLong(1, id);
-		ResultSet results = ps.executeQuery();
-		if (results.next()) {
-			result = mapper.mapCompany(results);
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			ps.setLong(1, id);
+			results = ps.executeQuery();
+			if (results.next()) {
+				result = mapper.mapCompany(results);
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 	
 	@Override
-	public List<Company> getAll(int limit, int offset) throws SQLException {
+	public List<Company> getAll(int limit, int offset) throws SQLException  {
 		LOG.info("getAll(" + limit + ", " + offset + ")");
 		Connection con = connectionFactory.getConnection();
 		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
-		PreparedStatement ps = con.prepareStatement(query);
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapCompany(results));
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			int paramIndex = 0;
+			ps.setLong(++paramIndex, limit);
+			ps.setLong(++paramIndex, offset);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(mapper.mapCompany(results));
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 	
 	@Override
-	public List<Company> getAll() throws SQLException {
+	public List<Company> getAll() throws SQLException  {
 		LOG.info("getAll()");
 		Connection con = connectionFactory.getConnection();
 		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			result.add(mapper.mapCompany(results));
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			results = ps.executeQuery();
+			while (results.next()) {
+				result.add(mapper.mapCompany(results));
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return result;
 	}
 
@@ -103,16 +131,25 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public int countLines() throws SQLException {
+	public int countLines() throws SQLException  {
 		LOG.info("countLine()");
 		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) FROM company;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ResultSet results = ps.executeQuery();
-		if (results.next()) {
-			return results.getInt(1);
+		PreparedStatement ps = null;
+		ResultSet results = null;
+		try {
+			ps = con.prepareStatement(query);
+			results = ps.executeQuery();
+			if (results.next()) {
+				return results.getInt(1);
+			}
+		} catch (SQLException e) {
+			LOG.error("Lecture impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Lecture impossible dans la bdd.");
+		} finally {
+			releaseResources(ps, results);
 		}
-		releaseResources(con, ps);
 		return 0;
 	}
 
@@ -137,17 +174,30 @@ public class CompanyDAOImpl implements CompanyDAO {
 		}
 		Connection con = connectionFactory.getConnection();
 		String deleteCompanyQuery = "DELETE FROM company WHERE id=?";
-		PreparedStatement delCompaniesStatement = con.prepareStatement(deleteCompanyQuery);
-		delCompaniesStatement.setLong(1, company.getId());
-		delCompaniesStatement.executeUpdate();
-		releaseResources(con, delCompaniesStatement);
+		PreparedStatement delCompaniesStatement = null;
+		try {
+			delCompaniesStatement = con.prepareStatement(deleteCompanyQuery);
+			delCompaniesStatement.setLong(1, company.getId());
+			delCompaniesStatement.executeUpdate();
+		} catch (SQLException e) {
+			LOG.error("Suppression impossible dans la bdd.");
+			e.printStackTrace();
+			throw new PersistenceException("Suppression impossible dans la bdd.");
+		} finally {
+			releaseResources(delCompaniesStatement, null);
+		}
 	}
 	
-	private void releaseResources(Connection connection, 
-			PreparedStatement ps) throws SQLException {
-		ps.close();
-		if (connection.getAutoCommit()) {
-			connection.close();
+	private void releaseResources(PreparedStatement ps, ResultSet results) throws SQLException {
+		if (results != null) {
+			results.close();
+		}
+		if (ps != null) {
+			ps.close();
+		}
+		Connection con = connectionFactory.getConnection();
+		if (con != null && con.getAutoCommit()) {
+			con.close();
 		}
 	}
 }

@@ -40,7 +40,6 @@ public class Page {
 	 */
 	public Page(int limit, int offset) {
 		LOG.info(new StringBuilder("new Page(")
-			.append(service).append(", ")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());

@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
@@ -30,6 +30,8 @@ public class CompanyServiceImpl implements CompanyService {
 	private CompanyDAO dao;
 	@Autowired
 	private ComputerDAO computerDAO;
+	@Autowired
+	private ConnectionFactory connectionFactory;
 	
 	@Override
 	public Company getById(Long id) {
@@ -121,7 +123,6 @@ public class CompanyServiceImpl implements CompanyService {
 		throw new UnsupportedOperationException();
 	}
 
-	@Transactional(rollbackFor = SQLException.class)
 	@Override
 	public void delete(Company company) {
 		LOG.info("delete(" + company + ")");
@@ -130,12 +131,17 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new IllegalArgumentException("company est à null.");
 		}
 		try {
+			connectionFactory.startTransaction();
 			computerDAO.deleteByCompanyId(company.getId());
 			dao.delete(company);
+			connectionFactory.commit();
 		} catch (SQLException e) {
 			LOG.error("Suppression impossible dans la bdd.");
+			connectionFactory.rollback();
 			e.printStackTrace();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
+		} finally {
+			connectionFactory.closeConnection();
 		}
 	}
 }

@@ -18,10 +18,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConnectionFactory {
 	private final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
-	private ThreadLocal<Connection> thread;
+	private final ThreadLocal<Connection> thread = new ThreadLocal<>();
 	
 	@Autowired
 	private BasicDataSource dataSource;
+	
 	/**
 	 * Retourne une connection à la base de données.
 	 * @return L'instance de connexion à la base de données.
@@ -45,5 +46,46 @@ public class ConnectionFactory {
 			throw new IllegalStateException("Pas possible de prendre une connection dans le pool de connections.");
 		}
 		return res;
+	}
+	
+	public final void closeConnection() {
+		try {
+			thread.get().close();
+		} catch (SQLException e) {
+			LOG.error("Pas possible de rendre la connection au pool de connections.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas possible de rendre la connection au pool de connections.");
+		}
+	}
+	
+	public final void startTransaction() {
+		try {
+			thread.get().setAutoCommit(false);
+		} catch (SQLException e) {
+			LOG.error("Pas possible de commencer la transaction.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas possible de commencer la transaction.");
+		}
+	}
+	
+	public final void commit() {
+		try {
+			thread.get().commit();
+			thread.get().setAutoCommit(true);
+		} catch (SQLException e) {
+			LOG.error("Pas possible de terminer la transaction.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas possible de terminer la transaction.");
+		}
+	}
+	
+	public final void rollback() {
+		try {
+			thread.get().rollback();
+		} catch (SQLException e) {
+			LOG.error("Pas possible de rollback la transaction.");
+			e.printStackTrace();
+			throw new IllegalStateException("Pas possible de rollback la transaction.");
+		}
 	}
 }
