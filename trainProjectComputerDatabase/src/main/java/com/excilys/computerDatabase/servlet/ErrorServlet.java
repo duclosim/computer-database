@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -9,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
+@Controller
 @WebServlet("/500")
 public class ErrorServlet extends HttpServlet implements Servlet {
 	private static final Logger LOG = LoggerFactory.getLogger(ErrorServlet.class);
@@ -20,7 +23,7 @@ public class ErrorServlet extends HttpServlet implements Servlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		LOG.trace(new StringBuilder("doGet(")
+		LOG.info(new StringBuilder("doGet(")
 			.append(req).append(", ")
 			.append(resp).append(")").toString());
 		getServletContext().getRequestDispatcher("/WEB-INF/views/500.jsp").forward(req, resp);

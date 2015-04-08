@@ -16,55 +16,55 @@ public class ComputerDTO {
 	private String companyName;
 	
 	public ComputerDTO() {
-		LOG.trace("new ComputerDTO()");
+		LOG.info("new ComputerDTO()");
 	}
 	
 	public String getId() {
-		LOG.trace("getId()");
+		LOG.info("getId()");
 		return id;
 	}
 	public void setId(String id) {
-		LOG.trace("setId(" + id + ")");
+		LOG.info("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
-		LOG.trace("getName()");
+		LOG.info("getName()");
 		return name;
 	}
 	public void setName(String name) {
-		LOG.trace("setName(" + name + ")");
+		LOG.info("setName(" + name + ")");
 		this.name = name;
 	}
 	public String getIntroducedDate() {
-		LOG.trace("getIntroducedDate()");
+		LOG.info("getIntroducedDate()");
 		return introducedDate;
 	}
 	public void setIntroducedDate(String introducedDate) {
-		LOG.trace("setIntroducedDate(" + introducedDate + ")");
+		LOG.info("setIntroducedDate(" + introducedDate + ")");
 		this.introducedDate = introducedDate;
 	}
 	public String getDiscontinuedDate() {
-		LOG.trace("getDiscontinuedDate()");
+		LOG.info("getDiscontinuedDate()");
 		return discontinuedDate;
 	}
 	public void setDiscontinuedDate(String discontinuedDate) {
-		LOG.trace("setDiscontinuedDate(" + discontinuedDate + ")");
+		LOG.info("setDiscontinuedDate(" + discontinuedDate + ")");
 		this.discontinuedDate = discontinuedDate;
 	}
 	public String getCompanyId() {
-		LOG.trace("getCompanyId()");
+		LOG.info("getCompanyId()");
 		return companyId;
 	}
 	public void setCompanyId(String companyId) {
-		LOG.trace("setCompanyId(" + companyId + ")");
+		LOG.info("setCompanyId(" + companyId + ")");
 		this.companyId = companyId;
 	}
 	public String getCompanyName() {
-		LOG.trace("getCompanyName()");
+		LOG.info("getCompanyName()");
 		return companyName;
 	}
 	public void setCompanyName(String companyName) {
-		LOG.trace("setCompanyName(" + companyName + ")");
+		LOG.info("setCompanyName(" + companyName + ")");
 		this.companyName = companyName;
 	}
 

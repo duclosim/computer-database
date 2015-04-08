@@ -33,7 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	public Company getById(Long id) {
-		LOG.trace("getById(" + id + ")");
+		LOG.info("getById(" + id + ")");
 		if (id == null) {
 			LOG.error("id est à null.");
 			throw new IllegalArgumentException("id est à null.");
@@ -56,7 +56,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	public List<Company> getAll() {
-		LOG.trace("getAll()");
+		LOG.info("getAll()");
 		List<Company> result = null;
 		try {
 			result = dao.getAll();
@@ -70,7 +70,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public List<Company> getAll(int limit, int offset) {
-		LOG.trace("getAll(" + limit + ", " + offset + ")");
+		LOG.info("getAll(" + limit + ", " + offset + ")");
 		if (limit <= 0) {
 			LOG.error("limit est négatif ou nul.");
 			throw new IllegalArgumentException("limit est négatif ou nul.");
@@ -104,7 +104,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	public int countAllLines() {
-		LOG.trace("countLines()");
+		LOG.info("countLines()");
 		int result = 0;
 		try {
 			result = dao.countLines();
@@ -124,7 +124,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Transactional(rollbackFor = SQLException.class)
 	@Override
 	public void delete(Company company) {
-		LOG.trace("delete(" + company + ")");
+		LOG.info("delete(" + company + ")");
 		if (company == null) {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");

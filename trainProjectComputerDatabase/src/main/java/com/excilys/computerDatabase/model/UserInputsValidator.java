@@ -17,7 +17,7 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si la date est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidDate(String date) {
-		LOG.trace("isValidDate(" + date + ")");
+		LOG.info("isValidDate(" + date + ")");
 		if (!isValidString(date)) {
 			return false;
 		}
@@ -76,7 +76,7 @@ public class UserInputsValidator {
 	}
 	
 	private static boolean isBissextileYear(int y) {
-		LOG.trace("isBissextileYear(" + y + ")");
+		LOG.info("isBissextileYear(" + y + ")");
 		return (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0));
 	}
 
@@ -86,12 +86,12 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si le nombre est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidNumber(String number) {
-		LOG.trace("isValidNumber(" + number + ")");
+		LOG.info("isValidNumber(" + number + ")");
 		return isValidString(number) && Pattern.matches(NUMBER_REGEX, number);
 	}
 	
 	public static boolean isValidString(String string) {
-		LOG.trace("isValidString(" + string + ")");
+		LOG.info("isValidString(" + string + ")");
 		return ((string != null) && (!string.trim().isEmpty()));
 	}
 }

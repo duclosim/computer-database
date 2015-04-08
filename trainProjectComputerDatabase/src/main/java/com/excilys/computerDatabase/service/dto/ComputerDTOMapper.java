@@ -27,7 +27,7 @@ public class ComputerDTOMapper {
 	 * @return
 	 */
 	public Computer DTOToBean(ComputerDTO dto) {
-		LOG.trace("DTOToBean(" + dto + ")");
+		LOG.info("DTOToBean(" + dto + ")");
 		Computer bean = new Computer();
 		bean.setId(null);
 		bean.setName(dto.getName());
@@ -58,7 +58,7 @@ public class ComputerDTOMapper {
 	 * @return
 	 */
 	public ComputerDTO BeanToDTO(Computer bean) {
-		LOG.trace("BeanToDTO(" + bean + ")");
+		LOG.info("BeanToDTO(" + bean + ")");
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(bean.getId().toString());
 		dto.setName(bean.getName());

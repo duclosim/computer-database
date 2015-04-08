@@ -7,18 +7,20 @@ import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 
+@Component
 public class ComputerMapper {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
 	
 	public Computer mapComputer(ResultSet results) {
-		LOG.trace("mapComputer(" + results + ")");
+		LOG.info("mapComputer(" + results + ")");
 		if (results == null) {
 			LOG.error("results est à null.");
 			throw new IllegalArgumentException("results est à null.");

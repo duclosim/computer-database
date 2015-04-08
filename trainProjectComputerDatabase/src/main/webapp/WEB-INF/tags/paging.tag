@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="p" %>
 
-<%@ attribute name="page" required="true" type="com.excilys.computerDatabase.model.page.Page"%>
+<%@ attribute name="page" required="true" type="com.excilys.computerDatabase.model.Page"%>
 
 <div class="container text-center">
 	<ul class="pagination">

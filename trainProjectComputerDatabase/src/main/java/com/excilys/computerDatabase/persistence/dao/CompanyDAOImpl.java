@@ -36,7 +36,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	@Override
 	public Company getById(Long id) throws SQLException {
-		LOG.trace("getById(" + id + ")");
+		LOG.info("getById(" + id + ")");
 		Connection con = connectionFactory.getConnection();
 		Company result = null;
 		String query = "SELECT * FROM company WHERE id=?;";
@@ -52,7 +52,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	@Override
 	public List<Company> getAll(int limit, int offset) throws SQLException {
-		LOG.trace("getAll(" + limit + ", " + offset + ")");
+		LOG.info("getAll(" + limit + ", " + offset + ")");
 		Connection con = connectionFactory.getConnection();
 		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
@@ -70,7 +70,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	@Override
 	public List<Company> getAll() throws SQLException {
-		LOG.trace("getAll()");
+		LOG.info("getAll()");
 		Connection con = connectionFactory.getConnection();
 		List<Company> result = new ArrayList<>();
 		String query = "SELECT * FROM company;";
@@ -104,7 +104,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public int countLines() throws SQLException {
-		LOG.trace("countLine()");
+		LOG.info("countLine()");
 		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) FROM company;";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -130,7 +130,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public void delete(Company company) throws SQLException {
-		LOG.trace("delete(" + company + ")");
+		LOG.info("delete(" + company + ")");
 		if (company == null) {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");

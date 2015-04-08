@@ -17,7 +17,7 @@ public class CompanyMapper {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 
 	public Company mapCompany(ResultSet results) {
-		LOG.trace("mapCompany(" + results + ")");
+		LOG.info("mapCompany(" + results + ")");
 		if (results == null) {
 			LOG.error("results est à null.");
 			throw new IllegalArgumentException("results est à null.");

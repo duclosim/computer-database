@@ -34,7 +34,7 @@ public class ComputerServiceImpl implements ComputerService {
 	
 	@Override
 	public ComputerDTO getById(Long id) {
-		LOG.trace("getById(" + id + ")");
+		LOG.info("getById(" + id + ")");
 		ComputerDTO result = null;
 		try {
 			result = dtoMapper.BeanToDTO(dao.getById(id));
@@ -48,7 +48,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
-		LOG.trace("getByNameOrCompanyName(" + name + ")");
+		LOG.info("getByNameOrCompanyName(" + name + ")");
 		List<ComputerDTO> result = null;
 		try {
 			result = dtoMapper.BeansToDTOs(dao.getFiltered(limit, offset, name));
@@ -62,7 +62,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public List<ComputerDTO> getAll(int limit, int offset) {
-		LOG.trace(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
@@ -80,7 +80,7 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public List<ComputerDTO> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way) {
-		LOG.trace(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(column).append(",")
@@ -101,7 +101,7 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public List<ComputerDTO> getFilteredAndOrdered(int limit, int offset,
 			String name, ComputerColumn column, OrderingWay way) {
-		LOG.trace(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(", ")
@@ -122,7 +122,7 @@ public class ComputerServiceImpl implements ComputerService {
 	
 	@Override
 	public int countAllLines() {
-		LOG.trace("countLines()");
+		LOG.info("countLines()");
 		int result = 0;
 		try {
 			result = dao.countLines();
@@ -136,7 +136,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public int countFilteredLines(String name) {
-		LOG.trace("countFilteredLines(" + name + ")");
+		LOG.info("countFilteredLines(" + name + ")");
 		int result = 0;
 		try {
 			result = dao.countFilteredLines(name);
@@ -150,7 +150,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void create(ComputerDTO computer) {
-		LOG.trace("create(" + computer + ")");
+		LOG.info("create(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
 			dao.create(dtoMapper.DTOToBean(computer));
@@ -164,7 +164,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void update(ComputerDTO computer) {
-		LOG.trace("update(" + computer + ")");
+		LOG.info("update(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
 			dao.update(dtoMapper.DTOToBean(computer));
@@ -177,7 +177,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void delete(ComputerDTO computer) {
-		LOG.trace("delete(" + computer + ")");
+		LOG.info("delete(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
 			dao.delete(dtoMapper.DTOToBean(computer));
@@ -189,7 +189,7 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 	
 	private void checkComputerDTO(ComputerDTO computer) {
-		LOG.trace("checkComputerDTO(" + computer + ")");
+		LOG.info("checkComputerDTO(" + computer + ")");
 		if (computer == null) {
 			throw new IllegalArgumentException("computer est à null.");
 		}

@@ -18,11 +18,11 @@ public class Company {
 	private String name;
 	
 	public Company() {
-		LOG.trace("new Company()");
+		LOG.info("new Company()");
 	}
 	
 	public Company(Long id, String name) {
-		LOG.trace(new StringBuilder("new Company(")
+		LOG.info(new StringBuilder("new Company(")
 		.append(id).append(",")
 		.append(name).append(")")
 		.toString());
@@ -31,19 +31,19 @@ public class Company {
 	}
 
 	public Long getId() {
-		LOG.trace("getId()");
+		LOG.info("getId()");
 		return id;
 	}
 	public void setId(Long id) {
-		LOG.trace("setId(" + id + ")");
+		LOG.info("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
-		LOG.trace("getName()");
+		LOG.info("getName()");
 		return name;
 	}
 	public void setName(String name) {
-		LOG.trace("setName(" + id + ")");
+		LOG.info("setName(" + id + ")");
 		this.name = name;
 	}
 

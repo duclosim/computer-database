@@ -26,7 +26,7 @@ public class Computer {
 
 	public Computer(Long id, String name, LocalDateTime introduced,
 			LocalDateTime discontinued, Company company) {
-		LOG.trace(new StringBuilder("new Computer(")
+		LOG.info(new StringBuilder("new Computer(")
 			.append(id).append(",")
 			.append(name).append(",")
 			.append(introduced).append(",")
@@ -41,47 +41,47 @@ public class Computer {
 	}
 	
 	public Computer() {
-		LOG.trace("new Computer()");
+		LOG.info("new Computer()");
 	}
 	
 	public Long getId() {
-		LOG.trace("getId()");
+		LOG.info("getId()");
 		return id;
 	}
 	public void setId(Long id) {
-		LOG.trace("setId(" + id + ")");
+		LOG.info("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
-		LOG.trace("getName()");
+		LOG.info("getName()");
 		return name;
 	}
 	public void setName(String name) {
-		LOG.trace("setName(" + name + ")");
+		LOG.info("setName(" + name + ")");
 		this.name = name;
 	}
 	public LocalDateTime getIntroducedDate() {
-		LOG.trace("getIntroducedDate()");
+		LOG.info("getIntroducedDate()");
 		return introducedDate;
 	}
 	public void setIntroducedDate(LocalDateTime introducedDate) {
-		LOG.trace("setIntroducedDate(" + introducedDate + ")");
+		LOG.info("setIntroducedDate(" + introducedDate + ")");
 		this.introducedDate = introducedDate;
 	}
 	public LocalDateTime getDiscontinuedDate() {
-		LOG.trace("getDiscontinuedDate()");
+		LOG.info("getDiscontinuedDate()");
 		return discontinuedDate;
 	}
 	public void setDiscontinuedDate(LocalDateTime discontinuedDate) {
-		LOG.trace("setDiscontinuedDate(" + discontinuedDate + ")");
+		LOG.info("setDiscontinuedDate(" + discontinuedDate + ")");
 		this.discontinuedDate = discontinuedDate;
 	}
 	public Company getCompany() {
-		LOG.trace("getCompany()");
+		LOG.info("getCompany()");
 		return company;
 	}
 	public void setCompany(Company company) {
-		LOG.trace("setCompany(" + company + ")");
+		LOG.info("setCompany(" + company + ")");
 		this.company = company;
 	}
 

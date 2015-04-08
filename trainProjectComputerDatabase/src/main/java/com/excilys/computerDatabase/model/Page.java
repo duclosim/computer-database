@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model.page;
+package com.excilys.computerDatabase.model;
 
 import java.util.List;
 
@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
-import com.excilys.computerDatabase.service.PageableService;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @Component
-public class Page<T> {
+public class Page {
 	private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 	private static final int WIDTH = 3;
 	
@@ -22,7 +22,7 @@ public class Page<T> {
 	public static final int DEFAULT_PAGE_NUM = 1;
 	
 	@Autowired
-	private PageableService<T> service;
+	private ComputerServiceImpl service;
 	private int maxNbItemsByPage;
 	private int pageNum;
     
@@ -38,16 +38,12 @@ public class Page<T> {
 	 * @param offset
 	 * @param limit
 	 */
-	public Page(PageableService<T> service, int limit, int offset) {
-		LOG.trace(new StringBuilder("new Page(")
+	public Page(int limit, int offset) {
+		LOG.info(new StringBuilder("new Page(")
 			.append(service).append(", ")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
-		if (service == null) {
-			LOG.error("service est à null.");
-			throw new IllegalArgumentException("service est à null.");
-		}
 		if (limit <= 0) {
 			LOG.error("limit est négatif ou nul");
 			throw new IllegalArgumentException("limit est négatif ou nul");
@@ -56,7 +52,6 @@ public class Page<T> {
 			LOG.error("offset est négatif");
 			throw new IllegalArgumentException("offset est négatif");
 		}
-		this.service = service;
 		this.maxNbItemsByPage = limit;
 		pageNum = offset / getMaxNbItemsByPage() + 1;
 	}
@@ -65,25 +60,16 @@ public class Page<T> {
 	 * 
 	 * @param service
 	 */
-	public Page(PageableService<T> service) {
-		this(service, DEFAULT_LIMIT, DEFAULT_OFFSET);
-		LOG.trace("new Page(" + service + ")");
-	}
-	
-	/**
-	 * 
-	 */
 	public Page() {
-		LOG.trace("new Page()");
-		setMaxNbItemsByPage(DEFAULT_LIMIT);
-		setPageNum(DEFAULT_OFFSET / getMaxNbItemsByPage() + 1);
+		this(DEFAULT_LIMIT, DEFAULT_OFFSET);
+		LOG.info("new Page()");
 	}
 	
 	// Requetes
-	public PageableService<T> getService() {
+	public ComputerServiceImpl getService() {
 		return service;
 	}
-	public List<T> getEntities() {
+	public List<ComputerDTO> getEntities() {
 		return reloadEntities();
 	}
 	public String getSearchedName() {
@@ -127,16 +113,16 @@ public class Page<T> {
 		}
 	}
     public int getStartingPage() {
-		LOG.trace("getStartingPage()");
+		LOG.info("getStartingPage()");
 		return Integer.max(1, getPageNum() - WIDTH);
 	}
 	public int getFinishingPage() {
-		LOG.trace("getFinishingPage()");
+		LOG.info("getFinishingPage()");
 		return Integer.min(getLastPageNb(), getPageNum() + WIDTH);
 	}
 	
 	// Commandes
-	public void setService(PageableService<T> service) {
+	public void setService(ComputerServiceImpl service) {
 		this.service = service;
 	}
 	public void setSearchedName(String searchedName) {
@@ -154,7 +140,7 @@ public class Page<T> {
 	 * @param maxNbItemsByPage
 	 */
 	public void setMaxNbItemsByPage(int maxNbItemsByPage) {
-		LOG.trace("setMaxNbItemsByPage(" + maxNbItemsByPage + ")");
+		LOG.info("setMaxNbItemsByPage(" + maxNbItemsByPage + ")");
 		if (maxNbItemsByPage < 0) {
 			LOG.error("maxNbItemsByPage est négatif.");
 			throw new IllegalArgumentException("maxNbItemsByPage est négatif.");
@@ -169,7 +155,7 @@ public class Page<T> {
 	 * @param pageNum
 	 */
 	public void setPageNum(int pageNum) {
-		LOG.trace("setPageNum(" + pageNum + ")");
+		LOG.info("setPageNum(" + pageNum + ")");
 		if ((0 >= pageNum) || (pageNum > getLastPageNb())) {
 			LOG.error("pageNum est hors-limites.");
 			throw new IllegalArgumentException("pageNum est hors-limites.");
@@ -182,8 +168,9 @@ public class Page<T> {
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	private List<T> reloadEntities() {
-		List<T> entities = null;
+	private List<ComputerDTO> reloadEntities() {
+		LOG.info("reloadEntities()");
+		List<ComputerDTO> entities = null;
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
@@ -214,7 +201,7 @@ public class Page<T> {
 	@Override
 	public String toString() {
 		StringBuilder res = new StringBuilder();
-		for (T entity : getEntities()) {
+		for (ComputerDTO entity : getEntities()) {
 			res.append(entity).append('\n');
 		}
 		return res.toString();

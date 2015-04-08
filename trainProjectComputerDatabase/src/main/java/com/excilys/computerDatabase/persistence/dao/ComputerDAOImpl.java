@@ -35,7 +35,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	
 	@Override
 	public Computer getById(Long id) throws SQLException {
-		LOG.trace("getById(" + id + ")");
+		LOG.info("getById(" + id + ")");
 		Connection con = connectionFactory.getConnection();
 		Computer result = null;
 		String query = "SELECT * "
@@ -55,7 +55,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public List<Computer> getAll(int limit, int offset) throws SQLException {
-		LOG.trace(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
@@ -88,7 +88,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public List<Computer> getFiltered(int limit, int offset, String name)
 			throws SQLException {
-		LOG.trace(new StringBuilder("getByNameOrCompanyName(")
+		LOG.info(new StringBuilder("getByNameOrCompanyName(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(")").toString());
@@ -117,7 +117,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public List<Computer> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way) throws SQLException {
-		LOG.trace(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(column).append(",")
@@ -157,7 +157,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	public List<Computer> getFilteredAndOrdered(int limit, int offset,
 			String name, ComputerColumn column, OrderingWay way)
 			throws SQLException {
-		LOG.trace(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(",")
@@ -204,7 +204,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public int countLines() throws SQLException {
-		LOG.trace("countLine()");
+		LOG.info("countLine()");
 		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) FROM computer;";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -218,7 +218,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public int countFilteredLines(String name) throws SQLException {
-		LOG.trace("countFilteredLines(" + name + ")");
+		LOG.info("countFilteredLines(" + name + ")");
 		Connection con = connectionFactory.getConnection();
 		String query = "SELECT COUNT(*) "
 				+ "FROM computer "
@@ -238,7 +238,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void create(Computer computer) throws SQLException {
-		LOG.trace("create(" + computer + ")");
+		LOG.info("create(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
@@ -287,7 +287,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void update(Computer computer) throws SQLException {
-		LOG.trace("update(" + computer + ")");
+		LOG.info("update(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
@@ -338,7 +338,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void delete(Computer computer) throws SQLException {
-		LOG.trace("delete(" + computer + ")");
+		LOG.info("delete(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
@@ -355,7 +355,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void deleteByCompanyId(Long companyId) throws SQLException {
-		LOG.trace("deleteByCompanyId(" + companyId + ")");
+		LOG.info("deleteByCompanyId(" + companyId + ")");
 		Connection con = connectionFactory.getConnection();
 		String deleteComputersQuery = "DELETE FROM computer WHERE company_id=?";
 		PreparedStatement delComputersStatement = con.prepareStatement(deleteComputersQuery);

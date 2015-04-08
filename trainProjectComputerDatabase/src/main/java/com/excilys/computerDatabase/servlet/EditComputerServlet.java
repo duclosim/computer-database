@@ -13,34 +13,36 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.service.CompanyServiceImpl;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
+@Controller
 @WebServlet("/editComputer")
 public class EditComputerServlet extends HttpServlet implements Servlet {
 	private static final Logger LOG = LoggerFactory.getLogger(EditComputerServlet.class);
 	private static final long serialVersionUID = 423648038487626720L;
 	
 	@Autowired
-	private CompanyService companyService;
+	private CompanyServiceImpl companyService;
 	@Autowired
-	private ComputerService computerService;
+	private ComputerServiceImpl computerService;
 	private ComputerDTO computer;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		LOG.trace("init(" + config + ")");
+		LOG.info("init(" + config + ")");
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		LOG.trace(new StringBuilder("doGet(")
+		LOG.info(new StringBuilder("doGet(")
 			.append(req).append(", ")
 			.append(resp).append(")").toString());
 		req.setAttribute("companies", companyService.getAll());
@@ -55,7 +57,7 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		LOG.trace(new StringBuilder("doPost(")
+		LOG.info(new StringBuilder("doPost(")
 			.append(req).append(", ")
 			.append(resp).append(")").toString());
 		computer.setName(req.getParameter("computerName"));

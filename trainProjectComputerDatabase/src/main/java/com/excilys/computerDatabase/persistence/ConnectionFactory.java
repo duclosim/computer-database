@@ -31,7 +31,7 @@ public class ConnectionFactory {
 	 *   à la base de données.
 	 */
 	public final Connection getConnection() {
-		LOG.trace("getConnection()");
+		LOG.info("getConnection()");
 		Connection res = null;
 		try {
 			res = thread.get();

@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.page.Page;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
@@ -26,7 +26,7 @@ public class CLIService {
 	private static final Logger LOG = LoggerFactory.getLogger(CLIService.class);
 	
 	@Autowired
-	private Page<ComputerDTO> page;
+	private Page page;
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
@@ -81,13 +81,13 @@ public class CLIService {
 	}
 	
 	public void getCompanies() {
-		LOG.trace("getCompanies()");
+		LOG.info("getCompanies()");
 		List<Company> page = companyService.getAll();
 		System.out.println(page);
 	}
 	
 	public void getComputers(Scanner sc) {
-		LOG.trace("getComputers(" + sc + ")");
+		LOG.info("getComputers(" + sc + ")");
 		System.out.println(page);
 		for (int k = 2; k < page.getLastPageNb(); ++k) {
 			page.setPageNum(k);
@@ -97,7 +97,7 @@ public class CLIService {
 	}
 	
 	public void createComputer(Scanner sc) {
-		LOG.trace("createComputer(" + sc + ")");
+		LOG.info("createComputer(" + sc + ")");
 		ComputerDTO computer = new ComputerDTO();
 		System.out.println("Nom du nouvel ordinateur : ");
 		String args = sc.next();
@@ -129,7 +129,7 @@ public class CLIService {
 	}
 	
 	public void deleteCompany(Scanner sc) {
-		LOG.trace("deleteCompany(" + sc + ")");
+		LOG.info("deleteCompany(" + sc + ")");
 		try {
 			System.out.println("Entrez l'id de la companie à supprimer : ");
 			String args = sc.next();
@@ -143,7 +143,7 @@ public class CLIService {
 	}
 	
 	public void deleteComputer(Scanner sc) {
-		LOG.trace("deleteComputer(" + sc + ")");
+		LOG.info("deleteComputer(" + sc + ")");
 		try {
 			System.out.println("Entrez l'id de l'ordinateur à supprimer : ");
 			String args = sc.next();
@@ -157,7 +157,7 @@ public class CLIService {
 	}
 	
 	public void detailComputer(Scanner sc) {
-		LOG.trace("detailComputer(" + sc + ")");
+		LOG.info("detailComputer(" + sc + ")");
 		try {
 			System.out.println("Entrez l'id de l'ordinateur recherché : ");
 			String args = sc.next();
@@ -170,12 +170,12 @@ public class CLIService {
 	}
 	
 	public void exit() {
-		LOG.trace("exit()");
+		LOG.info("exit()");
 		System.out.println("Fin du programme");
 	}
 	
 	public void updateComputer(Scanner sc) {
-		LOG.trace("updateComputer(" + sc + ")");
+		LOG.info("updateComputer(" + sc + ")");
 		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
 		String args = sc.next();
 		try {
