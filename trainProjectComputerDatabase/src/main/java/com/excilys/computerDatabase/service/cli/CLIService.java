@@ -42,6 +42,10 @@ public class CLIService {
 		LOG.info(new StringBuilder("new interpretCommand(")
 			.append(command).append(", ")
 			.append(sc).append(")").toString());
+		if (command == null) {
+			LOG.error("command est à null.");
+			throw new IllegalArgumentException("command est à null.");
+		}
 		if (sc == null) {
 			LOG.error("sc est à null.");
 			throw new IllegalArgumentException("sc est à null.");

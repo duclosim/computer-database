@@ -2,13 +2,18 @@ package com.excilys.computerDatabase.persistence.dao;
 
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
@@ -19,14 +24,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Transactional(rollbackFor = SQLException.class)
+@Transactional
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ActiveProfiles("DEV")
 public class ComputerDAOTest {
 	private Connection con;
 	
 	@Autowired
-	private CompanyDAO companyDAO;
+	private CompanyDAOImpl companyDAO;
 	@Autowired
-	private ComputerDAO computerDAO;
+	private ComputerDAOImpl computerDAO;
 	@Autowired
 	private ComputerMapper computerMapper;
 	@Autowired
@@ -40,7 +48,6 @@ public class ComputerDAOTest {
 	@After
 	public void closeConnection() throws SQLException {
 		con.close();
-		throw new SQLException("Fin de test");
 	}
 	
 	@Test
@@ -60,7 +67,7 @@ public class ComputerDAOTest {
 		results = ps.executeQuery();
 		if (results.next()) {
 			expectedBean = computerMapper.mapComputer(results);
-			ps.close();
+			closeResources(results, ps);
 			// When
 			bean = computerDAO.getById(id);
 			// Then
@@ -107,7 +114,7 @@ public class ComputerDAOTest {
 		while (results.next()) {
 			expectedBeansByCompanyName.add(computerMapper.mapComputer(results));
 		}
-		ps.close();
+		closeResources(results, ps);
 		// When
 		beans = computerDAO.getFiltered(limit, offset, computerName);
 		beansByCompany = computerDAO.getFiltered(limit, offset, companyName);
@@ -136,7 +143,7 @@ public class ComputerDAOTest {
 		while (results.next()) {
 			expectedBeans.add(computerMapper.mapComputer(results));
 		}
-		ps.close();
+		closeResources(results, ps);
 		// When
 		bean = computerDAO.getAll(limit, offset);
 		// Then
@@ -153,7 +160,7 @@ public class ComputerDAOTest {
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
 			int expectedSize = results.getInt(1);
-			ps.close();
+			closeResources(results, ps);
 			// When
 			nbLines = computerDAO.countLines();
 			// Then
@@ -230,8 +237,17 @@ public class ComputerDAOTest {
 		ResultSet results = ps.executeQuery();
 		if (results.next()) {
 			nbLines = results.getInt(1);
-			ps.close();
+			closeResources(results, ps);
 			Assert.assertEquals("Erreur sur le nombre de lignes", 0, nbLines);
+		}
+	}
+	
+	private void closeResources(ResultSet results, PreparedStatement ps) throws SQLException {
+		if (results != null) {
+			results.close();
+		}
+		if (ps != null) {
+			ps.close();
 		}
 	}
 }

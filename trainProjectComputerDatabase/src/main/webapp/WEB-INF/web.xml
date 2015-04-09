@@ -11,6 +11,12 @@
 		<param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
 
+	<!-- Active Spring profile -->
+	<context-param>
+		<param-name>spring.profiles.active</param-name>
+		<param-value>DEV</param-value>
+	</context-param>
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

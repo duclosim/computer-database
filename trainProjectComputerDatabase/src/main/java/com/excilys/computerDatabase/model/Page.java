@@ -38,7 +38,7 @@ public class Page {
 	 * @param offset
 	 * @param limit
 	 */
-	public Page(int limit, int offset) {
+	private Page(int limit, int offset) {
 		LOG.info(new StringBuilder("new Page(")
 			.append(limit).append(", ")
 			.append(offset).append(")")

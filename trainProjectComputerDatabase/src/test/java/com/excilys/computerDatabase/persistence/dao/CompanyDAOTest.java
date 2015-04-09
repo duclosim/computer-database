@@ -8,7 +8,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
@@ -19,11 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(rollbackFor = SQLException.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ActiveProfiles("DEV")
 public class CompanyDAOTest {
 	private Connection con;
 	
 	@Autowired
-	private CompanyDAO companyDAO;
+	private CompanyDAOImpl companyDAO;
 	@Autowired
 	private CompanyMapper mapper;
 	@Autowired
@@ -37,7 +44,6 @@ public class CompanyDAOTest {
 	@After
 	public void closeConnection() throws SQLException {
 		con.close();
-		throw new SQLException("Test");
 	}
 	
 	@Test

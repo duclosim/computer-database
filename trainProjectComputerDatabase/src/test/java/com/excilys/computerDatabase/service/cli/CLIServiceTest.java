@@ -1,13 +1,21 @@
 package com.excilys.computerDatabase.service.cli;
 
 import com.excilys.computerDatabase.service.cli.CLIService;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ActiveProfiles("DEV")
 public class CLIServiceTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -50,7 +58,7 @@ public class CLIServiceTest {
 		boolean result = cliService.interpretCommand(command, sc);
 		// Then
 		Assert.assertFalse("Erreur sur le résultat.", result);
-		Assert.assertEquals("Erreur sur le message de sortie.", expectedMessage, outContent.toString());
+		Assert.assertTrue("Erreur sur le message de sortie.", outContent.toString().contains(expectedMessage));
 	}
 
 	@Test

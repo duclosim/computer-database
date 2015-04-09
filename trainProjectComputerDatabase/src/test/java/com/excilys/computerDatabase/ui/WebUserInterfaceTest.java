@@ -7,16 +7,23 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 // TODO finir d'écrire les tests selenium
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ActiveProfiles("DEV")
 public class WebUserInterfaceTest {
 	private WebDriver driver;
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";
