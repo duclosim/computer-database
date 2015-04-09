@@ -37,7 +37,7 @@ public class PageTest {
 		int expectedCurrentPageNum = DEFAULT_OFFSET / DEFAULT_LIMIT + 1;
 		int offset = (expectedCurrentPageNum - 1) * DEFAULT_LIMIT;
 		List<ComputerDTO> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, offset));
-		int expectedLastPageNb = (service.countAllLines() - offset) / DEFAULT_LIMIT + 1;
+		int expectedLastPageNb = service.countAllLines() / DEFAULT_LIMIT + 1;
 		if (expectedEntities.size() % DEFAULT_LIMIT != 0) {
 			++expectedLastPageNb;
 		}

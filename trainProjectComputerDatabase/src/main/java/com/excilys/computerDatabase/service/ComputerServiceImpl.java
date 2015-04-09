@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
+import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
@@ -156,7 +157,9 @@ public class ComputerServiceImpl implements ComputerService {
 		LOG.info("create(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
-			dao.create(dtoMapper.DTOToBean(computer));
+			Computer cmptrBean = dtoMapper.DTOToBean(computer);
+			dao.create(cmptrBean);
+			computer.setId(cmptrBean.getId().toString());
 		} catch (SQLException e) {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();

@@ -5,7 +5,6 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -20,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
-// TODO corriger les tests en erreur
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 @ActiveProfiles("DEV")
@@ -64,10 +62,9 @@ public class WebUserInterfaceTest {
 	    // When
 	    element = driver.findElement(By.id(addButtonId));
 	    element.click();
-
+	    // filling the form
 	    element = driver.findElement(By.name(computerNameFieldId));
 	    element.sendKeys(beanName);
-	    // Now submit the form. WebDriver will find the form for us from the element
 	    element.submit();
 	    driver.get(HOME_PAGE);
 	    element = driver.findElement(By.id(itemsCount));
@@ -76,25 +73,38 @@ public class WebUserInterfaceTest {
 	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", expectedNbItems, nbItems);
 	}
 	
-	@Ignore
 	@Test
 	public void editComputerShouldUpdateTheComputer() {
-		// TODO finir d'écrire le test
 		// Given
-		
+		String editedItemId = "computer3";
+		String newIntroDate = "2015-02-22";
+		String introDateFieldId = "introduced";
+		WebElement element = driver.findElement(By.id(editedItemId));
+		element.click();
 		// When
-		
+		element = driver.findElement(By.name(introDateFieldId));
+		element.sendKeys(newIntroDate);
+		element.submit();
 		// Then
-		
+		ComputerDTO editedBean = computerService.getById(new Long(3));
+		Assert.assertTrue("Bean non modifié correctement.", editedBean.getIntroducedDate().contains(newIntroDate));
+		// After
+		element = driver.findElement(By.name(introDateFieldId));
+		element.clear();
+		element.sendKeys("");
+		element.submit();
 	}
 
-	@Ignore
 	@Test
 	public void deleteAComputerShouldRemoveOneToCount() {
 		// Given
+		ComputerDTO newBean = new ComputerDTO();
+		newBean.setName(beanName);
+		computerService.create(newBean);
+		driver.get(HOME_PAGE);
 		String lastPageButtonId = "Last";
 		String editModeButtonId = "editComputer";
-		String rmBoxId = "computerRm575";
+		String rmBoxId = "computerRm" + newBean.getId();
 		String rmButtonId = "deleteSelected";
 		String itemsCount = "homeTitle";
 	    WebElement element = driver.findElement(By.id(itemsCount));
@@ -173,8 +183,8 @@ public class WebUserInterfaceTest {
 	public void orderByIntroducedDateDesc() {
 		// Given
 		String orderByIntroDescField = "orderByIntroducedDesc";
-		String computerName = "iPhone 4S";
-		String computerId = "computer574";
+		String computerName = "HP TouchPad";
+		String computerId = "computer569";
 		WebElement element = driver.findElement(By.id(orderByIntroDescField));
 		// When
 		element.click();

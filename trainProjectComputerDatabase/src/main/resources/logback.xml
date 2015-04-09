@@ -18,7 +18,7 @@
 		<file>logs/computerDatabaseLog.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>logs/rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>
@@ -33,7 +33,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover every minute -->
-			<FileNamePattern>computerDatabaseLog.%d{yyyy-MM-dd_HH-mm}.log</FileNamePattern>
+			<FileNamePattern>logs/computerDatabaseLog.%d{yyyy-MM-dd_HH-mm}.log</FileNamePattern>
 
 			<!-- keep 30 minutes' worth of history -->
 			<maxHistory>30</maxHistory>
