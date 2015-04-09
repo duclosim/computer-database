@@ -15,7 +15,7 @@
 
 	<appender name="dailyRollingFileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>computerDatabaseLog.log</file>
+		<file>logs/computerDatabaseLog.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
 			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
