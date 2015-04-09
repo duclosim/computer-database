@@ -1,22 +1,5 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,12 +7,25 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Transactional
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 @ActiveProfiles("DEV")
 public class ComputerDAOTest {
-	private Connection con;
+	private ResultSet results;
+	private PreparedStatement ps;
 	
 	@Autowired
 	private CompanyDAOImpl companyDAO;
@@ -40,14 +36,10 @@ public class ComputerDAOTest {
 	@Autowired
 	private ConnectionFactory connection;
 	
-	@Before
-	public void prepareConnection() throws SQLException {
-		con = connection.getConnection();
-	}
-	
 	@After
 	public void closeConnection() throws SQLException {
-		con.close();
+		closeResources(results, ps);
+		connection.closeConnection();
 	}
 	
 	@Test
@@ -60,14 +52,12 @@ public class ComputerDAOTest {
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.id=?;";
-		ResultSet results;
 		
-		PreparedStatement ps = con.prepareStatement(query);
+		ps = connection.getConnection().prepareStatement(query);
 		ps.setLong(1, id);
 		results = ps.executeQuery();
 		if (results.next()) {
 			expectedBean = computerMapper.mapComputer(results);
-			closeResources(results, ps);
 			// When
 			bean = computerDAO.getById(id);
 			// Then
@@ -93,18 +83,18 @@ public class ComputerDAOTest {
 				+ "WHERE computer.name LIKE ? "
 				+ "OR company.name LIKE ? "
 				+ "LIMIT ? OFFSET ?;";
-		PreparedStatement ps = con.prepareStatement(query);
+		ps = connection.getConnection().prepareStatement(query);
 		int paramIndex = 0;
 		ps.setString(++paramIndex, "%" + computerName + "%");
 		ps.setString(++paramIndex, "%" + computerName + "%");
 		ps.setLong(++paramIndex, limit);
 		ps.setLong(++paramIndex, offset);
-		ResultSet results = ps.executeQuery();
+		results = ps.executeQuery();
 		while (results.next()) {
 			expectedBeansByComputerName.add(computerMapper.mapComputer(results));
 		}
-		ps.close();
-		ps = con.prepareStatement(query);
+		closeResources(results, ps);
+		ps = connection.getConnection().prepareStatement(query);
 		paramIndex = 0;
 		ps.setString(++paramIndex, "%" + companyName + "%");
 		ps.setString(++paramIndex, "%" + companyName + "%");
@@ -114,7 +104,6 @@ public class ComputerDAOTest {
 		while (results.next()) {
 			expectedBeansByCompanyName.add(computerMapper.mapComputer(results));
 		}
-		closeResources(results, ps);
 		// When
 		beans = computerDAO.getFiltered(limit, offset, computerName);
 		beansByCompany = computerDAO.getFiltered(limit, offset, companyName);
@@ -133,9 +122,7 @@ public class ComputerDAOTest {
 		String query = "SELECT * FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "LIMIT ? OFFSET ?;";
-		ResultSet results;
-
-		PreparedStatement ps = con.prepareStatement(query);
+		ps = connection.getConnection().prepareStatement(query);
 		int paramIndex = 0;
 		ps.setLong(++paramIndex, limit);
 		ps.setLong(++paramIndex, offset);
@@ -143,7 +130,6 @@ public class ComputerDAOTest {
 		while (results.next()) {
 			expectedBeans.add(computerMapper.mapComputer(results));
 		}
-		closeResources(results, ps);
 		// When
 		bean = computerDAO.getAll(limit, offset);
 		// Then
@@ -156,11 +142,10 @@ public class ComputerDAOTest {
 		// Given
 		int nbLines;
 		String query = "SELECT COUNT(*) FROM computer;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ResultSet results = ps.executeQuery();
+		ps = connection.getConnection().prepareStatement(query);
+		results = ps.executeQuery();
 		if (results.next()) {
 			int expectedSize = results.getInt(1);
-			closeResources(results, ps);
 			// When
 			nbLines = computerDAO.countLines();
 			// Then
@@ -232,12 +217,11 @@ public class ComputerDAOTest {
 		computerDAO.deleteByCompanyId(companyId);
 		// Then
 		String query = "SELECT COUNT(*) FROM computer WHERE company_id=?;";
-		PreparedStatement ps = con.prepareStatement(query);
+		ps = connection.getConnection().prepareStatement(query);
 		ps.setLong(1, companyId);
-		ResultSet results = ps.executeQuery();
+		results = ps.executeQuery();
 		if (results.next()) {
 			nbLines = results.getInt(1);
-			closeResources(results, ps);
 			Assert.assertEquals("Erreur sur le nombre de lignes", 0, nbLines);
 		}
 	}

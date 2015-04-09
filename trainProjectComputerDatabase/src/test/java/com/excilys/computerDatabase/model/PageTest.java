@@ -41,6 +41,7 @@ public class PageTest {
 		if (expectedEntities.size() % DEFAULT_LIMIT != 0) {
 			++expectedLastPageNb;
 		}
+		page.getEntities();
 		// WHEN
 		// THEN
 		Assert.assertEquals("Erreur sur le numéro de la dernière page.", expectedLastPageNb, page.getLastPageNb());

@@ -46,7 +46,7 @@ public class WebUserInterfaceTest {
 	public void closeDriver() {
 	    //Close the browser
 	    driver.quit();
-	    List<ComputerDTO> list = computerService.getFiltered(beanName, 1, 0);
+	    List<ComputerDTO> list = computerService.getFiltered(beanName, 10, 0);
 	    for (ComputerDTO computer : list) {
 	    	computerService.delete(computer);
 	    }
@@ -88,6 +88,7 @@ public class WebUserInterfaceTest {
 		
 	}
 
+	@Ignore
 	@Test
 	public void deleteAComputerShouldRemoveOneToCount() {
 		// Given
@@ -124,14 +125,17 @@ public class WebUserInterfaceTest {
 	public void searchComputer() {
 		// Given
 		String searchFieldId = "searchbox";
+		String itemsCount = "homeTitle";
 		String searchedComputerName = "CM-2a";
+		int expectedComputerNb = 1;
 	    WebElement element = driver.findElement(By.id(searchFieldId));
 	    // When
 	    element.sendKeys(searchedComputerName);
 	    element.submit();
 	    // Then
-	    String foundName = element.findElement(By.linkText(searchedComputerName)).getText();
-	    Assert.assertEquals("Erreur sur l'item trouvé.", searchedComputerName, foundName);
+	    element = driver.findElement(By.id(itemsCount));
+	    int nbItems = Integer.parseInt(element.getText());
+		Assert.assertEquals("Erreur sur le nombre d'items trouvés.", expectedComputerNb, nbItems);
 	}
 	
 	@Test
@@ -156,11 +160,12 @@ public class WebUserInterfaceTest {
 		// Given
 		String orderByCmptrAscField = "orderByComputerNameAsc";
 		String computerName = "ACE";
+		String computerId = "computer381";
 		WebElement element = driver.findElement(By.id(orderByCmptrAscField));
 		// When
 		element.click();
 		// Then
-		String foundName = element.findElement(By.linkText(computerName)).getText();
+		String foundName = driver.findElement(By.id(computerId)).getText();
 		Assert.assertEquals("Erreur sur l'item trouvé.", computerName, foundName);
 	}
 
@@ -169,11 +174,12 @@ public class WebUserInterfaceTest {
 		// Given
 		String orderByIntroDescField = "orderByIntroducedDesc";
 		String computerName = "iPhone 4S";
+		String computerId = "computer574";
 		WebElement element = driver.findElement(By.id(orderByIntroDescField));
 		// When
 		element.click();
 		// Then
-		String foundName = element.findElement(By.linkText(computerName)).getText();
+		String foundName = driver.findElement(By.id(computerId)).getText();
 		Assert.assertEquals("Erreur sur l'item trouvé.", computerName, foundName);
 	}
 
@@ -182,22 +188,23 @@ public class WebUserInterfaceTest {
 		// Given
 		String orderByCompanyDescField = "orderByCompanyNameDesc";
 		String computerName = "MSX";
+		String computerId = "computer248";
 		WebElement element = driver.findElement(By.id(orderByCompanyDescField));
 		// When
 		element.click();
 		// Then
-		String foundName = element.findElement(By.linkText(computerName)).getText();
+		String foundName = driver.findElement(By.id(computerId)).getText();
 		Assert.assertEquals("Erreur sur l'item trouvé.", computerName, foundName);
 	}
 	
 	@Test
 	public void filteredByCompanyNameAndOrderByComputerNameAsc() {
-		// TODO finir d'écrire le test
 		// Given
 		String searchFieldId = "searchbox";
 		String orderByCmptrAscField = "orderByComputerNameAsc";
 		String companyName = "Nintendo";
 		String computerName = "Game & Watch";
+		String computerId = "computer160";
 		// When
 		// Filtering
 	    WebElement element = driver.findElement(By.id(searchFieldId));
@@ -207,7 +214,7 @@ public class WebUserInterfaceTest {
 		element = driver.findElement(By.id(orderByCmptrAscField));
 		element.click();
 		// Then
-		String foundName = element.findElement(By.linkText(computerName)).getText();
+		String foundName = driver.findElement(By.id(computerId)).getText();
 		Assert.assertEquals("Erreur sur l'item trouvé.", computerName, foundName);
 	}
 }
