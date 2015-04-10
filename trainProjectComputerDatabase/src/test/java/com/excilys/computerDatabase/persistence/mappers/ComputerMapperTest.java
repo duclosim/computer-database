@@ -39,13 +39,13 @@ public class ComputerMapperTest {
     public ExpectedException thrown = ExpectedException.none();
 
 	@Test
-	public void mapComputerShouldThrowAnIllegalArgumentExceptionBecauseOfNullResultSet() {
+	public void mapComputerShouldReturnNullObjectBecauseOfNullResultSet() {
 		// Given
 		ResultSet resultSet = null;
-		thrown.expect(IllegalArgumentException.class);
 		// When
-		computerMapper.mapComputer(resultSet);
+		Computer res = computerMapper.mapRow(resultSet, 0);
 		// Then
+		Assert.assertNull("Bean n'est pas null.", res);
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class ComputerMapperTest {
 						discontinuedDate,
 						company);
 				// When
-				result = computerMapper.mapComputer(results);
+				result = computerMapper.mapRow(results, 0);
 				ps.close();
 				// Then
 				Assert.assertEquals("Erreur sur le bean",  expectedBean, result);

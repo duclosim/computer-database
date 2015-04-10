@@ -34,13 +34,13 @@ public class CompanyMapperTest {
     public ExpectedException thrown = ExpectedException.none();
 
 	@Test
-	public void mapCompanyShouldThrowAnIllegalArgumentExceptionBecauseOfNullResultSet() {
+	public void mapCompanyShouldReturnNullObjectBecauseOfNullResultSet() {
 		// Given
 		ResultSet resultSet = null;
-		thrown.expect(IllegalArgumentException.class);
 		// When
-		companyMapper.mapCompany(resultSet);
+		Company res = companyMapper.mapRow(resultSet, 0);
 		// Then
+		Assert.assertNull("Bean n'est pas null.", res);
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class CompanyMapperTest {
 				Company expectedBean = new Company(results.getLong(CompanyDAOImpl.ID_COLUMN_LABEL),
 						results.getString(CompanyDAOImpl.NAME_COLUMN_LABEL));
 				// When
-				result = companyMapper.mapCompany(results);
+				result = companyMapper.mapRow(results, 0);
 				results.close();
 				ps.close();
 				// Then

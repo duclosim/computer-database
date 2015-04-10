@@ -2,7 +2,6 @@ package com.excilys.computerDatabase.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -12,11 +11,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 /**
@@ -28,39 +29,42 @@ import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 public class ComputerDAOImpl implements ComputerDAO {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
+	private static final String GET_BY_ID = "SELECT * FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "WHERE computer.id=?;";
+	private static final String GET_ALL = "SELECT * "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "LIMIT ? OFFSET ?;";
+	private static final String GET_FILTERED = "SELECT * "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "WHERE computer.name LIKE ? "
+			+ "OR company.name LIKE ? "
+			+ "LIMIT ? OFFSET ?;";
+	private static final String COUNT = "SELECT COUNT(*) FROM computer;";
+	private static final String COUNT_FILTERED = "SELECT COUNT(*) "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "WHERE computer.name LIKE ? "
+			+ "OR company.name LIKE ?;";
+	private static final String DELETE  = "DELETE FROM computer WHERE id=?";
+	private static final String DELETE_BY_COMPANY_ID = "DELETE FROM computer WHERE company_id=?";
 	
 	@Autowired
 	private ComputerMapper mapper;
 	@Autowired
-	private ConnectionFactory connectionFactory;
+	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public Computer getById(Long id) throws SQLException  {
+	public Computer getById(Long id) {
 		LOG.info("getById(" + id + ")");
-		Connection con = connectionFactory.getConnection();
-		Computer result = null;
-		String query = "SELECT * "
-				+ "FROM computer "
-				+ "LEFT JOIN company ON computer.company_id = company.id "
-				+ "WHERE computer.id=?;";
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query);
-			int paramIndex = 0;
-			ps.setLong(++paramIndex, id);
-			results = ps.executeQuery();
-			if (results.next()) {
-				result = mapper.mapComputer(results);
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
+		List<Computer> result = jdbcTemplate.query(GET_BY_ID, new Object[]{id}, mapper);
+		if (result.isEmpty()) {
+			return null;
+		} else {
+			return result.get(0);
 		}
-		return result;
 	}
 
 	@Override
@@ -78,69 +82,20 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection con = connectionFactory.getConnection();
-		List<Computer> result = new ArrayList<>();
-		String query = "SELECT * "
-				+ "FROM computer "
-				+ "LEFT JOIN company ON computer.company_id = company.id "
-				+ "LIMIT ? OFFSET ?;";
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query);
-			int paramIndex = 0;
-			ps.setLong(++paramIndex, limit);
-			ps.setLong(++paramIndex, offset);
-			results = ps.executeQuery();
-			while (results.next()) {
-				result.add(mapper.mapComputer(results));
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
-		}
-		return result;
+		return jdbcTemplate.query(GET_ALL, new Object[]{limit, offset}, mapper);
 	}
 
 	@Override
-	public List<Computer> getFiltered(int limit, int offset, String name) 
-			throws SQLException {
+	public List<Computer> getFiltered(int limit, int offset, String name) {
 		LOG.info(new StringBuilder("getByNameOrCompanyName(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(")").toString());
-		Connection con = connectionFactory.getConnection();
-		List<Computer> result = new ArrayList<>();
-		String query = "SELECT * "
-				+ "FROM computer "
-				+ "LEFT JOIN company ON computer.company_id = company.id "
-				+ "WHERE computer.name LIKE ? "
-				+ "OR company.name LIKE ? "
-				+ "LIMIT ? OFFSET ?;";
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query);
-			int paramIndex = 0;
-			ps.setString(++paramIndex, "%" + name + "%");
-			ps.setString(++paramIndex, "%" + name + "%");
-			ps.setLong(++paramIndex, limit);
-			ps.setLong(++paramIndex, offset);
-			results = ps.executeQuery();
-			while (results.next()) {
-				result.add(mapper.mapComputer(results));
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
-		}
-		return result;
+		return jdbcTemplate.query(GET_FILTERED, new Object[]{
+			new StringBuilder("%").append(name).append("%").toString(), 
+			new StringBuilder("%").append(name).append("%").toString(),
+			limit, offset},
+			mapper);
 	}
 	
 	@Override
@@ -160,35 +115,16 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection con = connectionFactory.getConnection();
-		List<Computer> result = new ArrayList<>();
 		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
 			.append("LEFT JOIN company ON computer.company_id = company.id ");
 		if (column != null && way != null) {
 			query.append("ORDER BY ")
 				.append(column.getColumnName()).append(" ")
-				.append(way.getWay()).append(" ");
+				.append(way.getWay()).append(", ")
+				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ");
 		}
 		query.append("LIMIT ? OFFSET ?;");
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query.toString());
-			int paramIndex = 0;
-			ps.setLong(++paramIndex, limit);
-			ps.setLong(++paramIndex, offset);
-			results = ps.executeQuery();
-			while (results.next()) {
-				result.add(mapper.mapComputer(results));
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
-		}
-		return result;
+		return jdbcTemplate.query(query.toString(), new Object[]{limit, offset}, mapper);
 	}
 
 	@Override
@@ -210,9 +146,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("offset est négatif.");
 			throw new IllegalArgumentException("offset est négatif.");
 		}
-		Connection con = connectionFactory.getConnection();
-		int paramIndex = 0;
-		List<Computer> result = new ArrayList<>();
 		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
 			.append("LEFT JOIN company ON computer.company_id = company.id ");
 		if (name != null) {
@@ -222,93 +155,36 @@ public class ComputerDAOImpl implements ComputerDAO {
 		if (column != null && way != null) {
 			query.append("ORDER BY ")
 				.append(column.getColumnName()).append(" ")
-				.append(way.getWay()).append(" ");
+				.append(way.getWay()).append(", ")
+				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ");
 		}
 		query.append("LIMIT ? OFFSET ?;");
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query.toString());
-			if (name != null) {
-				ps.setString(++paramIndex, "%" + name + "%");
-				ps.setString(++paramIndex, "%" + name + "%");
-			}
-			ps.setLong(++paramIndex, limit);
-			ps.setLong(++paramIndex, offset);
-			results = ps.executeQuery();
-			while (results.next()) {
-				result.add(mapper.mapComputer(results));
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
-		}
-		return result;
+		return jdbcTemplate.query(query.toString(), new Object[]{
+			new StringBuilder("%").append(name).append("%").toString(), 
+			new StringBuilder("%").append(name).append("%").toString(),
+			limit, offset}, mapper);
 	}
 
 	@Override
-	public int countLines() throws SQLException {
+	public int countLines() {
 		LOG.info("countLine()");
-		Connection con = connectionFactory.getConnection();
-		String query = "SELECT COUNT(*) FROM computer;";
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query);
-			results = ps.executeQuery();
-			if (results.next()) {
-				return results.getInt(1);
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
-		}
-		return 0;
+		return jdbcTemplate.queryForObject(COUNT, Integer.class);
 	}
 
 	@Override
-	public int countFilteredLines(String name) throws SQLException {
+	public int countFilteredLines(String name) {
 		LOG.info("countFilteredLines(" + name + ")");
-		Connection con = connectionFactory.getConnection();
-		String query = "SELECT COUNT(*) "
-				+ "FROM computer "
-				+ "LEFT JOIN company ON computer.company_id = company.id "
-				+ "WHERE computer.name LIKE ? "
-				+ "OR company.name LIKE ?;";
-		PreparedStatement ps = null;
-		ResultSet results = null;
-		try {
-			ps = con.prepareStatement(query);
-			ps.setString(1, "%" + name + "%");
-			ps.setString(2, "%" + name + "%");
-			results = ps.executeQuery();
-			if (results.next()) {
-				return results.getInt(1);
-			}
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, results);
-		}
-		return 0;
+		String usableName = new StringBuilder("%").append(name).append("%").toString();
+		return jdbcTemplate.queryForObject(COUNT_FILTERED, new Object[]{usableName, usableName}, Integer.class);
 	}
 
 	@Override
-	public void create(Computer computer) throws SQLException {
-		LOG.info("create(" + computer + ")");
+	public void create(Computer computer) {
+		LOG.info("create(" + computer + ")");         
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
-		Connection con = connectionFactory.getConnection();
 		StringBuilder query = new StringBuilder("INSERT INTO computer (")
 			.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
 			.append(", ")
@@ -324,43 +200,41 @@ public class ComputerDAOImpl implements ComputerDAO {
 			query.append(", ?");
 		}
 		query.append(");");
-		PreparedStatement ps = null;
-		ResultSet generatedKeys = null;
-		try {
-			ps = con.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
-			int colNb = 0;
-			Timestamp introduced = null;
-			Timestamp discontinued = null;
-			if (computer.getIntroducedDate() != null) {
-				introduced = Timestamp.valueOf(computer.getIntroducedDate());
-			}
-			if (computer.getDiscontinuedDate() != null) {
-				discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
-			}
-			ps.setString(++colNb, computer.getName());
-			ps.setTimestamp(++colNb, introduced);
-			ps.setTimestamp(++colNb, discontinued);
-			if (computer.getCompany() != null) {
-				ps.setLong(++colNb, computer.getCompany().getId());
-			}
-			ps.executeUpdate();
-			generatedKeys = ps.getGeneratedKeys();
-	        if (generatedKeys.next()) {
-	        	computer.setId(generatedKeys.getLong(1));
-	        } else {
-	        	throw new SQLException();
-	        }
-		} catch (SQLException e) {
-			LOG.error("Ecriture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Ecriture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, generatedKeys);
+		final Timestamp introduced;
+		final Timestamp discontinued;
+		if (computer.getIntroducedDate() != null) {
+			introduced = Timestamp.valueOf(computer.getIntroducedDate());
+		} else {
+			introduced = null;
 		}
+		if (computer.getDiscontinuedDate() != null) {
+			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
+		} else {
+			discontinued = null;
+		}
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(
+			new PreparedStatementCreator() {
+				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+					PreparedStatement ps =
+							connection.prepareStatement(query.toString(), 
+									Statement.RETURN_GENERATED_KEYS);
+					int paramIndex = 0;
+					ps.setString(++paramIndex, computer.getName());
+					ps.setTimestamp(++paramIndex, introduced);
+					ps.setTimestamp(++paramIndex, discontinued);
+					if (computer.getCompany() != null) {
+						ps.setLong(++paramIndex, computer.getCompany().getId());
+					}
+					return ps;
+				}
+			},
+			keyHolder);
+		computer.setId(keyHolder.getKey().longValue());
 	}
 
 	@Override
-	public void update(Computer computer) throws SQLException {
+	public void update(Computer computer) {
 		LOG.info("update(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
@@ -370,7 +244,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computerName est à null.");
 			throw new IllegalArgumentException("computerName est à null.");
 		}
-		Connection con = connectionFactory.getConnection();
 		StringBuilder query = new StringBuilder("UPDATE computer SET ")
 		.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
 		.append("=?, ")
@@ -384,38 +257,28 @@ public class ComputerDAOImpl implements ComputerDAO {
 			.append("=?");
 		}
 		query.append(" WHERE id = ?;");
-		PreparedStatement ps = null;
-		try {
-			ps = con.prepareStatement(query.toString());
-			int colNb = 0;
-			Timestamp introduced = null;
-			Timestamp discontinued = null;
-			if (computer.getIntroducedDate() != null) {
-				introduced = Timestamp.valueOf(computer.getIntroducedDate());
-			}
-			if (computer.getDiscontinuedDate() != null) {
-				discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
-			}
-			// name
-			ps.setString(++colNb, computer.getName());
-			// introduced date
-			ps.setTimestamp(++colNb, introduced);
-			// discontinued date
-			ps.setTimestamp(++colNb, discontinued);
-			// company id
-			if (computer.getCompany() != null) {
-				ps.setLong(++colNb, computer.getCompany().getId());
-			}
-			// id
-			ps.setLong(++colNb, computer.getId());
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			LOG.error("Ecriture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Ecriture impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, null);
+		Timestamp introduced = null;
+		Timestamp discontinued = null;
+		if (computer.getIntroducedDate() != null) {
+			introduced = Timestamp.valueOf(computer.getIntroducedDate());
 		}
+		if (computer.getDiscontinuedDate() != null) {
+			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
+		}
+		List<Object> params = new ArrayList<>();
+		// name
+		params.add(computer.getName());
+		// introduced date
+		params.add(introduced);
+		// discontinued date
+		params.add(discontinued);
+		// company id
+		if (computer.getCompany() != null) {
+			params.add(computer.getCompany().getId());
+		}
+		// id
+		params.add(computer.getId());
+		jdbcTemplate.update(query.toString(), params.toArray());
 	}
 
 	@Override
@@ -425,56 +288,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
-		Connection con = connectionFactory.getConnection();
-		String query = "DELETE FROM computer WHERE id=?";
-		PreparedStatement ps = null;
-		try {
-			ps = con.prepareStatement(query);
-			if (computer.getId() != null) {
-				ps.setLong(1, computer.getId());
-				ps.executeUpdate();
-			}
-		} catch (SQLException e) {
-			LOG.error("Suppression impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Suppression impossible dans la bdd.");
-		} finally {
-			releaseResources(ps, null);
-		}
+		jdbcTemplate.update(DELETE, computer.getId());
 	}
 
 	@Override
 	public void deleteByCompanyId(Long companyId) throws SQLException {
 		LOG.info("deleteByCompanyId(" + companyId + ")");
-		Connection con = connectionFactory.getConnection();
-		String deleteComputersQuery = "DELETE FROM computer WHERE company_id=?";
-		PreparedStatement delComputersStatement = null;
-		try {
-			delComputersStatement = con.prepareStatement(deleteComputersQuery);
-			if (companyId != null) {
-				delComputersStatement.setLong(1, companyId);
-				delComputersStatement.executeUpdate();
-			}
-		} catch (SQLException e) {
-			LOG.error("Suppression impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Suppression impossible dans la bdd.");
-		} finally {
-			releaseResources(delComputersStatement, null);
-		}
-	}
-	
-	private void releaseResources(PreparedStatement ps,
-			ResultSet results) throws SQLException {
-		if (results != null) {
-			results.close();
-		}
-		if (ps != null) {
-			ps.close();
-		}
-		Connection con = connectionFactory.getConnection();
-		if (con != null && con.getAutoCommit()) {
-			con.close();
-		}
+		jdbcTemplate.update(DELETE_BY_COMPANY_ID, companyId);
 	}
 }

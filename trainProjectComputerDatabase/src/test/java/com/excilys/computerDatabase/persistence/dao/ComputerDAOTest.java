@@ -36,6 +36,20 @@ public class ComputerDAOTest {
 	@Autowired
 	private ConnectionFactory connection;
 	
+//    @BeforeClass
+//    public static void setUpDB() {
+//    	try {
+//    		DBUtils.executeSqlFiles();
+//    	} catch (SQLException | IOException e) {
+//			e.printStackTrace();
+//		}
+//    }
+//
+//    @AfterClass
+//    public static void tearDown() throws Exception {
+//        DBUtils.databaseTester.onTearDown();
+//    }
+	
 	@After
 	public void closeConnection() throws SQLException {
 		closeResources(results, ps);
@@ -57,13 +71,24 @@ public class ComputerDAOTest {
 		ps.setLong(1, id);
 		results = ps.executeQuery();
 		if (results.next()) {
-			expectedBean = computerMapper.mapComputer(results);
+			expectedBean = computerMapper.mapRow(results, 0);
 			// When
 			bean = computerDAO.getById(id);
 			// Then
 			Assert.assertNotNull("Erreur sur le bean.", bean);
 			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
 		}
+	}
+	
+	@Test
+	public void getByNonFindableIdShouldReturnNullResult() {
+		// Given
+		Computer bean;
+		Long id = new Long(-10);
+		// When
+		bean = computerDAO.getById(id);
+		// Then
+		Assert.assertNull("Le computer devrait être à null.", bean);
 	}
 	
 	@Test
@@ -91,7 +116,7 @@ public class ComputerDAOTest {
 		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeansByComputerName.add(computerMapper.mapComputer(results));
+			expectedBeansByComputerName.add(computerMapper.mapRow(results, 0));
 		}
 		closeResources(results, ps);
 		ps = connection.getConnection().prepareStatement(query);
@@ -102,7 +127,7 @@ public class ComputerDAOTest {
 		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeansByCompanyName.add(computerMapper.mapComputer(results));
+			expectedBeansByCompanyName.add(computerMapper.mapRow(results, 0));
 		}
 		// When
 		beans = computerDAO.getFiltered(limit, offset, computerName);
@@ -128,13 +153,78 @@ public class ComputerDAOTest {
 		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeans.add(computerMapper.mapComputer(results));
+			expectedBeans.add(computerMapper.mapRow(results, 0));
 		}
 		// When
 		bean = computerDAO.getAll(limit, offset);
 		// Then
 		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
-		
+	}
+	
+	@Test
+	public void getOrderedShouldReturnOrderedList() throws SQLException {
+		// Given
+		List<Computer> beans;
+		List<Computer> expectedBeans = new ArrayList<>();
+		int limit = 4;
+		int offset = 0;
+		ComputerColumn column = ComputerColumn.COMPANY_NAME_COLUMN_LABEL;
+		OrderingWay way = OrderingWay.DESC;
+		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
+			.append("LEFT JOIN company ON computer.company_id = company.id ")
+			.append("ORDER BY ")
+			.append(column.getColumnName()).append(" ")
+			.append(way.getWay()).append(", ")
+			.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ")
+			.append("LIMIT ? OFFSET ?;");
+		ps = connection.getConnection().prepareStatement(query.toString());
+		int paramIndex = 0;
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
+		results = ps.executeQuery();
+		while (results.next()) {
+			expectedBeans.add(computerMapper.mapRow(results, 0));
+		}
+		// When
+		beans = computerDAO.getOrdered(limit, offset, column, way);
+		// Then
+		Assert.assertEquals("Erreur sur la taille de la liste.", expectedBeans.size(), beans.size());
+		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, beans);
+	}
+
+	@Test
+	public void getFilteredAndOrderedShouldReturnOrderedList() throws SQLException {
+		// Given
+		List<Computer> bean;
+		List<Computer> expectedBeans = new ArrayList<>();
+		String companyName = "Nintendo";
+		int limit = 15;
+		int offset = 5;
+		ComputerColumn col = ComputerColumn.NAME_COLUMN_LABEL;
+		OrderingWay way = OrderingWay.ASC;
+		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
+			.append("LEFT JOIN company ON computer.company_id = company.id ")
+			.append("WHERE computer.name LIKE ? ")
+			.append("OR company.name LIKE ? ")
+			.append("ORDER BY ")
+			.append(col.getColumnName()).append(" ")
+			.append(way.getWay()).append(", ")
+			.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ")
+			.append("LIMIT ? OFFSET ?;");
+		ps = connection.getConnection().prepareStatement(query.toString());
+		int paramIndex = 0;
+		ps.setString(++paramIndex, "%" + companyName + "%");
+		ps.setString(++paramIndex, "%" + companyName + "%");
+		ps.setLong(++paramIndex, limit);
+		ps.setLong(++paramIndex, offset);
+		results = ps.executeQuery();
+		while (results.next()) {
+			expectedBeans.add(computerMapper.mapRow(results, 0));
+		}
+		// When
+		bean = computerDAO.getFilteredAndOrdered(limit, offset, companyName, col, way);
+		// Then
+		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
 	}
 	
 	@Test
@@ -151,7 +241,29 @@ public class ComputerDAOTest {
 			// Then
 			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 		}
-		
+	}
+	
+	@Test
+	public void countFilteredLines() throws SQLException {
+		// Given
+		int nbLines;
+		String name = "Nintendo";
+		final String query = "SELECT COUNT(*) "
+				+ "FROM computer "
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "WHERE computer.name LIKE ? "
+				+ "OR company.name LIKE ?;";
+		ps = connection.getConnection().prepareStatement(query);
+		ps.setString(1, new StringBuilder("%").append(name).append("%").toString());
+		ps.setString(2, new StringBuilder("%").append(name).append("%").toString());
+		results = ps.executeQuery();
+		if (results.next()) {
+			int expectedSize = results.getInt(1);
+			// When
+			nbLines = computerDAO.countFilteredLines(name);
+			// Then
+			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
+		}
 	}
 	
 	@Test

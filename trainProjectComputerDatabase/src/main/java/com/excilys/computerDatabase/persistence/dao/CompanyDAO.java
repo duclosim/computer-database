@@ -11,6 +11,9 @@ import com.excilys.computerDatabase.model.beans.Company;
  *
  */
 public interface CompanyDAO extends CRUDDao<Company> {
+	
+	public static final String ID_COLUMN_LABEL = "id";
+	public static final String NAME_COLUMN_LABEL = "name";
 	/**
 	 * 
 	 * @param con

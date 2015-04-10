@@ -1,8 +1,11 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -15,12 +18,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.ConnectionFactory;
+import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 @Transactional(rollbackFor = SQLException.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,6 +35,20 @@ public class CompanyDAOTest {
 	private CompanyMapper mapper;
 	@Autowired
 	private ConnectionFactory connection;
+	
+//    @BeforeClass
+//    public static void setUpDB() {
+//    	try {
+//    		DBUtils.executeSqlFiles();
+//    	} catch (SQLException | IOException e) {
+//			e.printStackTrace();
+//		}
+//    }
+//
+//    @AfterClass
+//    public static void tearDown() throws Exception {
+//        DBUtils.databaseTester.onTearDown();
+//    }
 	
 	@Before
 	public void prepareConnection() throws SQLException {
@@ -59,7 +73,7 @@ public class CompanyDAOTest {
 		ps.setLong(1, id);
 		results = ps.executeQuery();
 		if (results.next()) {
-			expectedBean = mapper.mapCompany(results);
+			expectedBean = mapper.mapRow(results, 0);
 			ps.close();
 			// When
 			bean = companyDAO.getById(id);
@@ -67,6 +81,17 @@ public class CompanyDAOTest {
 			Assert.assertNotNull("Erreur sur le bean.", bean);
 			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
 		}
+	}
+	
+	@Test
+	public void getByNonFindableIdShouldReturnNullResult() throws SQLException {
+		// Given
+		Company bean;
+		Long id = new Long(-10);
+		// When
+		bean = companyDAO.getById(id);
+		// Then
+		Assert.assertNull("Le computer devrait être à null.", bean);
 	}
 	
 	@Test
@@ -85,7 +110,7 @@ public class CompanyDAOTest {
 		ps.setLong(++paramIndex, offset);
 		results = ps.executeQuery();
 		while (results.next()) {
-			expectedBeans.add(mapper.mapCompany(results));
+			expectedBeans.add(mapper.mapRow(results, 0));
 		}
 		ps.close();
 		// When
