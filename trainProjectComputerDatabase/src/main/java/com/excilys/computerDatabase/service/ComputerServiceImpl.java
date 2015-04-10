@@ -30,15 +30,13 @@ public class ComputerServiceImpl implements ComputerService {
 	
 	@Autowired
 	private ComputerDAO computerDao;
-	@Autowired
-	private ComputerDTOMapper dtoMapper;
 	
 	@Override
 	public ComputerDTO getById(Long id) {
 		LOG.info("getById(" + id + ")");
 		ComputerDTO result = null;
 		try {
-			result = dtoMapper.BeanToDTO(computerDao.getById(id));
+			result = ComputerDTOMapper.BeanToDTO(computerDao.getById(id));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -52,7 +50,7 @@ public class ComputerServiceImpl implements ComputerService {
 		LOG.info("getByNameOrCompanyName(" + name + ")");
 		List<ComputerDTO> result = null;
 		try {
-			result = dtoMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
+			result = ComputerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -69,7 +67,7 @@ public class ComputerServiceImpl implements ComputerService {
 			.toString());
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			result = dtoMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
+			result = ComputerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -89,7 +87,7 @@ public class ComputerServiceImpl implements ComputerService {
 			.toString());
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			result = dtoMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
+			result = ComputerDTOMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
 					column, way)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
@@ -111,7 +109,7 @@ public class ComputerServiceImpl implements ComputerService {
 			.toString());
 		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			result = dtoMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
+			result = ComputerDTOMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
 					limit, offset, name, column, way)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
@@ -154,7 +152,7 @@ public class ComputerServiceImpl implements ComputerService {
 		LOG.info("create(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
-			Computer cmptrBean = dtoMapper.DTOToBean(computer);
+			Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
 			computerDao.create(cmptrBean);
 			computer.setId(cmptrBean.getId().toString());
 		} catch (SQLException e) {
@@ -170,7 +168,7 @@ public class ComputerServiceImpl implements ComputerService {
 		LOG.info("update(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
-			computerDao.update(dtoMapper.DTOToBean(computer));
+			computerDao.update(ComputerDTOMapper.DTOToBean(computer));
 		} catch (SQLException e) {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();
@@ -183,7 +181,7 @@ public class ComputerServiceImpl implements ComputerService {
 		LOG.info("delete(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
-			computerDao.delete(dtoMapper.DTOToBean(computer));
+			computerDao.delete(ComputerDTOMapper.DTOToBean(computer));
 		} catch (SQLException e) {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();

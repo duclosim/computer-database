@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
@@ -16,7 +15,6 @@ import com.excilys.computerDatabase.model.beans.Computer;
  * @author excilys
  *
  */
-@Component
 public class ComputerDTOMapper {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOMapper.class);
@@ -26,7 +24,7 @@ public class ComputerDTOMapper {
 	 * @param dto
 	 * @return
 	 */
-	public Computer DTOToBean(ComputerDTO dto) {
+	public static Computer DTOToBean(ComputerDTO dto) {
 		LOG.info("DTOToBean(" + dto + ")");
 		Computer bean = new Computer();
 		bean.setId(null);
@@ -57,7 +55,7 @@ public class ComputerDTOMapper {
 	 * @param bean
 	 * @return
 	 */
-	public ComputerDTO BeanToDTO(Computer bean) {
+	public static ComputerDTO BeanToDTO(Computer bean) {
 		LOG.info("BeanToDTO(" + bean + ")");
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(bean.getId().toString());
@@ -84,7 +82,7 @@ public class ComputerDTOMapper {
 	 * @param beans
 	 * @return
 	 */
-	public List<ComputerDTO> BeansToDTOs(List<Computer> beans) {
-        return beans.stream().map(this::BeanToDTO).collect(Collectors.toList());
+	public static List<ComputerDTO> BeansToDTOs(List<Computer> beans) {
+        return beans.stream().map(ComputerDTOMapper::BeanToDTO).collect(Collectors.toList());
 	}
 }
