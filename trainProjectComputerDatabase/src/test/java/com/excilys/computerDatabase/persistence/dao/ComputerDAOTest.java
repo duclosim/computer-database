@@ -1,40 +1,33 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 @ActiveProfiles("DEV")
 public class ComputerDAOTest {
-	private ResultSet results;
-	private PreparedStatement ps;
-	
 	@Autowired
 	private CompanyDAOImpl companyDAO;
 	@Autowired
 	private ComputerDAOImpl computerDAO;
 	@Autowired
-	private ComputerMapper computerMapper;
+	private ComputerMapper mapper;
 	@Autowired
-	private ConnectionFactory connection;
+	private JdbcTemplate jdbcTemplate;
 	
 //    @BeforeClass
 //    public static void setUpDB() {
@@ -50,34 +43,23 @@ public class ComputerDAOTest {
 //        DBUtils.databaseTester.onTearDown();
 //    }
 	
-	@After
-	public void closeConnection() throws SQLException {
-		closeResources(results, ps);
-		connection.closeConnection();
-	}
-	
 	@Test
 	public void getByIdShouldReturnABean() throws SQLException {
 		// Given
-		Computer bean;
 		Long id = new Long(10);
-		Computer expectedBean;
 		String query = "SELECT * "
 				+ "FROM computer "
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.id=?;";
-		
-		ps = connection.getConnection().prepareStatement(query);
-		ps.setLong(1, id);
-		results = ps.executeQuery();
-		if (results.next()) {
-			expectedBean = computerMapper.mapRow(results, 0);
-			// When
-			bean = computerDAO.getById(id);
-			// Then
-			Assert.assertNotNull("Erreur sur le bean.", bean);
-			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
-		}
+		Computer bean;
+		Computer expectedBean;
+		List<Computer> list = jdbcTemplate.query(query, new Object[]{id}, mapper);
+		expectedBean = list.isEmpty() ? null : list.get(0);
+		// When
+		bean = computerDAO.getById(id);
+		// Then
+		Assert.assertNotNull("Erreur sur le bean.", bean);
+		Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
 	}
 	
 	@Test
@@ -92,14 +74,26 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
+	public void getAllShouldReturnMultipleBeans() throws SQLException {
+		// Given
+		int limit = 15;
+		int offset = 5;
+		String query = "SELECT * FROM computer "
+				+ "LEFT JOIN company ON computer.company_id = company.id "
+				+ "LIMIT ? OFFSET ?;";
+		List<Computer> bean;
+		List<Computer> expectedBeans = jdbcTemplate.query(query, new Object[]{limit, offset}, mapper);
+		// When
+		bean = computerDAO.getAll(limit, offset);
+		// Then
+		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
+	}
+	
+	@Test
 	public void getByNameShouldReturnABean() throws SQLException {
 		// Given
 		String computerName = "CM-2a";
 		String companyName = "Apple Inc.";
-		List<Computer> beans;
-		List<Computer> beansByCompany;
-		List<Computer> expectedBeansByComputerName = new ArrayList<>();
-		List<Computer> expectedBeansByCompanyName = new ArrayList<>();
 		int limit = 15;
 		int offset = 5;
 		String query = "SELECT * "
@@ -108,27 +102,18 @@ public class ComputerDAOTest {
 				+ "WHERE computer.name LIKE ? "
 				+ "OR company.name LIKE ? "
 				+ "LIMIT ? OFFSET ?;";
-		ps = connection.getConnection().prepareStatement(query);
-		int paramIndex = 0;
-		ps.setString(++paramIndex, "%" + computerName + "%");
-		ps.setString(++paramIndex, "%" + computerName + "%");
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		results = ps.executeQuery();
-		while (results.next()) {
-			expectedBeansByComputerName.add(computerMapper.mapRow(results, 0));
-		}
-		closeResources(results, ps);
-		ps = connection.getConnection().prepareStatement(query);
-		paramIndex = 0;
-		ps.setString(++paramIndex, "%" + companyName + "%");
-		ps.setString(++paramIndex, "%" + companyName + "%");
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		results = ps.executeQuery();
-		while (results.next()) {
-			expectedBeansByCompanyName.add(computerMapper.mapRow(results, 0));
-		}
+		List<Computer> beans;
+		List<Computer> beansByCompany;
+		List<Computer> expectedBeansByComputerName = jdbcTemplate.query(query, new Object[]{
+				new StringBuilder("%").append(computerName).append("%").toString(), 
+				new StringBuilder("%").append(computerName).append("%").toString(),
+				limit, offset},
+				mapper);
+		List<Computer> expectedBeansByCompanyName = jdbcTemplate.query(query, new Object[]{
+				new StringBuilder("%").append(companyName).append("%").toString(), 
+				new StringBuilder("%").append(companyName).append("%").toString(),
+				limit, offset},
+				mapper);
 		// When
 		beans = computerDAO.getFiltered(limit, offset, computerName);
 		beansByCompany = computerDAO.getFiltered(limit, offset, companyName);
@@ -138,34 +123,8 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
-	public void getAllShouldReturnMultipleBeans() throws SQLException {
-		// Given
-		List<Computer> bean;
-		List<Computer> expectedBeans = new ArrayList<>();
-		int limit = 15;
-		int offset = 5;
-		String query = "SELECT * FROM computer "
-				+ "LEFT JOIN company ON computer.company_id = company.id "
-				+ "LIMIT ? OFFSET ?;";
-		ps = connection.getConnection().prepareStatement(query);
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		results = ps.executeQuery();
-		while (results.next()) {
-			expectedBeans.add(computerMapper.mapRow(results, 0));
-		}
-		// When
-		bean = computerDAO.getAll(limit, offset);
-		// Then
-		Assert.assertEquals("Erreur sur la liste de beans.", expectedBeans, bean);
-	}
-	
-	@Test
 	public void getOrderedShouldReturnOrderedList() throws SQLException {
 		// Given
-		List<Computer> beans;
-		List<Computer> expectedBeans = new ArrayList<>();
 		int limit = 4;
 		int offset = 0;
 		ComputerColumn column = ComputerColumn.COMPANY_NAME_COLUMN_LABEL;
@@ -177,14 +136,8 @@ public class ComputerDAOTest {
 			.append(way.getWay()).append(", ")
 			.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ")
 			.append("LIMIT ? OFFSET ?;");
-		ps = connection.getConnection().prepareStatement(query.toString());
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		results = ps.executeQuery();
-		while (results.next()) {
-			expectedBeans.add(computerMapper.mapRow(results, 0));
-		}
+		List<Computer> beans;
+		List<Computer> expectedBeans = jdbcTemplate.query(query.toString(), new Object[]{limit, offset}, mapper);
 		// When
 		beans = computerDAO.getOrdered(limit, offset, column, way);
 		// Then
@@ -195,8 +148,6 @@ public class ComputerDAOTest {
 	@Test
 	public void getFilteredAndOrderedShouldReturnOrderedList() throws SQLException {
 		// Given
-		List<Computer> bean;
-		List<Computer> expectedBeans = new ArrayList<>();
 		String companyName = "Nintendo";
 		int limit = 15;
 		int offset = 5;
@@ -211,16 +162,11 @@ public class ComputerDAOTest {
 			.append(way.getWay()).append(", ")
 			.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ")
 			.append("LIMIT ? OFFSET ?;");
-		ps = connection.getConnection().prepareStatement(query.toString());
-		int paramIndex = 0;
-		ps.setString(++paramIndex, "%" + companyName + "%");
-		ps.setString(++paramIndex, "%" + companyName + "%");
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		results = ps.executeQuery();
-		while (results.next()) {
-			expectedBeans.add(computerMapper.mapRow(results, 0));
-		}
+		List<Computer> bean;
+		List<Computer> expectedBeans = jdbcTemplate.query(query.toString(), new Object[]{
+			new StringBuilder("%").append(companyName).append("%").toString(), 
+			new StringBuilder("%").append(companyName).append("%").toString(),
+			limit, offset}, mapper);
 		// When
 		bean = computerDAO.getFilteredAndOrdered(limit, offset, companyName, col, way);
 		// Then
@@ -232,15 +178,11 @@ public class ComputerDAOTest {
 		// Given
 		int nbLines;
 		String query = "SELECT COUNT(*) FROM computer;";
-		ps = connection.getConnection().prepareStatement(query);
-		results = ps.executeQuery();
-		if (results.next()) {
-			int expectedSize = results.getInt(1);
-			// When
-			nbLines = computerDAO.countLines();
-			// Then
-			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
-		}
+		int expectedNbLines = jdbcTemplate.queryForObject(query, Integer.class);
+		// When
+		nbLines = computerDAO.countLines();
+		// Then
+		Assert.assertEquals("Erreur sur le bean", expectedNbLines, nbLines);
 	}
 	
 	@Test
@@ -253,17 +195,12 @@ public class ComputerDAOTest {
 				+ "LEFT JOIN company ON computer.company_id = company.id "
 				+ "WHERE computer.name LIKE ? "
 				+ "OR company.name LIKE ?;";
-		ps = connection.getConnection().prepareStatement(query);
-		ps.setString(1, new StringBuilder("%").append(name).append("%").toString());
-		ps.setString(2, new StringBuilder("%").append(name).append("%").toString());
-		results = ps.executeQuery();
-		if (results.next()) {
-			int expectedSize = results.getInt(1);
-			// When
-			nbLines = computerDAO.countFilteredLines(name);
-			// Then
-			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
-		}
+		String usableName = new StringBuilder("%").append(name).append("%").toString();
+		int expectedSize = jdbcTemplate.queryForObject(query, new Object[]{usableName, usableName}, Integer.class);
+		// When
+		nbLines = computerDAO.countFilteredLines(name);
+		// Then
+		Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 	}
 	
 	@Test
@@ -329,21 +266,7 @@ public class ComputerDAOTest {
 		computerDAO.deleteByCompanyId(companyId);
 		// Then
 		String query = "SELECT COUNT(*) FROM computer WHERE company_id=?;";
-		ps = connection.getConnection().prepareStatement(query);
-		ps.setLong(1, companyId);
-		results = ps.executeQuery();
-		if (results.next()) {
-			nbLines = results.getInt(1);
-			Assert.assertEquals("Erreur sur le nombre de lignes", 0, nbLines);
-		}
-	}
-	
-	private void closeResources(ResultSet results, PreparedStatement ps) throws SQLException {
-		if (results != null) {
-			results.close();
-		}
-		if (ps != null) {
-			ps.close();
-		}
+		nbLines = jdbcTemplate.queryForObject(query, new Object[]{companyId}, Integer.class);
+		Assert.assertEquals("Erreur sur le nombre de lignes", 0, nbLines);
 	}
 }

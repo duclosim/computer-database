@@ -1,25 +1,19 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 @Transactional(rollbackFor = SQLException.class)
@@ -27,14 +21,12 @@ import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 @ActiveProfiles("DEV")
 public class CompanyDAOTest {
-	private Connection con;
-	
 	@Autowired
 	private CompanyDAOImpl companyDAO;
 	@Autowired
 	private CompanyMapper mapper;
 	@Autowired
-	private ConnectionFactory connection;
+	private JdbcTemplate jdbcTemplate;
 	
 //    @BeforeClass
 //    public static void setUpDB() {
@@ -50,16 +42,6 @@ public class CompanyDAOTest {
 //        DBUtils.databaseTester.onTearDown();
 //    }
 	
-	@Before
-	public void prepareConnection() throws SQLException {
-		con = connection.getConnection();
-	}
-	
-	@After
-	public void closeConnection() throws SQLException {
-		con.close();
-	}
-	
 	@Test
 	public void getByIdShouldReturnABean() throws SQLException {
 		// Given
@@ -67,20 +49,13 @@ public class CompanyDAOTest {
 		Long id = new Long(10);
 		Company expectedBean;
 		String query = "SELECT * FROM company WHERE id=?;";
-		ResultSet results;
-		
-		PreparedStatement ps = con.prepareStatement(query);
-		ps.setLong(1, id);
-		results = ps.executeQuery();
-		if (results.next()) {
-			expectedBean = mapper.mapRow(results, 0);
-			ps.close();
-			// When
-			bean = companyDAO.getById(id);
-			// Then
-			Assert.assertNotNull("Erreur sur le bean.", bean);
-			Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
-		}
+		List<Company> results = jdbcTemplate.query(query, new Object[]{id}, mapper);
+		// When
+		bean = companyDAO.getById(id);
+		// Then
+		expectedBean = results.isEmpty() ? null : results.get(0);
+		Assert.assertNotNull("Erreur sur le bean.", bean);
+		Assert.assertEquals("Erreur sur le bean.", expectedBean, bean);
 	}
 	
 	@Test
@@ -97,22 +72,11 @@ public class CompanyDAOTest {
 	@Test
 	public void getAllShouldReturnMultipleBeans() throws SQLException {
 		// Given
-		List<Company> bean;
-		List<Company> expectedBeans = new ArrayList<>();
 		int limit = 15;
 		int offset = 5;
 		String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
-		ResultSet results;
-
-		PreparedStatement ps = con.prepareStatement(query);
-		int paramIndex = 0;
-		ps.setLong(++paramIndex, limit);
-		ps.setLong(++paramIndex, offset);
-		results = ps.executeQuery();
-		while (results.next()) {
-			expectedBeans.add(mapper.mapRow(results, 0));
-		}
-		ps.close();
+		List<Company> bean;
+		List<Company> expectedBeans = jdbcTemplate.query(query, new Object[]{limit, offset}, mapper);
 		// When
 		bean = companyDAO.getAll(limit, offset);
 		// Then
@@ -124,15 +88,10 @@ public class CompanyDAOTest {
 		// Given
 		int nbLines;
 		String query = "SELECT COUNT(*) FROM company;";
-		PreparedStatement ps = con.prepareStatement(query);
-		ResultSet results = ps.executeQuery();
-		if (results.next()) {
-			int expectedSize = results.getInt(1);
-			ps.close();
-			// When
-			nbLines = companyDAO.countLines();
-			// Then
-			Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
-		}
+		int expectedSize = jdbcTemplate.queryForObject(query, Integer.class);
+		// When
+		nbLines = companyDAO.countLines();
+		// Then
+		Assert.assertEquals("Erreur sur le bean", expectedSize, nbLines);
 	}
 }

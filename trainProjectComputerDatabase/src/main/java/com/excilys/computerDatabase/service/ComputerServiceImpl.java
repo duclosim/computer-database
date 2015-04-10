@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.model.UserInputsValidator;
 import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
@@ -33,8 +32,6 @@ public class ComputerServiceImpl implements ComputerService {
 	private ComputerDAO dao;
 	@Autowired
 	private ComputerDTOMapper dtoMapper;
-	@Autowired
-	private ConnectionFactory connectionFactory;
 	
 	@Override
 	public ComputerDTO getById(Long id) {

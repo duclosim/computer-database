@@ -10,11 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.apache.commons.dbcp2.ConnectionFactory;
 import org.dbunit.IDatabaseTester;
 
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
-
-
+// TODO finir de mettre en place la bdd de test.
 public class DBUtils {
     private static final String CONFIG_TEST = "db.properties";
     private static final String SQL_SCHEMA_FILE = "1-SCHEMA.sql";

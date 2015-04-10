@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.ConnectionFactory;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
@@ -31,8 +30,6 @@ public class CompanyServiceImpl implements CompanyService {
 	private CompanyDAO dao;
 	@Autowired
 	private ComputerDAO computerDAO;
-	@Autowired
-	private ConnectionFactory connectionFactory;
 	
 	@Override
 	public Company getById(Long id) {
@@ -139,8 +136,6 @@ public class CompanyServiceImpl implements CompanyService {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();
 			throw new PersistenceException("Suppression impossible dans la bdd.");
-		} finally {
-			connectionFactory.closeConnection();
 		}
 	}
 }
