@@ -46,11 +46,14 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
-		LOG.info("getByNameOrCompanyName(" + name + ")");
-		List<ComputerDTO> result = null;
+	public List<ComputerDTO> getAll(int limit, int offset) {
+		LOG.info(new StringBuilder("getAll(")
+			.append(limit).append(", ")
+			.append(offset).append(")")
+			.toString());
+		List<ComputerDTO> result = new ArrayList<>();
 		try {
-			result = ComputerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
+			result = ComputerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -60,14 +63,11 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public List<ComputerDTO> getAll(int limit, int offset) {
-		LOG.info(new StringBuilder("getAll(")
-			.append(limit).append(", ")
-			.append(offset).append(")")
-			.toString());
-		List<ComputerDTO> result = new ArrayList<>();
+	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
+		LOG.info("getByNameOrCompanyName(" + name + ")");
+		List<ComputerDTO> result = null;
 		try {
-			result = ComputerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
+			result = ComputerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();

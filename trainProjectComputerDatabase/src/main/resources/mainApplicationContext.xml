@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/tx/spring-tx.xsd        
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
-
+	<!-- Component scan -->
 	<context:component-scan base-package="com.excilys.computerDatabase.model.beans" />
 	<context:component-scan base-package="com.excilys.computerDatabase.model.dto" />
 	<context:component-scan
@@ -16,9 +16,9 @@
 	<context:component-scan base-package="com.excilys.computerDatabase.persistence.dao" />
 	<context:component-scan base-package="com.excilys.computerDatabase.service" />
 	<context:component-scan base-package="com.excilys.computerDatabase.model.page" />
-	<context:property-placeholder location="classpath:db.properties" />
-
+	
 	<context:annotation-config />
+	<context:property-placeholder location="classpath:db.properties" />
 
 	<beans>
 		<!-- JDBC Data Source for MySQL Database -->
@@ -28,6 +28,7 @@
 		<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 			<property name="dataSource" ref="dataSource" />
 		</bean>
+		<!-- Transactions -->
 		<bean id="transactionManager"
 			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 			<property name="dataSource" ref="dataSource" />

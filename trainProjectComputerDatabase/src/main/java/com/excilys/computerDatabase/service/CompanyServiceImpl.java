@@ -48,11 +48,6 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		return result;
 	}
-
-	@Override
-	public List<Company> getFiltered(String name, int limit, int offset) {
-		throw new UnsupportedOperationException();
-	}
 	
 	@Override
 	public List<Company> getAll() {
@@ -70,24 +65,12 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public List<Company> getAll(int limit, int offset) {
-		LOG.info("getAll(" + limit + ", " + offset + ")");
-		if (limit <= 0) {
-			LOG.error("limit est négatif ou nul.");
-			throw new IllegalArgumentException("limit est négatif ou nul.");
-		}
-		if (offset < 0) {
-			LOG.error("offset est négatif.");
-			throw new IllegalArgumentException("offset est négatif.");
-		}
-		List<Company> result = null;
-		try {
-			result = companyDao.getAll(limit, offset);
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
-		return result;
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<Company> getFiltered(String name, int limit, int offset) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
