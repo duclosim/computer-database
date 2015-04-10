@@ -21,6 +21,7 @@ public class ComputerDatabaseCLI {
 		Scanner sc = new Scanner(System.in);
 		boolean terminated = false;
 		System.out.println("Bienvenue sur le CLI de Computer Database.");
+		@SuppressWarnings("resource")
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("./mainApplicationContext.xml");
 		CLIService cliService = (CLIService) ctx.getBean(CLIService.class);
         while(sc.hasNextLine() && !terminated) {
