@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.userInterface;
+package com.excilys.computerDatabase.cli;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.excilys.computerDatabase.service.cli.CLIService;
 
 /**
  * Cette classe lit les commandes entrées en ligne de commande et les exécute.
@@ -23,7 +21,7 @@ public class ComputerDatabaseCLI {
 		Scanner sc = new Scanner(System.in);
 		boolean terminated = false;
 		System.out.println("Bienvenue sur le CLI de Computer Database.");
-		ApplicationContext ctx = new ClassPathXmlApplicationContext("./applicationContext.xml");
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("./mainApplicationContext.xml");
 		CLIService cliService = (CLIService) ctx.getBean(CLIService.class);
         while(sc.hasNextLine() && !terminated) {
         	terminated = cliService.interpretCommand(sc.next(), sc);

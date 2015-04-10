@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model;
+package com.excilys.computerDatabase.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

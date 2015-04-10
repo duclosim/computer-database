@@ -1,7 +1,9 @@
-package com.excilys.computerDatabase.model;
+package com.excilys.computerDatabase.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.excilys.computerDatabase.utils.UserInputsValidator;
 
 public class ValidatorTest {
 	@Test

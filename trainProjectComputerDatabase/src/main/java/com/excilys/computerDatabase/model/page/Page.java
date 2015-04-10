@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model;
+package com.excilys.computerDatabase.model.page;
 
 import java.util.List;
 
@@ -7,10 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.utils.UserInputsValidator;
 
 @Component
 public class Page {
@@ -22,7 +23,7 @@ public class Page {
 	public static final int DEFAULT_PAGE_NUM = 1;
 	
 	@Autowired
-	private ComputerServiceImpl service;
+	private ComputerService service;
 	private int maxNbItemsByPage;
 	private int pageNum;
     
@@ -65,7 +66,7 @@ public class Page {
 	}
 	
 	// Requetes
-	public ComputerServiceImpl getService() {
+	public ComputerService getService() {
 		return service;
 	}
 	public List<ComputerDTO> getEntities() {
@@ -121,7 +122,7 @@ public class Page {
 	}
 	
 	// Commandes
-	public void setService(ComputerServiceImpl service) {
+	public void setService(ComputerService service) {
 		this.service = service;
 	}
 	public void setSearchedName(String searchedName) {

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service.dto;
+package com.excilys.computerDatabase.model.dto;
 
 import java.time.LocalDate;
 import java.util.List;

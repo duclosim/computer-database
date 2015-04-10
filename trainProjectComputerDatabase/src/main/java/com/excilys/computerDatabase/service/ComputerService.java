@@ -1,13 +1,13 @@
 package com.excilys.computerDatabase.service;
 
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
 
 /**
  * 
  * @author excilys
  *
  */
-public interface ComputerService extends PageableService<ComputerDTO> {
+public interface ComputerService extends CRUDService<ComputerDTO> {
 	
 	/**
 	 * 

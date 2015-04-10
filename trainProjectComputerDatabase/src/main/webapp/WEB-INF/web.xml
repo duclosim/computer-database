@@ -8,13 +8,7 @@
 	<!-- Spring container configuration -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
-	</context-param>
-
-	<!-- Active Spring profile -->
-	<context-param>
-		<param-name>spring.profiles.active</param-name>
-		<param-value>DEV</param-value>
+		<param-value>classpath:mainApplicationContext.xml</param-value>
 	</context-param>
 
 	<listener>

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service.cli;
+package com.excilys.computerDatabase.cli;
 
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
+import com.excilys.computerDatabase.model.page.Page;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 /**
  * Cette classe représente l'interpréteur et invocateur de commandes.

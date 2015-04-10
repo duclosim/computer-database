@@ -27,7 +27,7 @@ public class CompanyServiceImpl implements CompanyService {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
 	
 	@Autowired
-	private CompanyDAO dao;
+	private CompanyDAO companyDao;
 	@Autowired
 	private ComputerDAO computerDAO;
 	
@@ -40,7 +40,7 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		Company result = null;
 		try {
-			result = dao.getById(id);
+			result = companyDao.getById(id);
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -59,7 +59,7 @@ public class CompanyServiceImpl implements CompanyService {
 		LOG.info("getAll()");
 		List<Company> result = null;
 		try {
-			result = dao.getAll();
+			result = companyDao.getAll();
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		List<Company> result = null;
 		try {
-			result = dao.getAll(limit, offset);
+			result = companyDao.getAll(limit, offset);
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -107,7 +107,7 @@ public class CompanyServiceImpl implements CompanyService {
 		LOG.info("countLines()");
 		int result = 0;
 		try {
-			result = dao.countLines();
+			result = companyDao.countLines();
 		} catch (SQLException e) {
 			LOG.error("Lecture impossible dans la bdd.");
 			e.printStackTrace();
@@ -131,7 +131,7 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		try {
 			computerDAO.deleteByCompanyId(company.getId());
-			dao.delete(company);
+			companyDao.delete(company);
 		} catch (SQLException e) {
 			LOG.error("Suppression impossible dans la bdd.");
 			e.printStackTrace();

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +17,7 @@ import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 @Transactional(rollbackFor = SQLException.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
-@ActiveProfiles("DEV")
+@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class CompanyDAOTest {
 	@Autowired
 	private CompanyDAOImpl companyDAO;

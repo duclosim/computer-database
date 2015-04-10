@@ -6,7 +6,7 @@ import java.util.List;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 
-public interface PageableService<T> {
+public interface CRUDService<T> {
 
 	/**
 	 * 

@@ -13,18 +13,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 // TODO enlever @Ignore
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
-@ActiveProfiles("DEV")
+@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class WebUserInterfaceTest {
 	private WebDriver driver;
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";

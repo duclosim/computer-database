@@ -9,7 +9,7 @@ import java.util.List;
  * @author excilys
  *
  */
-public interface CompanyService extends PageableService<Company> {
+public interface CompanyService extends CRUDService<Company> {
 	
 	/**
 	 * 

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service.cli;
+package com.excilys.computerDatabase.cli;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -11,13 +11,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
-@ActiveProfiles("DEV")
+@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class CLIServiceTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();

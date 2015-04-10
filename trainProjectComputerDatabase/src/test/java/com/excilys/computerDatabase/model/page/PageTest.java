@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model;
+package com.excilys.computerDatabase.model.page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
-import com.excilys.computerDatabase.service.dto.ComputerDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
-@ActiveProfiles("DEV")
+@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class PageTest {
 	private static final int DEFAULT_LIMIT = 10;
 	private static final int DEFAULT_OFFSET = 2;
@@ -54,7 +52,7 @@ public class PageTest {
 		// GIVEN
 		int newLimit = 10;
 		int newOffset = (page.getPageNum() - 1) * newLimit;
-		int expectedLastPageNb = (service.countAllLines() - newOffset) / newLimit + 1;
+		int expectedLastPageNb = service.countAllLines() / newLimit + 1;
 		List<ComputerDTO> expectedEntities = new ArrayList<>(service.getAll(newLimit, newOffset));
 		if (expectedEntities.size() % newLimit != 0) {
 			++expectedLastPageNb;
