@@ -1,8 +1,11 @@
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="computerDatabase.mainTitle" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 	<%@ include file="/WEB-INF/partials/includeCSS.jsp" %>
 <body>
 	<%@ include file="/WEB-INF/partials/header.jsp" %>
@@ -10,7 +13,7 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 403: Access denied! <br />
+				<spring:message code="403.message" /><br />
 				<!-- stacktrace -->
 			</div>
 		</div>

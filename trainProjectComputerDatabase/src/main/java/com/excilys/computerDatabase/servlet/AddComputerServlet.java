@@ -71,7 +71,7 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		computerDTO.setCompanyId(companyId);
 		computerService.create(computerDTO);
 		
-		req.setAttribute("validMessage", "Computer successfully updated : " + computerDTO.toString());
+		req.setAttribute("validMessage", "Computer successfully added : " + computerDTO.toString());
 		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
 	}
 }

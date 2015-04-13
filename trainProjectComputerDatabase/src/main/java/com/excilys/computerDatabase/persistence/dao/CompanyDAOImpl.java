@@ -37,11 +37,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	public Company getById(Long id) {
 		LOG.info("getById(" + id + ")");
 		List<Company> result = jdbcTemplate.query(GET_BY_ID, new Object[]{id}, mapper);
-		if (result.isEmpty()) {
-			return null;
-		} else {
-			return result.get(0);
-		}
+		return result.isEmpty() ? null : result.get(0);
 	}
 	
 	@Override

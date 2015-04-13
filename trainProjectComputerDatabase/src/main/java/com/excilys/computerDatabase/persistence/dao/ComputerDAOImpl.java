@@ -60,11 +60,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	public Computer getById(Long id) {
 		LOG.info("getById(" + id + ")");
 		List<Computer> result = jdbcTemplate.query(GET_BY_ID, new Object[]{id}, mapper);
-		if (result.isEmpty()) {
-			return null;
-		} else {
-			return result.get(0);
-		}
+		return result.isEmpty() ? null : result.get(0);
 	}
 
 	@Override

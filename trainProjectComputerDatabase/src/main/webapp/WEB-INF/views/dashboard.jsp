@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="p" %>
     
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="computerDatabase.mainTitle" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 	<%@ include file="/WEB-INF/partials/includeCSS.jsp" %>
@@ -21,15 +22,14 @@
 				<div class="pull-left">
 					<form id="searchForm" action="" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="search.placeholder" />" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="search.button" />"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="addMode.button" /></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message code="editMode.button" /></a>
 				</div>
 			</div>
 		</div>
@@ -51,7 +51,7 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name
+						<th><spring:message code="column.computerName" />
 							<a id="orderByComputerNameAsc" href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.name" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
@@ -60,7 +60,7 @@
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Introduced date -->
-						<th>Introduced date
+						<th><spring:message code="column.introduced" />
 							<a id="orderByIntroducedAsc" href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.introduced" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
@@ -69,7 +69,7 @@
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date
+						<th><spring:message code="column.discontinued" />
 							<a id="orderByDiscontinuedAsc" href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.discontinued" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
@@ -78,7 +78,7 @@
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-down"/></i></a>
 						</th>
 						<!-- Table header for Company -->
-						<th>Company
+						<th><spring:message code="column.company" />
 							<a id="orderByCompanyNameAsc" href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="company.name" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>" onclick=""><i class="fa fa-long-arrow-up"/></i></a>
