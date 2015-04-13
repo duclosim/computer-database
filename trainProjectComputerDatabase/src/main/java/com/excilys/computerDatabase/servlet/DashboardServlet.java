@@ -1,85 +1,64 @@
 package com.excilys.computerDatabase.servlet;
 
-import java.io.IOException;
 import java.util.StringTokenizer;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.model.page.Page;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.utils.UserInputsValidator;
 
-@WebServlet("/dashboard")
-public class DashboardServlet extends HttpServlet implements Servlet {
+@Controller
+@RequestMapping("/dashboard")
+public class DashboardServlet {
 	private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
-	private static final long serialVersionUID = -5526661127455358108L;
-	
+
 	@Autowired
-	private ComputerServiceImpl service;
+	private ComputerService service;
 	@Autowired
 	private Page page;
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		LOG.info("init(" + config + ")");
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+
+	@RequestMapping(method = RequestMethod.GET)
+	public String get(@RequestParam(value = "pageNum", required = false) Integer numParam,
+			@RequestParam(value = "itemByPage", required = false) Integer maxItemPageParam,
+			@RequestParam(value = "column", required = false) String computerColumnStr,
+			@RequestParam(value = "orderWay", required = false) String orderWayStr,
+			@RequestParam(value = "search", required = false) String searchedName,
+			Model model) {
 		LOG.info(new StringBuilder("doGet(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
-		if (req.getParameterMap().values().isEmpty()) {
-			page.setColumn(null);
-			page.setSearchedName(null);
-			page.setWay(null);
-		}
+			.append(numParam).append(", ")
+			.append(maxItemPageParam).append(", ")
+			.append(computerColumnStr).append(", ")
+			.append(orderWayStr).append(", ")
+			.append(searchedName).append(", ")
+			.append(model).append(")").toString());
 		// Numéro de page.
-		String numParam = req.getParameter("pageNum");
 		int newPageNum = Page.DEFAULT_PAGE_NUM;
 		if (numParam != null) {
-			if (!UserInputsValidator.isValidNumber(numParam)) {
-				numParam = null;
-			} else {
-				newPageNum = Integer.parseInt(numParam);
-			}
+			newPageNum = numParam;
 		}
 		if (page.getPageNum() != newPageNum) {
 			page.setPageNum(newPageNum);
 		}
 		// Nombre d'objets par page.
-		String maxItemPageParam = req.getParameter("itemByPage");
 		int newItemByPage = Page.DEFAULT_LIMIT;
 		if (maxItemPageParam != null) {
-			if (!UserInputsValidator.isValidNumber(maxItemPageParam)) {
-				maxItemPageParam = null;
-			} else {
-				newItemByPage = Integer.parseInt(maxItemPageParam);
-			}
+			newItemByPage = maxItemPageParam;
 		}
 		if (page.getMaxNbItemsByPage() != newItemByPage) {
 			page.setMaxNbItemsByPage(newItemByPage);
 		}
 		// Tri
-		String computerColumnStr = req.getParameter("column");
-		String orderWayStr = req.getParameter("orderWay");
 		ComputerColumn column = null;
 		OrderingWay way = null;
 		if (UserInputsValidator.isValidString(computerColumnStr)
@@ -108,34 +87,28 @@ public class DashboardServlet extends HttpServlet implements Servlet {
 			page.setWay(way);
 		}
 		// Recherche sur le nom.
-		String searchedName = req.getParameter("search");
 		if (UserInputsValidator.isValidString(searchedName)) {
 			page.setSearchedName(searchedName);
 		}
 		// Passage des paramètres de la page dans la requête.
-		req.setAttribute("page", page);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
+		model.addAttribute("page", page);
+		return "dashboard";
 	}
-	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+
+	@RequestMapping(method = RequestMethod.POST)
+	public void delete(@RequestParam("selection") String selectedComputersId, 
+			Model model) {
 		LOG.info(new StringBuilder("doPost(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
-		String selectedComputersId = req.getParameter("selection");
-		if (selectedComputersId == null) {
-			req.setAttribute("page", page);
-			getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
-			return;
+			.append(selectedComputersId).append(", ")
+			.append(model).append(")").toString());
+		if (selectedComputersId != null) {
+			StringTokenizer st = new StringTokenizer(selectedComputersId, ",");
+			while (st.hasMoreTokens()) {
+				ComputerDTO deleteDTO = new ComputerDTO();
+				deleteDTO.setId(st.nextToken());
+				service.delete(deleteDTO);
+			}
 		}
-		StringTokenizer st = new StringTokenizer(selectedComputersId, ",");
-		while (st.hasMoreTokens()) {
-			ComputerDTO deleteDTO = new ComputerDTO();
-			deleteDTO.setId(st.nextToken());
-			service.delete(deleteDTO);
-		}
-		req.setAttribute("page", page);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
+		model.addAttribute("page", page);
 	}
 }

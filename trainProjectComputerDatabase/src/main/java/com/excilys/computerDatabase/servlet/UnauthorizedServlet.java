@@ -3,29 +3,15 @@ package com.excilys.computerDatabase.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@WebServlet("/403")
-public class UnauthorizedServlet extends HttpServlet implements Servlet {
+@RequestMapping("/403")
+public class UnauthorizedServlet {
 	private static final Logger LOG = LoggerFactory.getLogger(UnauthorizedServlet.class);
 
-	private static final long serialVersionUID = -2760351849206909874L;
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		LOG.info(new StringBuilder("doGet(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
-		getServletContext().getRequestDispatcher("/WEB-INF/views/403.jsp").forward(req, resp);
+	public String get() {
+		LOG.info("get()");
+		return "403";
 	}
 }

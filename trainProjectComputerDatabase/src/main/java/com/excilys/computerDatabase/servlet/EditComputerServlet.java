@@ -1,67 +1,58 @@
 package com.excilys.computerDatabase.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.ComputerService;
 
-@WebServlet("/editComputer")
-public class EditComputerServlet extends HttpServlet implements Servlet {
+@Controller
+@RequestMapping("/editComputer")
+public class EditComputerServlet {
 	private static final Logger LOG = LoggerFactory.getLogger(EditComputerServlet.class);
-	private static final long serialVersionUID = 423648038487626720L;
 	
 	@Autowired
-	private CompanyServiceImpl companyService;
+	private CompanyService companyService;
 	@Autowired
-	private ComputerServiceImpl computerService;
+	private ComputerService computerService;
+	@Autowired
+	private MessageSource messageSource;
+	
 	private ComputerDTO computer;
+	private final String VALID_MESSAGE = "";//messageSource.getMessage("editComputer.validMessage", new Object[]{}, null);
 	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		LOG.info("init(" + config + ")");
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		LOG.info(new StringBuilder("doGet(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
-		req.setAttribute("companies", companyService.getAll());
-		String beanIdStr = req.getParameter("beanId");
-		Long id = Long.parseLong(beanIdStr);
+	@RequestMapping(method = RequestMethod.GET)
+	public String get(@RequestParam("beanId") Long id, Model model) {
+		LOG.info(new StringBuilder("get(")
+			.append(id).append(", ")
+			.append(model).append(")").toString());
 		computer = computerService.getById(id);
 		
-		req.setAttribute("computerBean", computer);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(req, resp);
+		model.addAttribute("companies", companyService.getAll());
+		model.addAttribute("computerBean", computer);
+		return "addComputer";
 	}
 	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		LOG.info(new StringBuilder("doPost(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
-		computer.setName(req.getParameter("computerName"));
-		String introducedDate = req.getParameter("introduced");
-		String discontinuedDate = req.getParameter("discontinued");
-		String companyId = req.getParameter("companyId");
+	@RequestMapping(method = RequestMethod.POST)
+	public void editComputer(@RequestParam(value = "computerName", required = true) String name, 
+			@RequestParam(value = "introduced", required = false) String introducedDate, 
+			@RequestParam(value = "discontinued", required = false) String discontinuedDate, 
+			@RequestParam(value = "companyId", required = false) String companyId, 
+			Model model) {
+		LOG.info(new StringBuilder("editComputer(")
+			.append(name).append(", ")
+			.append(introducedDate).append(", ")
+			.append(discontinuedDate).append(", ")
+			.append(companyId).append(", ")
+			.append(model).append(")").toString());
 		if (introducedDate != null && introducedDate.trim().isEmpty()) {
 			introducedDate = null;
 		}
@@ -71,13 +62,13 @@ public class EditComputerServlet extends HttpServlet implements Servlet {
 		if (companyId != null && companyId.trim().isEmpty()) {
 			companyId = null;
 		}
+		computer.setName(name);
 		computer.setIntroducedDate(introducedDate);
 		computer.setDiscontinuedDate(discontinuedDate);
 		computer.setCompanyId(companyId);
 		computerService.update(computer);
 		
-		req.setAttribute("validMessage", "Computer successfully updated.");
-		req.setAttribute("computerBean", computer);
-		getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(req, resp);
+		model.addAttribute("validMessage", VALID_MESSAGE);
+		model.addAttribute("computerBean", computer);
 	}
 }

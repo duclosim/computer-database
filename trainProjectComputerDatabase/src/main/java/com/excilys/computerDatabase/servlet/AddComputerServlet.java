@@ -1,62 +1,53 @@
 package com.excilys.computerDatabase.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.service.CompanyServiceImpl;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.ComputerService;
 
-@WebServlet("/addComputer")
-public class AddComputerServlet extends HttpServlet implements Servlet {
+@Controller
+@RequestMapping("/addComputer")
+public class AddComputerServlet {
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
+	@Autowired
+	private MessageSource messageSource;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(AddComputerServlet.class);
-	private static final long serialVersionUID = 6902766188799864148L;
-	
-	@Autowired
-	private CompanyServiceImpl companyService;
-	@Autowired
-	private ComputerServiceImpl computerService;
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		LOG.trace("init(" + config + ")");
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	private final String VALID_MESSAGE = "";//messageSource.getMessage("addComputer.validMessage", new Object[]{}, null);
+
+	@RequestMapping(method = RequestMethod.GET)
+	public String get(Model model) {
+		LOG.trace(new StringBuilder("get()").toString());
+		model.addAttribute("companies", companyService.getAll());
+		return "addComputer";
 	}
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		LOG.trace(new StringBuilder("doGet(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
-		req.setAttribute("companies", companyService.getAll());
-		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		LOG.trace(new StringBuilder("doPost(")
-			.append(req).append(", ")
-			.append(resp).append(")").toString());
+
+	@RequestMapping(method = RequestMethod.POST)
+	public void createComputer(@RequestParam(value = "computerName", required = true) String name, 
+			@RequestParam(value = "introduced", required = false) String introducedDate, 
+			@RequestParam(value = "discontinued", required = false) String discontinuedDate, 
+			@RequestParam(value = "companyId", required = false) String companyId, 
+			Model model) {
+		LOG.trace(new StringBuilder("createComputer(")
+			.append(name).append(", ")
+			.append(introducedDate).append(", ")
+			.append(discontinuedDate).append(", ")
+			.append(companyId).append(", ")
+			.append(model).append(")").toString());
 		ComputerDTO computerDTO = new ComputerDTO();
-		computerDTO.setName(req.getParameter("computerName"));
-		String introducedDate = req.getParameter("introduced");
-		String discontinuedDate = req.getParameter("discontinued");
-		String companyId = req.getParameter("companyId");
+		computerDTO.setName(name);
 		if (introducedDate != null && introducedDate.trim().isEmpty()) {
 			introducedDate = null;
 		}
@@ -71,7 +62,6 @@ public class AddComputerServlet extends HttpServlet implements Servlet {
 		computerDTO.setCompanyId(companyId);
 		computerService.create(computerDTO);
 		
-		req.setAttribute("validMessage", "Computer successfully added : " + computerDTO.toString());
-		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(req, resp);
+		model.addAttribute("validMessage", VALID_MESSAGE + computerDTO.toString());
 	}
 }
