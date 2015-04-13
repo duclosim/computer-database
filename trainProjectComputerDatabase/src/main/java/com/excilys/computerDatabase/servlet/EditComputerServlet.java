@@ -38,7 +38,7 @@ public class EditComputerServlet {
 		
 		model.addAttribute("companies", companyService.getAll());
 		model.addAttribute("computerBean", computer);
-		return "addComputer";
+		return "editComputer";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

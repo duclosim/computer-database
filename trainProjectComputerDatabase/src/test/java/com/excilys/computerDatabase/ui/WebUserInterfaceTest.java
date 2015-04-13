@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.service.ComputerServiceImpl;
 
-// TODO enlever @Ignore
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")

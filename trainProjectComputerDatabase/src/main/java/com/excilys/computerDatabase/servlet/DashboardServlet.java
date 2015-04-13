@@ -83,12 +83,14 @@ public class DashboardServlet {
 			if (ow.getWay().equals(orderWayStr)) {
 				way = ow;
 			}
-			page.setColumn(column);
-			page.setWay(way);
 		}
+		page.setColumn(column);
+		page.setWay(way);
 		// Recherche sur le nom.
 		if (UserInputsValidator.isValidString(searchedName)) {
 			page.setSearchedName(searchedName);
+		} else {
+			page.setSearchedName(null);
 		}
 		// Passage des paramètres de la page dans la requête.
 		model.addAttribute("page", page);

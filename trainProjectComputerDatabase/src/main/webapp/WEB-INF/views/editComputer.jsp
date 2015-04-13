@@ -31,19 +31,19 @@
 								<label for="computerName"><spring:message code="addComputer.name" /></label> <input
 									type="text" class="form-control" id="computerName"
 									name="computerName"
-									placeholder="Computer name" value="${computerBean.name}">
+									placeholder="<spring:message code="addComputer.name.placeholder" />" value="${computerBean.name}">
 							</div>
 							<div class="form-group">
 								<label for="introduced"><spring:message code="addComputer.introduced" /></label> <input
 									type="date" class="form-control" id="introduced"
 									name="introduced"
-									placeholder="Introduced date" value="${computerBean.introducedDate}">
+									placeholder="<spring:message code="addComputer.introduced.placeholder" />" value="${computerBean.introducedDate}">
 							</div>
 							<div class="form-group">
 								<label for="discontinued"><spring:message code="addComputer.discontinued" /></label> <input
 									type="date" class="form-control" id="discontinued"
 									name="discontinued"
-									placeholder="Discontinued date" value="${computerBean.discontinuedDate}">
+									placeholder="<spring:message code="addComputer.discontinued.placeholder" />" value="${computerBean.discontinuedDate}">
 							</div>
 							<div class="form-group">
 								<label for="companyId"><spring:message code="addComputer.company" /></label>
