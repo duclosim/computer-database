@@ -13,6 +13,7 @@
 	
 	<import resource="classpath:mainApplicationContext.xml" />
 	<context:component-scan base-package="com.excilys.computerDatabase.servlet" />
+	<context:annotation-config />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -22,7 +23,8 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
- 	 
- 	<mvc:default-servlet-handler/>
- 	<mvc:annotation-driven/>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+ 	<mvc:default-servlet-handler />
+ 	<mvc:annotation-driven />
 </beans>
