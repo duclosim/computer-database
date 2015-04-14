@@ -65,10 +65,10 @@ public class ComputerDTOMapper {
 		dto.setCompanyId(null);
 		dto.setCompanyName(null);
 		if (bean.getIntroducedDate() != null) {
-			dto.setIntroducedDate(bean.getIntroducedDate().toString());
+			dto.setIntroducedDate(bean.getIntroducedDate().toLocalDate().toString());
 		}
 		if (bean.getDiscontinuedDate() != null) {
-			dto.setDiscontinuedDate(bean.getDiscontinuedDate().toString());
+			dto.setDiscontinuedDate(bean.getDiscontinuedDate().toLocalDate().toString());
 		}
 		if (bean.getCompany() != null) {
 			dto.setCompanyId(bean.getCompany().getId().toString());

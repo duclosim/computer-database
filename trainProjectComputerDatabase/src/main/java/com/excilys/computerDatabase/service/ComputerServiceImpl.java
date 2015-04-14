@@ -168,7 +168,8 @@ public class ComputerServiceImpl implements ComputerService {
 		LOG.info("update(" + computer + ")");
 		checkComputerDTO(computer);
 		try {
-			computerDao.update(ComputerDTOMapper.DTOToBean(computer));
+			Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
+			computerDao.update(cmptrBean);
 		} catch (SQLException e) {
 			LOG.error("Ecriture impossible dans la bdd.");
 			e.printStackTrace();
@@ -179,13 +180,14 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public void delete(ComputerDTO computer) {
 		LOG.info("delete(" + computer + ")");
-		checkComputerDTO(computer);
-		try {
-			computerDao.delete(ComputerDTOMapper.DTOToBean(computer));
-		} catch (SQLException e) {
-			LOG.error("Suppression impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Suppression impossible dans la bdd.");
+		if (computer != null) {
+			try {
+				computerDao.delete(ComputerDTOMapper.DTOToBean(computer));
+			} catch (SQLException e) {
+				LOG.error("Suppression impossible dans la bdd.");
+				e.printStackTrace();
+				throw new PersistenceException("Suppression impossible dans la bdd.");
+			}
 		}
 	}
 	
@@ -199,17 +201,15 @@ public class ComputerServiceImpl implements ComputerService {
 		String discontinuedDate = computer.getDiscontinuedDate();
 		String companyIdStr = computer.getCompanyId();
 		// Test de l'objet.
-		if ((name != null) && (!UserInputsValidator.isValidString(name))) {
+		if ((name == null) || (!UserInputsValidator.isValidString(name))) {
 			LOG.error("Nom non valide.\n");
 			throw new IllegalArgumentException("Nom non valide.\n");
 		}
-		if ((introducedDate != null) 
-				&& (!UserInputsValidator.isValidDate(introducedDate))) {
+		if (!UserInputsValidator.isValidOrNullDate(introducedDate)) {
 			LOG.error("Date d'introduction non valide.\n");
 			throw new IllegalArgumentException("Date d'introduction non valide.\n");
 		}
-		if ((discontinuedDate != null) 
-				&& (!UserInputsValidator.isValidDate(discontinuedDate))) {
+		if (!UserInputsValidator.isValidOrNullDate(discontinuedDate)) {
 			LOG.error("Date de sortie non valide.\n");
 			throw new IllegalArgumentException("Date de sortie non valide.\n");
 		}

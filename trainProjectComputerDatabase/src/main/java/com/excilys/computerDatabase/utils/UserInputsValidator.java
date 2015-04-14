@@ -75,6 +75,18 @@ public class UserInputsValidator {
 		return result;
 	}
 	
+	public static String nullifyEmptyString(String str) {
+		if ((str == null) || (str.trim().isEmpty())) {
+			return null;
+		} else {
+			return str;
+		}
+	}
+	
+	public static boolean isValidOrNullDate(String date) {
+		return ((date == null) || (isValidDate(date)));
+	}
+	
 	private static boolean isBissextileYear(int y) {
 		LOG.info("isBissextileYear(" + y + ")");
 		return (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0));

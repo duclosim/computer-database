@@ -98,7 +98,7 @@ public class DashboardServlet {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void delete(@RequestParam("selection") String selectedComputersId, 
+	public String delete(@RequestParam("selection") String selectedComputersId, 
 			Model model) {
 		LOG.info(new StringBuilder("doPost(")
 			.append(selectedComputersId).append(", ")
@@ -106,11 +106,11 @@ public class DashboardServlet {
 		if (selectedComputersId != null) {
 			StringTokenizer st = new StringTokenizer(selectedComputersId, ",");
 			while (st.hasMoreTokens()) {
-				ComputerDTO deleteDTO = new ComputerDTO();
-				deleteDTO.setId(st.nextToken());
+				ComputerDTO deleteDTO = service.getById(Long.parseLong(st.nextToken()));
 				service.delete(deleteDTO);
 			}
 		}
 		model.addAttribute("page", page);
+		return "dashboard";
 	}
 }
