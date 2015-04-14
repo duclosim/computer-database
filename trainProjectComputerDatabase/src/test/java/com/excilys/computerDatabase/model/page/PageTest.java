@@ -1,8 +1,7 @@
 package com.excilys.computerDatabase.model.page;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
+import com.excilys.computerDatabase.service.ComputerServiceImpl;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
@@ -27,7 +26,7 @@ public class PageTest {
 	private Page page;
 	
 	@Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public final ExpectedException thrown = ExpectedException.none();
 	
 	@Test
 	public void constructorShouldSetTheLastPageNbAndCurrentPageNumAndEntities() {

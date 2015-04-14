@@ -1,10 +1,10 @@
 package com.excilys.computerDatabase.servlet;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.validation.Valid;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.dto.ComputerDTO;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.utils.UserInputsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.ComputerService;
-import com.excilys.computerDatabase.utils.UserInputsValidator;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/addComputer")
@@ -36,8 +34,8 @@ public class AddComputerServlet {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String get(Model model) {
-		LOG.info(new StringBuilder("get()").toString());
-		Map<Long, String> companies = new HashMap<Long, String>();
+		LOG.info("get()");
+		Map<Long, String> companies = new HashMap<>();
 		for (Company cmpny : companyService.getAll()) {
 			companies.put(cmpny.getId(), cmpny.getName());
 		}

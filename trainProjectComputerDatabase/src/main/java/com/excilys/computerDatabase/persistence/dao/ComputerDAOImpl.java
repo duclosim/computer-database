@@ -1,13 +1,7 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +11,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.
@@ -64,8 +59,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getAll(int limit, int offset) 
-			throws SQLException  {
+	public List<Computer> getAll(int limit, int offset) {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
@@ -96,7 +90,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	
 	@Override
 	public List<Computer> getOrdered(int limit, int offset, 
-			ComputerColumn column, OrderingWay way) throws SQLException  {
+			ComputerColumn column, OrderingWay way) {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
@@ -125,8 +119,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public List<Computer> getFilteredAndOrdered(int limit, int offset,
-			String name, ComputerColumn column, OrderingWay way) 
-				throws SQLException {
+			String name, ComputerColumn column, OrderingWay way) {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
@@ -210,10 +203,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		}
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(
-			new PreparedStatementCreator() {
-				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				connection -> {
 					PreparedStatement ps =
-							connection.prepareStatement(query.toString(), 
+							connection.prepareStatement(query.toString(),
 									Statement.RETURN_GENERATED_KEYS);
 					int paramIndex = 0;
 					ps.setString(++paramIndex, computer.getName());
@@ -223,8 +215,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 						ps.setLong(++paramIndex, computer.getCompany().getId());
 					}
 					return ps;
-				}
-			},
+				},
 			keyHolder);
 		computer.setId(keyHolder.getKey().longValue());
 	}
@@ -278,7 +269,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void delete(Computer computer) throws SQLException {
+	public void delete(Computer computer) {
 		LOG.info("delete(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
@@ -288,7 +279,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void deleteByCompanyId(Long companyId) throws SQLException {
+	public void deleteByCompanyId(Long companyId) {
 		LOG.info("deleteByCompanyId(" + companyId + ")");
 		jdbcTemplate.update(DELETE_BY_COMPANY_ID, companyId);
 	}

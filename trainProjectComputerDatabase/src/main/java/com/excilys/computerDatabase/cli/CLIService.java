@@ -1,19 +1,18 @@
 package com.excilys.computerDatabase.cli;
 
-import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.Scanner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.model.page.Page;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Cette classe représente l'interpréteur et invocateur de commandes.
@@ -21,7 +20,7 @@ import com.excilys.computerDatabase.service.ComputerService;
  *
  */
 @Component
-public class CLIService {
+class CLIService {
 	private static final String UNKNOWN_COMMAND = "Commande non reconnue.";
 	private static final Logger LOG = LoggerFactory.getLogger(CLIService.class);
 	
@@ -84,13 +83,13 @@ public class CLIService {
 		return isExit;
 	}
 	
-	public void getCompanies() {
+	private void getCompanies() {
 		LOG.info("getCompanies()");
 		List<Company> page = companyService.getAll();
 		System.out.println(page);
 	}
 	
-	public void getComputers(Scanner sc) {
+	private void getComputers(Scanner sc) {
 		LOG.info("getComputers(" + sc + ")");
 		System.out.println(page);
 		for (int k = 2; k < page.getLastPageNb(); ++k) {
@@ -100,7 +99,7 @@ public class CLIService {
 		}
 	}
 	
-	public void createComputer(Scanner sc) {
+	private void createComputer(Scanner sc) {
 		LOG.info("createComputer(" + sc + ")");
 		ComputerDTO computer = new ComputerDTO();
 		System.out.println("Nom du nouvel ordinateur : ");
@@ -132,7 +131,7 @@ public class CLIService {
 		computerService.create(computer);
 	}
 	
-	public void deleteCompany(Scanner sc) {
+	private void deleteCompany(Scanner sc) {
 		LOG.info("deleteCompany(" + sc + ")");
 		try {
 			System.out.println("Entrez l'id de la companie à supprimer : ");
@@ -146,7 +145,7 @@ public class CLIService {
 		}
 	}
 	
-	public void deleteComputer(Scanner sc) {
+	private void deleteComputer(Scanner sc) {
 		LOG.info("deleteComputer(" + sc + ")");
 		try {
 			System.out.println("Entrez l'id de l'ordinateur à supprimer : ");
@@ -160,7 +159,7 @@ public class CLIService {
 		}
 	}
 	
-	public void detailComputer(Scanner sc) {
+	private void detailComputer(Scanner sc) {
 		LOG.info("detailComputer(" + sc + ")");
 		try {
 			System.out.println("Entrez l'id de l'ordinateur recherché : ");
@@ -173,12 +172,12 @@ public class CLIService {
 		}
 	}
 	
-	public void exit() {
+	private void exit() {
 		LOG.info("exit()");
 		System.out.println("Fin du programme");
 	}
 	
-	public void updateComputer(Scanner sc) {
+	private void updateComputer(Scanner sc) {
 		LOG.info("updateComputer(" + sc + ")");
 		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
 		String args = sc.next();

@@ -1,17 +1,16 @@
 package com.excilys.computerDatabase.model.page;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.utils.UserInputsValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class Page {
@@ -64,7 +63,7 @@ public class Page {
 		this(DEFAULT_LIMIT, DEFAULT_OFFSET);
 		LOG.info("new Page()");
 	}
-	
+
 	// Requetes
 	public ComputerService getService() {
 		return service;
@@ -81,8 +80,8 @@ public class Page {
 	public int getPageNum() {
 		return pageNum;
 	}
-	public int getTotalNbEntities() {
-		int result = 0;
+	private int getTotalNbEntities() {
+		int result;
 		if (UserInputsValidator.isValidString(searchedName)) {
 			result = service.countFilteredLines(searchedName);
 		} else {
@@ -170,7 +169,7 @@ public class Page {
 	 */
 	private List<ComputerDTO> reloadEntities() {
 		LOG.info("reloadEntities()");
-		List<ComputerDTO> entities = null;
+		List<ComputerDTO> entities;
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();

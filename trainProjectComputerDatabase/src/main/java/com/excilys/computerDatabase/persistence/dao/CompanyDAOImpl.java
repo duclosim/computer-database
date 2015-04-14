@@ -1,16 +1,15 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import java.sql.SQLException;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Cette classe implémente CompanyDAO et utilise le design pattern Singleton.
@@ -41,38 +40,36 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 	
 	@Override
-	public List<Company> getAll(int limit, int offset) throws SQLException  {
+	public List<Company> getAll(int limit, int offset) {
 		LOG.info("getAll(" + limit + ", " + offset + ")");
 		return jdbcTemplate.query(GET_ALL_WITH_OFFSET, new Object[]{limit, offset}, mapper);
 	}
 	
 	@Override
-	public List<Company> getAll() throws SQLException  {
+	public List<Company> getAll() {
 		LOG.info("getAll()");
 		return jdbcTemplate.query(GET_ALL, mapper);
 	}
 
 	@Override
-	public List<Company> getFiltered(int limit, int offset, String name)
-			throws SQLException {
+	public List<Company> getFiltered(int limit, int offset, String name) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<Company> getOrdered(int limit, int offset,
-			ComputerColumn column, OrderingWay way) throws SQLException {
+			ComputerColumn column, OrderingWay way) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<Company> getFilteredAndOrdered(int limit, int offset,
-			String name, ComputerColumn column, OrderingWay way)
-			throws SQLException {
+			String name, ComputerColumn column, OrderingWay way) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int countLines() throws SQLException  {
+	public int countLines() {
 		LOG.info("countLine()");
 		return jdbcTemplate.queryForObject(COUNT, Integer.class);
 	}
@@ -90,7 +87,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public void delete(Company company) throws SQLException {
+	public void delete(Company company) {
 		LOG.info("delete(" + company + ")");
 		if (company == null) {
 			LOG.error("company est à null.");

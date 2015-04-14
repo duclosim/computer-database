@@ -4,9 +4,9 @@ public enum OrderingWay {
 	ASC("ASC"), 
 	DESC("DESC");
 	
-	private String way;
+	private final String way;
 	
-	private OrderingWay(String way) {
+	OrderingWay(String way) {
 		this.way = way;
 	}
 	

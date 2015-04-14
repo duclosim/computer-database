@@ -1,20 +1,19 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.PersistenceException;
 import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * 
@@ -38,28 +37,16 @@ public class CompanyServiceImpl implements CompanyService {
 			LOG.error("id est à null.");
 			throw new IllegalArgumentException("id est à null.");
 		}
-		Company result = null;
-		try {
-			result = companyDao.getById(id);
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		Company result;
+		result = companyDao.getById(id);
 		return result;
 	}
 	
 	@Override
 	public List<Company> getAll() {
 		LOG.info("getAll()");
-		List<Company> result = null;
-		try {
-			result = companyDao.getAll();
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		List<Company> result;
+		result = companyDao.getAll();
 		return result;
 	}
 
@@ -88,14 +75,8 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public int countAllLines() {
 		LOG.info("countLines()");
-		int result = 0;
-		try {
-			result = companyDao.countLines();
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		int result;
+		result = companyDao.countLines();
 		return result;
 	}
 
@@ -112,13 +93,7 @@ public class CompanyServiceImpl implements CompanyService {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");
 		}
-		try {
-			computerDAO.deleteByCompanyId(company.getId());
-			companyDao.delete(company);
-		} catch (SQLException e) {
-			LOG.error("Suppression impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Suppression impossible dans la bdd.");
-		}
+		computerDAO.deleteByCompanyId(company.getId());
+		companyDao.delete(company);
 	}
 }

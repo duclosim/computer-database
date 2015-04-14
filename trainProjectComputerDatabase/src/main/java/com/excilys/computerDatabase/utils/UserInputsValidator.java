@@ -26,7 +26,7 @@ public class UserInputsValidator {
 		int month = 0;
 		int year = 0;
 		StringTokenizer st = new StringTokenizer(date, "-");
-		String token = null;
+		String token;
 		if (st.hasMoreTokens()) {
 			token = st.nextToken();
 			if (!isValidNumber(token)) {

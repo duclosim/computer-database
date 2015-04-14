@@ -1,14 +1,5 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.model.dto.ComputerDTO;
 import com.excilys.computerDatabase.model.dto.ComputerDTOMapper;
@@ -17,6 +8,13 @@ import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 import com.excilys.computerDatabase.utils.UserInputsValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * 
@@ -34,14 +32,8 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public ComputerDTO getById(Long id) {
 		LOG.info("getById(" + id + ")");
-		ComputerDTO result = null;
-		try {
-			result = ComputerDTOMapper.BeanToDTO(computerDao.getById(id));
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		ComputerDTO result;
+		result = ComputerDTOMapper.BeanToDTO(computerDao.getById(id));
 		return result;
 	}
 
@@ -51,28 +43,16 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
-		List<ComputerDTO> result = new ArrayList<>();
-		try {
-			result = ComputerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		List<ComputerDTO> result;
+		result = ComputerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
 		return result;
 	}
 
 	@Override
 	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
 		LOG.info("getByNameOrCompanyName(" + name + ")");
-		List<ComputerDTO> result = null;
-		try {
-			result = ComputerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		List<ComputerDTO> result;
+		result = ComputerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
 		return result;
 	}
 	
@@ -85,15 +65,9 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		List<ComputerDTO> result = new ArrayList<>();
-		try {
-			result = ComputerDTOMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
-					column, way)));
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		List<ComputerDTO> result;
+		result = ComputerDTOMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
+				column, way)));
 		return result;
 	}
 
@@ -107,43 +81,25 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		List<ComputerDTO> result = new ArrayList<>();
-		try {
-			result = ComputerDTOMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
-					limit, offset, name, column, way)));
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		List<ComputerDTO> result;
+		result = ComputerDTOMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
+				limit, offset, name, column, way)));
 		return result;
 	}
 	
 	@Override
 	public int countAllLines() {
 		LOG.info("countLines()");
-		int result = 0;
-		try {
-			result = computerDao.countLines();
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		int result;
+		result = computerDao.countLines();
 		return result;
 	}
 
 	@Override
 	public int countFilteredLines(String name) {
 		LOG.info("countFilteredLines(" + name + ")");
-		int result = 0;
-		try {
-			result = computerDao.countFilteredLines(name);
-		} catch (SQLException e) {
-			LOG.error("Lecture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Lecture impossible dans la bdd.");
-		}
+		int result;
+		result = computerDao.countFilteredLines(name);
 		return result;
 	}
 
@@ -151,43 +107,24 @@ public class ComputerServiceImpl implements ComputerService {
 	public void create(ComputerDTO computer) {
 		LOG.info("create(" + computer + ")");
 		checkComputerDTO(computer);
-		try {
-			Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
-			computerDao.create(cmptrBean);
-			computer.setId(cmptrBean.getId().toString());
-		} catch (SQLException e) {
-			LOG.error("Ecriture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Ecriture impossible dans la bdd.");
-		}
-
+		Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
+		computerDao.create(cmptrBean);
+		computer.setId(cmptrBean.getId().toString());
 	}
 
 	@Override
 	public void update(ComputerDTO computer) {
 		LOG.info("update(" + computer + ")");
 		checkComputerDTO(computer);
-		try {
-			Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
-			computerDao.update(cmptrBean);
-		} catch (SQLException e) {
-			LOG.error("Ecriture impossible dans la bdd.");
-			e.printStackTrace();
-			throw new PersistenceException("Ecriture impossible dans la bdd.");
-		}
+		Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
+		computerDao.update(cmptrBean);
 	}
 
 	@Override
 	public void delete(ComputerDTO computer) {
 		LOG.info("delete(" + computer + ")");
 		if (computer != null) {
-			try {
-				computerDao.delete(ComputerDTOMapper.DTOToBean(computer));
-			} catch (SQLException e) {
-				LOG.error("Suppression impossible dans la bdd.");
-				e.printStackTrace();
-				throw new PersistenceException("Suppression impossible dans la bdd.");
-			}
+			computerDao.delete(ComputerDTOMapper.DTOToBean(computer));
 		}
 	}
 	

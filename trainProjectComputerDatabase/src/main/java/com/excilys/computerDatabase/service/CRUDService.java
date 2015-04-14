@@ -1,10 +1,10 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public interface CRUDService<T> {
 

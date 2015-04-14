@@ -1,8 +1,8 @@
 package com.excilys.computerDatabase.persistence.dao;
 
-import java.sql.SQLException;
-
 import com.excilys.computerDatabase.model.beans.Computer;
+
+import java.sql.SQLException;
 
 /**
  * Cette interface rassemble des méthodes d'accès à la table computer.
@@ -17,7 +17,7 @@ public interface ComputerDAO extends CRUDDao<Computer> {
 	 * @return
 	 * @throws SQLException 
 	 */
-	int countFilteredLines(String name) throws SQLException;
+	int countFilteredLines(String name);
 	
 	/**
 	 * Cette méthode supprime tous les computer avec un certain company_id.
@@ -25,5 +25,5 @@ public interface ComputerDAO extends CRUDDao<Computer> {
 	 *   comme company seront supprimés.
 	 * @throws SQLException 
 	 */
-	void deleteByCompanyId(Long companyId) throws SQLException;
+	void deleteByCompanyId(Long companyId);
 }

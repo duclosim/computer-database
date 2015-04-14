@@ -1,14 +1,12 @@
 package com.excilys.computerDatabase.model.dto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import org.junit.Assert;
-
-import org.junit.Test;
-
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 // TODO
 public class ComputerDTOMapperTest {

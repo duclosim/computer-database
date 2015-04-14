@@ -1,8 +1,7 @@
 package com.excilys.computerDatabase.service;
 
-import java.sql.SQLException;
-import java.util.List;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import java.sql.SQLException;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")

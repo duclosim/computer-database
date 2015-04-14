@@ -1,5 +1,8 @@
 package utils;
 
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.dbunit.IDatabaseTester;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.dbunit.IDatabaseTester;
-
 // TODO finir de mettre en place la bdd de test.
-public class DBUtils {
+class DBUtils {
     private static final String CONFIG_TEST = "db.properties";
     private static final String SQL_SCHEMA_FILE = "1-SCHEMA.sql";
     private static final String SQL_DATA_FILE = "3-ENTRIES.sql";
@@ -34,10 +34,10 @@ public class DBUtils {
     }
 
     public static IDatabaseTester databaseTester;
-    public static String jdbcDriver;
-    public static String jdbcUrl;
-    public static String user;
-    public static String password;
+    private static final String jdbcDriver;
+    private static final String jdbcUrl;
+    private static final String user;
+    private static final String password;
 
     /**
      * Execute the sql file.
@@ -67,7 +67,7 @@ public class DBUtils {
     	executeSqlFile(SQL_DATA_FILE, getConnection());
     }
 
-    public static Connection getConnection() throws IOException, SQLException {
+    private static Connection getConnection() throws IOException, SQLException {
         final Properties properties = new Properties();
         try (final InputStream is = ConnectionFactory.class
                 .getClassLoader().getResourceAsStream(CONFIG_TEST)) {

@@ -8,9 +8,9 @@ public enum ComputerColumn {
 	COMPANY_ID_COLUMN_LABEL("computer.company_id"),
 	COMPANY_NAME_COLUMN_LABEL("company.name");
 
-	private String columnName;
+	private final String columnName;
 	
-	private ComputerColumn(String columnName) {
+	ComputerColumn(String columnName) {
 		this.columnName = columnName;
 	}
 	

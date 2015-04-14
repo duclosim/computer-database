@@ -9,7 +9,7 @@ public interface CRUDDao<T> {
 	 * @param entity Le nouveau bean à enregsitrer.
 	 * @throws SQLException 
 	 */
-	void create(T entity) throws SQLException;
+	void create(T entity);
 	
 	/**
 	 * Cette méthode retourne un bean dont on a donné 
@@ -20,7 +20,7 @@ public interface CRUDDao<T> {
 	 *   à aucune ligne.
 	 * @throws SQLException 
 	 */
-	T getById(Long id) throws SQLException;
+	T getById(Long id);
 	
 	/**
 	 * Cette méthode retourne tout le contenu de la table 
@@ -30,7 +30,7 @@ public interface CRUDDao<T> {
 	 * @return La List de tous les beans.
 	 * @throws SQLException 
 	 */
-	List<T> getAll(int limit, int offset) throws SQLException;
+	List<T> getAll(int limit, int offset);
 	/**
 	 * 
 	 * @param limit
@@ -39,7 +39,7 @@ public interface CRUDDao<T> {
 	 * @return
 	 * @throws SQLException
 	 */
-	List<T> getFiltered(int limit, int offset, String name) throws SQLException;
+	List<T> getFiltered(int limit, int offset, String name);
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public interface CRUDDao<T> {
 	 * @throws SQLException
 	 */
 	List<T> getOrdered(int limit, int offset, ComputerColumn column,
-			OrderingWay way) throws SQLException;
+			OrderingWay way);
 	
 	/**
 	 * 
@@ -64,24 +64,24 @@ public interface CRUDDao<T> {
 	 * @throws SQLException
 	 */
 	List<T> getFilteredAndOrdered(int limit, int offset, String name,
-			ComputerColumn column, OrderingWay way) throws SQLException;
+			ComputerColumn column, OrderingWay way);
 	/**
 	 * Retourne le nombre de lignes dans la table.
 	 * @return Le nombre total de lignes dans la table.
 	 * @throws SQLException 
 	 */
-	int countLines() throws SQLException;
+	int countLines();
 	/**
 	 * Cette méthode enregistre les modifications apportées à un 
 	 *   bean dans la table.
 	 * @param entity Le bean dont on doit enregistrer les modifications.
 	 * @throws SQLException 
 	 */
-	void update(T entity) throws SQLException;
+	void update(T entity);
 	/**
 	 * Cette méthode supprime un bean de la table.
 	 * @param entity Le bean à supprimer.
 	 * @throws SQLException 
 	 */
-	void delete(T entity) throws SQLException;
+	void delete(T entity);
 }

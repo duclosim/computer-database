@@ -1,19 +1,18 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Component
 public class ComputerMapper implements RowMapper<Computer> {
@@ -26,7 +25,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 		if (rs == null) {
 			return null;
 		}
-		Computer computerBean = null;
+		Computer computerBean;
 		LocalDateTime introducedDate = null;
 		LocalDateTime discontinuedDate = null;
 		Company company = null;

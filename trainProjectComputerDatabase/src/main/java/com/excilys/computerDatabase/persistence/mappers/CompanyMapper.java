@@ -1,17 +1,16 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
-
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
 
 @Component
 public class CompanyMapper implements RowMapper<Company> {
@@ -33,10 +32,5 @@ public class CompanyMapper implements RowMapper<Company> {
 			throw new PersistenceException("Problème de lecture colonne");
 		}
 	}
-	
-	public Company mapRow(Map<String,Object> empRow) {
-		LOG.info("mapRow(" + empRow + ")");
-		return new Company(Long.parseLong(String.valueOf(empRow.get(CompanyDAO.ID_COLUMN_LABEL))),
-				String.valueOf(empRow.get(CompanyDAO.NAME_COLUMN_LABEL)));
-	}
+
 }
