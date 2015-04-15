@@ -1,7 +1,9 @@
 package com.excilys.computerDatabase.persistence.dao;
 
 import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.daos.CompanyDAOImpl;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

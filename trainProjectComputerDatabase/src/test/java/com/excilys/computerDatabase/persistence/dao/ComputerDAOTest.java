@@ -1,7 +1,12 @@
 package com.excilys.computerDatabase.persistence.dao;
 
 import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.persistence.daos.CompanyDAOImpl;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.ComputerDAOImpl;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

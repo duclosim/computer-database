@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.daos;
 
 public enum OrderingWay {
 	ASC("ASC"), 

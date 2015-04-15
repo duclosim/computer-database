@@ -1,7 +1,8 @@
 package com.excilys.computerDatabase.model.page;
 
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
+import com.excilys.computerDatabase.services.ComputerServiceImpl;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

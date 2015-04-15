@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
 import java.util.List;
 
@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.model.beans.Computer;
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.model.dto.ComputerDTOMapper;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
+import com.excilys.computerDatabase.model.dtos.ComputerDTOMapper;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.ComputerDAO;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 import com.excilys.computerDatabase.utils.UserInputsValidator;
 
 /**

@@ -1,11 +1,12 @@
-package com.excilys.computerDatabase.servlet;
+package com.excilys.computerDatabase.controllers;
 
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
 import com.excilys.computerDatabase.model.page.Page;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.OrderingWay;
-import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
+import com.excilys.computerDatabase.services.ComputerService;
 import com.excilys.computerDatabase.utils.UserInputsValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

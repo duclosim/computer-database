@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model.dto;
+package com.excilys.computerDatabase.model.dtos;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;

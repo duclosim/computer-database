@@ -5,13 +5,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
-<spring:message code="addComputer.name.placeholder"
-	var="name.placeholder" />
-<spring:message code="addComputer.introduced.placeholder"
-	var="introduced.placeholder" />
-<spring:message code="addComputer.discontinued.placeholder"
-	var="discontinued.placeholder" />
-
 <html>
 <head>
 <title><spring:message code="addComputer.title" /></title>
@@ -20,6 +13,12 @@
 <%@ include file="/WEB-INF/partials/includeCSS.jsp"%>
 </head>
 <body>
+	<spring:message code="addComputer.namePlaceholder"
+		var="name.placeholder" scope="page" />
+	<spring:message code="addComputer.introducedPlaceholder"
+		var="introduced.placeholder" />
+	<spring:message code="addComputer.discontinuedPlaceholder"
+		var="discontinued.placeholder" />
 	<%@ include file="/WEB-INF/partials/header.jsp"%>
 	<section id="main">
 		<div class="container">

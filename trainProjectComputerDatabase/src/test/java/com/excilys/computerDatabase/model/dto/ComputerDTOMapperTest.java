@@ -2,6 +2,9 @@ package com.excilys.computerDatabase.model.dto;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
+import com.excilys.computerDatabase.model.dtos.ComputerDTOMapper;
+
 import org.junit.Assert;
 import org.junit.Test;
 

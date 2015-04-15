@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+import com.excilys.computerDatabase.persistence.daos.CompanyDAO;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.ComputerDAO;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 
 /**
  * 

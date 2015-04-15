@@ -1,7 +1,7 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model.dto;
+package com.excilys.computerDatabase.model.dtos;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;

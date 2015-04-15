@@ -1,9 +1,10 @@
 package com.excilys.computerDatabase.ui;
 
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.OrderingWay;
-import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
+import com.excilys.computerDatabase.services.ComputerService;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

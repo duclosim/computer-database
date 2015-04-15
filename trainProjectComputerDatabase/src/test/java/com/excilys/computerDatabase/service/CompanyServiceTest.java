@@ -1,7 +1,9 @@
 package com.excilys.computerDatabase.service;
 
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import com.excilys.computerDatabase.persistence.daos.CompanyDAO;
+import com.excilys.computerDatabase.services.CompanyService;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

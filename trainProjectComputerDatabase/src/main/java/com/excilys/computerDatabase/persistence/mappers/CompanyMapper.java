@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import com.excilys.computerDatabase.persistence.daos.CompanyDAO;
 
 @Component
 public class CompanyMapper implements RowMapper<Company> {

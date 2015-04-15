@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
 import com.excilys.computerDatabase.model.beans.Company;
 

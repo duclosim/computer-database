@@ -1,6 +1,6 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
 
 /**
  * 

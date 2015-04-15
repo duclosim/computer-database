@@ -3,7 +3,8 @@ package com.excilys.computerDatabase.persistence.mappers;
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;

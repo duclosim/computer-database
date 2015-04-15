@@ -1,10 +1,11 @@
 package com.excilys.computerDatabase.cli;
 
 import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.model.dto.ComputerDTO;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
 import com.excilys.computerDatabase.model.page.Page;
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.services.CompanyService;
+import com.excilys.computerDatabase.services.ComputerService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

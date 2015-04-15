@@ -13,7 +13,7 @@
 
 	<import resource="classpath:mainApplicationContext.xml" />
 	
-	<context:component-scan base-package="com.excilys.computerDatabase.servlet" />
+	<context:component-scan base-package="com.excilys.computerDatabase.controllers" />
 	<context:annotation-config />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
