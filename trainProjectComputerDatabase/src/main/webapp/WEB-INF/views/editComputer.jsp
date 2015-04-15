@@ -4,14 +4,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<spring:message code="addComputer.name.placeholder"
-	var="name.placeholder" />
-<spring:message code="addComputer.introduced.placeholder"
-	var="introduced.placeholder" />
-<spring:message code="addComputer.discontinued.placeholder"
-	var="discontinued.placeholder" />
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +23,12 @@
 					<h1>
 						<spring:message code="editComputer.label" />
 					</h1>
+					<spring:message code="addComputer.namePlaceholder"
+						var="namePlaceholder" />
+					<spring:message code="addComputer.introducedPlaceholder"
+						var="introducedPlaceholder" />
+					<spring:message code="addComputer.discontinuedPlaceholder"
+						var="discontinuedPlaceholder" />
 					<form:form id="formAddEditComputer" method="POST"
 						action="editComputer" commandName="computerForm">
 						<fieldset>
@@ -39,7 +37,7 @@
 								<label for="computerName"><spring:message
 										code="addComputer.name" /></label>
 								<form:input name="computerName" path="name" class="form-control"
-									id="computerName" placeholder="${name.placeholder}"
+									id="computerName" placeholder="${namePlaceholder}"
 									value="${computerForm.name}" />
 								<form:errors path="name" cssClass="error" />
 							</div>
@@ -48,7 +46,7 @@
 										code="addComputer.introduced" /></label>
 								<form:input name="introduced" path="introducedDate"
 									class="form-control" id="introduced"
-									placeholder="${introduced.placeholder}"
+									placeholder="${introducedPlaceholder}"
 									value="${computerForm.introducedDate}" />
 								<form:errors path="introducedDate" cssClass="error" />
 							</div>
@@ -57,7 +55,7 @@
 										code="addComputer.discontinued" /></label>
 								<form:input name="discontinued" path="discontinuedDate"
 									class="form-control" id="discontinued"
-									placeholder="${discontinued.placeholder}"
+									placeholder="${discontinuedPlaceholder}"
 									value="${computerForm.discontinuedDate}" />
 								<form:errors path="discontinuedDate" cssClass="error" />
 							</div>

@@ -13,12 +13,6 @@
 <%@ include file="/WEB-INF/partials/includeCSS.jsp"%>
 </head>
 <body>
-	<spring:message code="addComputer.namePlaceholder"
-		var="name.placeholder" scope="page" />
-	<spring:message code="addComputer.introducedPlaceholder"
-		var="introduced.placeholder" />
-	<spring:message code="addComputer.discontinuedPlaceholder"
-		var="discontinued.placeholder" />
 	<%@ include file="/WEB-INF/partials/header.jsp"%>
 	<section id="main">
 		<div class="container">
@@ -27,6 +21,12 @@
 					<h1>
 						<spring:message code="addComputer.label" />
 					</h1>
+					<spring:message code="addComputer.namePlaceholder"
+						var="namePlaceholder" />
+					<spring:message code="addComputer.introducedPlaceholder"
+						var="introducedPlaceholder" />
+					<spring:message code="addComputer.discontinuedPlaceholder"
+						var="discontinuedPlaceholder" />
 					<form:form id="formAddEditComputer" method="POST"
 						action="addComputer" commandName="computerForm">
 						<fieldset>
@@ -34,7 +34,7 @@
 								<label for="computerName"><spring:message
 										code="addComputer.name" /></label>
 								<form:input name="computerName" path="name" class="form-control"
-									id="computerName" placeholder="${name.placeholder}" />
+									id="computerName" placeholder="${namePlaceholder}" />
 								<form:errors path="name" cssClass="error" />
 							</div>
 							<div class="form-group">
@@ -42,7 +42,7 @@
 										code="addComputer.introduced" /></label>
 								<form:input name="introduced" path="introducedDate"
 									class="form-control" id="introduced"
-									placeholder="${introduced.placeholder}" />
+									placeholder="${introducedPlaceholder}" />
 								<form:errors path="introducedDate" cssClass="error" />
 							</div>
 							<div class="form-group">
@@ -50,7 +50,7 @@
 										code="addComputer.discontinued" /></label>
 								<form:input name="discontinued" path="discontinuedDate"
 									class="form-control" id="discontinued"
-									placeholder="${discontinued.placeholder}" />
+									placeholder="${discontinuedPlaceholder}" />
 								<form:errors path="discontinuedDate" cssClass="error" />
 							</div>
 							<div class="form-group">

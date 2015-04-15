@@ -10,11 +10,11 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:component-scan base-package="com.excilys.computerDatabase.model.beans" />
-	<context:component-scan base-package="com.excilys.computerDatabase.model.dto" />
+	<context:component-scan base-package="com.excilys.computerDatabase.model.dtos" />
 	<context:component-scan
 		base-package="com.excilys.computerDatabase.persistence.mappers" />
-	<context:component-scan base-package="com.excilys.computerDatabase.persistence.dao" />
-	<context:component-scan base-package="com.excilys.computerDatabase.service" />
+	<context:component-scan base-package="com.excilys.computerDatabase.persistence.daos" />
+	<context:component-scan base-package="com.excilys.computerDatabase.services" />
 	<context:component-scan base-package="com.excilys.computerDatabase.model.page" />
 	<context:property-placeholder location="classpath:db.properties" />
 
