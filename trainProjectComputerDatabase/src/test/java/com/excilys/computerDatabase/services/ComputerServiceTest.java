@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
 import org.junit.Ignore;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.daos;
 
 import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.daos.CompanyDAOImpl;

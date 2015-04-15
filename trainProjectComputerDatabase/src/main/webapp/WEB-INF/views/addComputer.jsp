@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <%@ include file="/WEB-INF/partials/includeCSS.jsp"%>
+<%@ include file="/WEB-INF/partials/includeJS.jsp"%>
 </head>
 <body>
 	<%@ include file="/WEB-INF/partials/header.jsp"%>
@@ -76,6 +77,5 @@
 			</div>
 		</div>
 	</section>
-	<%@ include file="/WEB-INF/partials/includeJS.jsp"%>
 </body>
 </html>

@@ -4,15 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +35,10 @@ public class ComputerController {
 	@Autowired
 	private ComputerService computerService;
 	@Autowired
-	private MessageSource messageSource;
-	@Autowired
-	private Page page;
-
+	private Page page; 
+    @Autowired
+    private Validator computerDTOValidator;
+ 
 	// --- DASHBOARD ---
 	@RequestMapping(value = "dashboard", method = RequestMethod.GET)
 	public String getDashboard(@RequestParam(value = "pageNum", required = false) Integer numParam,
@@ -137,13 +135,14 @@ public class ComputerController {
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
-	public String createComputer(@Valid @ModelAttribute("computerForm") ComputerDTO computer, 
+	public String createComputer(@ModelAttribute("computerForm") ComputerDTO computer, 
 			BindingResult bindingResult,
 			Model model) {
 		LOG.info(new StringBuilder("createComputer(")
 			.append(computer).append(", ")
 			.append(bindingResult).append(", ")
 			.append(model).append(")").toString());
+		model.addAttribute("companies", mapCompanies());
 		return saveOrUpdateComputer(SaveOrUpdate.SAVE, computer, bindingResult);
 	}
 	// --- EDIT COMPUTER ---
@@ -158,13 +157,14 @@ public class ComputerController {
 	}
 	
 	@RequestMapping(value = "editComputer", method = RequestMethod.POST)
-	public String editComputer(@Valid @ModelAttribute("computerForm") ComputerDTO computer, 
+	public String editComputer(@ModelAttribute("computerForm") ComputerDTO computer, 
 			BindingResult bindingResult,
 			Model model) {
 		LOG.info(new StringBuilder("editComputer(")
 			.append(computer).append(", ")
 			.append(bindingResult).append(", ")
 			.append(model).append(")").toString());
+		model.addAttribute("companies", mapCompanies());
 		return saveOrUpdateComputer(SaveOrUpdate.UPDATE, computer, bindingResult);
 	}
 	// --- OUTILS ---
@@ -189,26 +189,12 @@ public class ComputerController {
 			.append(method).append(", ")
 			.append(computer).append(", ")
 			.append(bindingResult).append(")").toString());
+		nullifyEmptyStrings(computer);
+		computerDTOValidator.validate(computer, bindingResult);
 		if (!bindingResult.hasErrors()) {
-			// Introduction date
-			String introducedDate = UserInputsValidator.nullifyEmptyString(computer.getIntroducedDate());
-			if (UserInputsValidator.isValidOrNullDate(introducedDate)) {
-				computer.setIntroducedDate(introducedDate);
-			} else {
-				computer.setIntroducedDate(null);
-			}
-			// Discontinued date
-			String discontinuedDate = UserInputsValidator.nullifyEmptyString(computer.getDiscontinuedDate());
-			if (UserInputsValidator.isValidOrNullDate(discontinuedDate)) {
-				computer.setDiscontinuedDate(discontinuedDate);
-			} else {
-				computer.setDiscontinuedDate(null);
-			}
 			// Company id
-			String companyIdStr = UserInputsValidator.nullifyEmptyString(computer.getCompanyId());
-			computer.setCompanyId(companyIdStr);
-			if (companyIdStr != null) {
-				Long companyId = Long.parseLong(companyIdStr);
+			if (computer.getCompanyId() != null) {
+				Long companyId = Long.parseLong(computer.getCompanyId());
 				Company cmpny = companyService.getById(companyId);
 				computer.setCompanyName(cmpny.getName());
 			}
@@ -222,5 +208,20 @@ public class ComputerController {
 			}
 		}
 		return "editComputer";
+	}
+	
+	private static void nullifyEmptyStrings(ComputerDTO computer) {
+		computer.setId(nullifyEmptyString(computer.getId()));
+		computer.setIntroducedDate(nullifyEmptyString(computer.getIntroducedDate()));
+		computer.setDiscontinuedDate(nullifyEmptyString(computer.getDiscontinuedDate()));
+		computer.setCompanyId(nullifyEmptyString(computer.getCompanyId()));
+	}
+
+	private static String nullifyEmptyString(String str) {
+		if ((str == null) || (str.trim().isEmpty())) {
+			return null;
+		} else {
+			return str;
+		}
 	}
 }

@@ -26,6 +26,7 @@
 		<mysql.version>5.1.34</mysql.version>
 		<selenium.version>2.45.0</selenium.version>
 		<slf4j.version>1.7.12</slf4j.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>
 
 	<dependencies>
@@ -160,7 +161,7 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-framework-bom</artifactId>
-				<version>4.1.6.RELEASE</version>
+				<version>${spring.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

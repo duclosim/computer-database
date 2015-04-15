@@ -1,6 +1,5 @@
 package com.excilys.computerDatabase.model.dtos;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,6 @@ public class ComputerDTO {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTO.class);
 	
 	private String id;
-	@NotEmpty
 	private String name;
 	private String introducedDate;
 	private String discontinuedDate;

@@ -27,12 +27,16 @@ public class ComputerServiceImpl implements ComputerService {
 	
 	@Autowired
 	private ComputerDAO computerDao;
+	@Autowired
+	private ComputerDTOMapper computerDTOMapper;
+	@Autowired
+	private UserInputsValidator userInputsValidator;
 	
 	@Override
 	public ComputerDTO getById(Long id) {
 		LOG.info("getById(" + id + ")");
 		ComputerDTO result;
-		result = ComputerDTOMapper.BeanToDTO(computerDao.getById(id));
+		result = computerDTOMapper.BeanToDTO(computerDao.getById(id));
 		return result;
 	}
 
@@ -43,7 +47,7 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(offset).append(")")
 			.toString());
 		List<ComputerDTO> result;
-		result = ComputerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
+		result = computerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
 		return result;
 	}
 
@@ -51,7 +55,7 @@ public class ComputerServiceImpl implements ComputerService {
 	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
 		LOG.info("getByNameOrCompanyName(" + name + ")");
 		List<ComputerDTO> result;
-		result = ComputerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
+		result = computerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
 		return result;
 	}
 	
@@ -65,7 +69,7 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(way).append(")")
 			.toString());
 		List<ComputerDTO> result;
-		result = ComputerDTOMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
+		result = computerDTOMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
 				column, way)));
 		return result;
 	}
@@ -81,7 +85,7 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(way).append(")")
 			.toString());
 		List<ComputerDTO> result;
-		result = ComputerDTOMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
+		result = computerDTOMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
 				limit, offset, name, column, way)));
 		return result;
 	}
@@ -106,7 +110,7 @@ public class ComputerServiceImpl implements ComputerService {
 	public void create(ComputerDTO computer) {
 		LOG.info("create(" + computer + ")");
 		checkComputerDTO(computer);
-		Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
+		Computer cmptrBean = computerDTOMapper.DTOToBean(computer);
 		computerDao.create(cmptrBean);
 		computer.setId(cmptrBean.getId().toString());
 	}
@@ -115,7 +119,7 @@ public class ComputerServiceImpl implements ComputerService {
 	public void update(ComputerDTO computer) {
 		LOG.info("update(" + computer + ")");
 		checkComputerDTO(computer);
-		Computer cmptrBean = ComputerDTOMapper.DTOToBean(computer);
+		Computer cmptrBean = computerDTOMapper.DTOToBean(computer);
 		computerDao.update(cmptrBean);
 	}
 
@@ -123,7 +127,7 @@ public class ComputerServiceImpl implements ComputerService {
 	public void delete(ComputerDTO computer) {
 		LOG.info("delete(" + computer + ")");
 		if (computer != null) {
-			computerDao.delete(ComputerDTOMapper.DTOToBean(computer));
+			computerDao.delete(computerDTOMapper.DTOToBean(computer));
 		}
 	}
 	
@@ -133,19 +137,19 @@ public class ComputerServiceImpl implements ComputerService {
 			throw new IllegalArgumentException("computer est à null.");
 		}
 		String name = computer.getName();
-		String introducedDate = computer.getIntroducedDate();
-		String discontinuedDate = computer.getDiscontinuedDate();
+		String introDate = computer.getIntroducedDate();
+		String disDate = computer.getDiscontinuedDate();
 		String companyIdStr = computer.getCompanyId();
 		// Test de l'objet.
 		if ((name == null) || (!UserInputsValidator.isValidString(name))) {
 			LOG.error("Nom non valide.\n");
 			throw new IllegalArgumentException("Nom non valide.\n");
 		}
-		if (!UserInputsValidator.isValidOrNullDate(introducedDate)) {
+		if ((introDate != null) && !userInputsValidator.isValidDate(introDate)) {
 			LOG.error("Date d'introduction non valide.\n");
 			throw new IllegalArgumentException("Date d'introduction non valide.\n");
 		}
-		if (!UserInputsValidator.isValidOrNullDate(discontinuedDate)) {
+		if ((disDate != null) && !userInputsValidator.isValidDate(disDate)) {
 			LOG.error("Date de sortie non valide.\n");
 			throw new IllegalArgumentException("Date de sortie non valide.\n");
 		}

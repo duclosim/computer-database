@@ -34,8 +34,8 @@ public class WebUserInterfaceTest {
 	private static final String COMPUTER_COUNT_FIELD = "homeTitle";
 	// Bean attributes
 	private static final String BEAN_NAME = "seleniumBean";
-	private static final String BEAN_INTRO_DATE = "2015-02-15";
-	private static final String BEAN_DIS_DATE = "2015-04-14";
+	private static final String BEAN_INTRO_DATE = "15/02/2015";
+	private static final String BEAN_DIS_DATE = "14/04/2015";
 	private static final String BEAN_COMPANY = "Commodore International";
 	
 	@Autowired

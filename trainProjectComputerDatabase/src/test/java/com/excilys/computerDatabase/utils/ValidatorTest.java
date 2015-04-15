@@ -2,8 +2,17 @@ package com.excilys.computerDatabase.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class ValidatorTest {
+	@Autowired
+	private UserInputsValidator userInputsValidator;
+	
 	@Test
 	public void shouldValidateTheString() {
 		// Given
@@ -60,9 +69,9 @@ public class ValidatorTest {
 	@Test
 	public void shouldValidateTheDate() {
 		// Given
-		String date = "2015-03-22";
+		String date = "22/03/2015";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertTrue("Erreur sur le valideur de dates.", result);
 	}
@@ -70,9 +79,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlValidateTheDateBecauseOfBissextileYear() {
 		// Given
-		String date = "2016-02-29";
+		String date = "29/02/2016";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertTrue("Erreur sur le valideur de dates.", result);
 	}
@@ -82,7 +91,7 @@ public class ValidatorTest {
 		// Given
 		String date = "15-03-22";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -92,7 +101,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-3-22";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -102,7 +111,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-03-2";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -112,7 +121,7 @@ public class ValidatorTest {
 		// Given
 		String date = "9999-03-22";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -122,7 +131,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-27-22";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -132,7 +141,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-27-37";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -142,7 +151,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-06-31";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -152,7 +161,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-07-32";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -162,7 +171,7 @@ public class ValidatorTest {
 		// Given
 		String date = "2015-02-29";
 		// When
-		boolean result = UserInputsValidator.isValidDate(date);
+		boolean result = userInputsValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
