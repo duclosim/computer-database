@@ -1,16 +1,16 @@
 package com.excilys.computerDatabase.persistence.mappers;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.PersistenceException;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
 
 @Component
 public class CompanyMapper implements RowMapper<Company> {

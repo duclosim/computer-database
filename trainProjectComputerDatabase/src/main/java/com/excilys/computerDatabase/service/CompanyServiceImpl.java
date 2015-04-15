@@ -1,19 +1,18 @@
 package com.excilys.computerDatabase.service;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.PersistenceException;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
-import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
-import com.excilys.computerDatabase.persistence.dao.OrderingWay;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
-import java.util.List;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import com.excilys.computerDatabase.persistence.dao.ComputerColumn;
+import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import com.excilys.computerDatabase.persistence.dao.OrderingWay;
 
 /**
  * 
