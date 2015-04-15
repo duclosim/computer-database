@@ -34,10 +34,10 @@ class DBUtils {
     }
 
     public static IDatabaseTester databaseTester;
-    private static final String jdbcDriver;
-    private static final String jdbcUrl;
-    private static final String user;
-    private static final String password;
+    private static String jdbcDriver;
+    private static String jdbcUrl;
+    private static String user;
+    private static String password;
 
     /**
      * Execute the sql file.

@@ -80,7 +80,7 @@ public class Page {
 	public int getPageNum() {
 		return pageNum;
 	}
-	private int getTotalNbEntities() {
+	public int getTotalNbEntities() {
 		int result;
 		if (UserInputsValidator.isValidString(searchedName)) {
 			result = service.countFilteredLines(searchedName);
