@@ -1,8 +1,5 @@
 package utils;
 
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.dbunit.IDatabaseTester;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +10,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.dbunit.IDatabaseTester;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // TODO finir de mettre en place la bdd de test.
 class DBUtils {
+	private static final Logger LOG = LoggerFactory.getLogger(DBUtils.class);
     private static final String CONFIG_TEST = "db.properties";
     private static final String SQL_SCHEMA_FILE = "1-SCHEMA.sql";
     private static final String SQL_DATA_FILE = "3-ENTRIES.sql";

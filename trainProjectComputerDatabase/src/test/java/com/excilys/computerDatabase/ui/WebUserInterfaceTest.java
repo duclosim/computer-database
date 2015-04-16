@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -23,6 +24,7 @@ import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
 import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 import com.excilys.computerDatabase.services.ComputerService;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class WebUserInterfaceTest {

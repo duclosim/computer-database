@@ -1,14 +1,8 @@
 package com.excilys.computerDatabase.validators;
 
-import static java.time.temporal.ChronoField.DAY_OF_MONTH;
-import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
-import static java.time.temporal.ChronoField.YEAR;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
-import java.time.format.SignStyle;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -24,12 +18,7 @@ public class DateValidator {
 	private static final Logger LOG = LoggerFactory.getLogger(DateValidator.class);
 	private static final String DATE_REGEX_MESSAGE_CODE = "date.regex";
 	private static final String DATE_FORMAT_MESSAGE_CODE = "date.format";
-	private static Locale locale = LocaleContextHolder.getLocale();
-//	private static ApplicationContext context = new ClassPathXmlApplicationContext("messageContext.xml");
-//	private static String dateRegEx = context.getMessage("date.regex", 
-//			null, locale);
-//	private static String dateSep = context.getMessage("date.sep", 
-//			null, locale);
+	
 	@Autowired
 	private MessageSource messageSource;
 	
@@ -43,16 +32,17 @@ public class DateValidator {
 		if (date == null) {
 			return true;
 		}
-		if (!isWellFormedDate(date)) {
+		boolean result = true;
+		Locale locale = LocaleContextHolder.getLocale();
+		if (!isWellFormedDate(date, locale)) {
 			return false;
 		}
-		boolean result = false;
-		Locale locale = LocaleContextHolder.getLocale();
 		String dateFormat = messageSource.getMessage(DATE_FORMAT_MESSAGE_CODE, null, locale);
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
-		// dirty checking pour parser une date à format variable et regarder si cette date existe.
+		// dirty checking pour parser une date à format variable
 		try {
-			LocalDate.parse(date, dateFormatter);
+			LocalDate lDate = LocalDate.parse(date, dateFormatter);
+			result = isExistingDate(lDate.getYear(), lDate.getMonthValue(), lDate.getDayOfMonth());
 		} catch (DateTimeParseException e) {
 			result = false;
 		}
@@ -60,21 +50,9 @@ public class DateValidator {
 	}
 
 	// OUTILS
-	private boolean isWellFormedDate(String date) {
+	private boolean isWellFormedDate(String date, Locale locale) {
 		LOG.info("isWellFormedDate(" + date + ")");
-		String pattern = null;
-		if (messageSource == null) {
-			switch (locale.getLanguage()) {
-			case "fr" :
-				pattern = "[0-3][0-9]/[0-1][1-9]/[1-2][0-9]{3}";
-				break;
-			case "en" :
-				pattern = "[1-2][0-9]{3}-[0-1][1-9]-[0-3][0-9]";
-				break;
-			}
-		} else {
-			pattern = messageSource.getMessage(DATE_REGEX_MESSAGE_CODE, null, locale);
-		}
+		String pattern = messageSource.getMessage(DATE_REGEX_MESSAGE_CODE, null, locale);
 		return Pattern.matches(pattern, date);
 	}
 
