@@ -3,8 +3,12 @@ package com.excilys.computerDatabase.cli;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.excilys.computerDatabase.validators.DateValidator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,17 +17,20 @@ import java.util.Scanner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class CLIServiceTest {
+	private static final Logger LOG = LoggerFactory.getLogger(DateValidator.class);
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
 	@Before
 	public void setUpStreams() {
+		LOG.debug("setUpStreams()");
 	    System.setOut(new PrintStream(outContent));
 	    System.setErr(new PrintStream(errContent));
 	}
 
 	@After
 	public void cleanUpStreams() {
+		LOG.debug("cleanUpStreams()");
 	    System.setOut(null);
 	    System.setErr(null);
 	}
@@ -33,6 +40,7 @@ public class CLIServiceTest {
 
 	@Test
 	public void commandInterpreterShouldRun() {
+		LOG.debug("commandInterpreterShouldRun()");
 		// Given
 		CLIService cliService = new CLIService();
 		String command = "exit";
@@ -45,6 +53,7 @@ public class CLIServiceTest {
 
 	@Test
 	public void commandInterpreterShouldNotWorkWithUnknownCommand() {
+		LOG.debug("commandInterpreterShouldNotWorkWithUnknownCommand()");
 		// Given
 		CLIService cliService = new CLIService();
 		String command = "toto";
@@ -59,6 +68,7 @@ public class CLIServiceTest {
 
 	@Test
 	public void commandInterpreterShouldThrowAnIllegalArgumentExceptionForNullCommand() {
+		LOG.debug("commandInterpreterShouldThrowAnIllegalArgumentExceptionForNullCommand()");
 		// Given
 		CLIService cliService = new CLIService();
 		String command = null;
@@ -71,6 +81,7 @@ public class CLIServiceTest {
 
 	@Test
 	public void commandInterpreterShouldThrowAnIllegalArgumentExceptionForNullScanner() {
+		LOG.debug("commandInterpreterShouldThrowAnIllegalArgumentExceptionForNullScanner()");
 		// Given
 		CLIService cliService = new CLIService();
 		String command = "";

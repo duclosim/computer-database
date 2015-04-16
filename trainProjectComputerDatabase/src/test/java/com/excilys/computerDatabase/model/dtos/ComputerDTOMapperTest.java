@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,6 +19,7 @@ import com.excilys.computerDatabase.model.beans.Computer;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class ComputerDTOMapperTest {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOMapperTest.class);
 	private static final String DATE_PATTERN = "dd/MM/yyyy";
 	private static final String STR_ID = "16";
 	private static final String NAME = "Apple II";
@@ -35,6 +38,7 @@ public class ComputerDTOMapperTest {
 	
 	@Test
 	public void beanToDTOShouldMapWithNoNullAttributes() {
+		LOG.debug("beanToDTOShouldMapWithNoNullAttributes()");
 		// Given
 		Computer bean = new Computer();
 		bean.setId(ID);
@@ -58,6 +62,7 @@ public class ComputerDTOMapperTest {
 	
 	@Test
 	public void dtoToBeanShouldMapWithNoNullAttributes() {
+		LOG.debug("dtoToBeanShouldMapWithNoNullAttributes()");
 		// Given
 		Computer expectedBean = new Computer();
 		expectedBean.setId(ID);

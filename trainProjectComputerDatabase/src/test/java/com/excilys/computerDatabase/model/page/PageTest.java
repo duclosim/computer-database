@@ -1,23 +1,26 @@
 package com.excilys.computerDatabase.model.page;
 
-import com.excilys.computerDatabase.model.dtos.ComputerDTO;
-import com.excilys.computerDatabase.services.ComputerServiceImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
+import com.excilys.computerDatabase.services.ComputerServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class PageTest {
+	private static final Logger LOG = LoggerFactory.getLogger(PageTest.class);
 	private static final int DEFAULT_LIMIT = 10;
 	private static final int DEFAULT_OFFSET = 2;
 	
@@ -31,6 +34,7 @@ public class PageTest {
 	
 	@Test
 	public void constructorShouldSetTheLastPageNbAndCurrentPageNumAndEntities() {
+		LOG.debug("constructorShouldSetTheLastPageNbAndCurrentPageNumAndEntities()");
 		// GIVEN
 		int expectedCurrentPageNum = DEFAULT_OFFSET / DEFAULT_LIMIT + 1;
 		int offset = (expectedCurrentPageNum - 1) * DEFAULT_LIMIT;
@@ -49,6 +53,7 @@ public class PageTest {
 	
 	@Test
 	public void changingMaxItemByPageShouldSetTheLastPageNbAndCurrentPageNumAndEntities() {
+		LOG.debug("changingMaxItemByPageShouldSetTheLastPageNbAndCurrentPageNumAndEntities()");
 		// GIVEN
 		int newLimit = 10;
 		int newOffset = (page.getPageNum() - 1) * newLimit;
@@ -68,6 +73,7 @@ public class PageTest {
 	
 	@Test
 	public void changingMaxItemByPageShouldThrowAnIllegalArgumentExceptionForMaxNegative() {
+		LOG.debug("changingMaxItemByPageShouldThrowAnIllegalArgumentExceptionForMaxNegative()");
 		// GIVEN
 		int newLimit = -1;
 		thrown.expect(IllegalArgumentException.class);
@@ -78,6 +84,7 @@ public class PageTest {
 	
 	@Test
 	public void changingPageNumShouldSetTheLastPageNbAndCurrentPageNumAndEntities() {
+		LOG.debug("changingPageNumShouldSetTheLastPageNbAndCurrentPageNumAndEntities()");
 		// GIVEN
 		int newPageNum = 2;
 		int newOffset = (newPageNum - 1) * DEFAULT_LIMIT;
@@ -96,6 +103,7 @@ public class PageTest {
 	
 	@Test
 	public void changingPageNumShouldThrowAnIllegalArgumentExceptionForPageNumNegative() {
+		LOG.debug("changingPageNumShouldThrowAnIllegalArgumentExceptionForPageNumNegative()");
 		// GIVEN
 		int newPageNum = -1;
 		thrown.expect(IllegalArgumentException.class);
@@ -106,6 +114,7 @@ public class PageTest {
 	
 	@Test
 	public void changingPageNumShouldThrowAnIllegalArgumentExceptionForPageNumToHigh() {
+		LOG.debug("changingPageNumShouldThrowAnIllegalArgumentExceptionForPageNumToHigh()");
 		// GIVEN
 		int newPageNum = page.getLastPageNb() + 1;
 		thrown.expect(IllegalArgumentException.class);

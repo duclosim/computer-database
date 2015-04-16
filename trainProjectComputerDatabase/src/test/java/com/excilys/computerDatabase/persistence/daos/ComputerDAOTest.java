@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,6 +21,7 @@ import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class ComputerDAOTest {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOTest.class);
 	@Autowired
 	private CompanyDAOImpl companyDAO;
 	@Autowired
@@ -44,6 +47,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getByIdShouldReturnABean() throws SQLException {
+		LOG.debug("getByIdShouldReturnABean()");
 		// Given
 		Long id = new Long(10);
 		String query = "SELECT * "
@@ -63,6 +67,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getByNonFindableIdShouldReturnNullResult() {
+		LOG.debug("getByNonFindableIdShouldReturnNullResult()");
 		// Given
 		Computer bean;
 		Long id = new Long(-10);
@@ -74,6 +79,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getAllShouldReturnMultipleBeans() throws SQLException {
+		LOG.debug("getAllShouldReturnMultipleBeans()");
 		// Given
 		int limit = 15;
 		int offset = 5;
@@ -90,6 +96,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getByNameShouldReturnABean() throws SQLException {
+		LOG.debug("getByNameShouldReturnABean()");
 		// Given
 		String computerName = "CM-2a";
 		String companyName = "Apple Inc.";
@@ -123,6 +130,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getOrderedShouldReturnOrderedList() throws SQLException {
+		LOG.debug("getOrderedShouldReturnOrderedList()");
 		// Given
 		int limit = 4;
 		int offset = 0;
@@ -146,6 +154,7 @@ public class ComputerDAOTest {
 
 	@Test
 	public void getFilteredAndOrderedShouldReturnOrderedList() throws SQLException {
+		LOG.debug("getFilteredAndOrderedShouldReturnOrderedList()");
 		// Given
 		String companyName = "Nintendo";
 		int limit = 15;
@@ -174,6 +183,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void countLinesShouldReturnTheNumberOfRowsInTheDatabase() throws SQLException {
+		LOG.debug("countLinesShouldReturnTheNumberOfRowsInTheDatabase()");
 		// Given
 		int nbLines;
 		String query = "SELECT COUNT(*) FROM computer;";
@@ -186,6 +196,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void countFilteredLines() throws SQLException {
+		LOG.debug("countFilteredLines()");
 		// Given
 		int nbLines;
 		String name = "Nintendo";
@@ -204,6 +215,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void createShouldAddABeanToTheDatabase() throws SQLException {
+		LOG.debug("createShouldAddABeanToTheDatabase()");
 		// Given
 		Computer bean = new Computer();
 		Long companyId = new Long(10);
@@ -223,6 +235,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void updateShouldAlterABeanFromTheDatabase() throws SQLException {
+		LOG.debug("updateShouldAlterABeanFromTheDatabase()");
 		// Given
 		Long id = new Long(10);
 		Computer bean = computerDAO.getById(id);
@@ -244,6 +257,7 @@ public class ComputerDAOTest {
 	@Test
 	@Ignore
 	public void deleteShouldRemoveABeanFromTheDatabase() throws SQLException {
+		LOG.debug("deleteShouldRemoveABeanFromTheDatabase()");
 		// Given
 		Computer bean = new Computer();
 		Long companyId = new Long(10);
@@ -264,6 +278,7 @@ public class ComputerDAOTest {
 	@Test
 	@Ignore
 	public void deleteByCompanyIdShouldDeleteMultipleBeans() throws SQLException {
+		LOG.debug("deleteByCompanyIdShouldDeleteMultipleBeans()");
 		// Given
 		int nbLines;
 		Long companyId = new Long(1);

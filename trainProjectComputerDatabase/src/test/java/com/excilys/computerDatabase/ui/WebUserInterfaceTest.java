@@ -1,9 +1,6 @@
 package com.excilys.computerDatabase.ui;
 
-import com.excilys.computerDatabase.model.dtos.ComputerDTO;
-import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
-import com.excilys.computerDatabase.persistence.daos.OrderingWay;
-import com.excilys.computerDatabase.services.ComputerService;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -15,16 +12,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
+import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
+import com.excilys.computerDatabase.persistence.daos.OrderingWay;
+import com.excilys.computerDatabase.services.ComputerService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class WebUserInterfaceTest {
-	private WebDriver driver;
+	private static final Logger LOG = LoggerFactory.getLogger(WebUserInterfaceTest.class);
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";
 	// Field ids/names
 	private static final String BEAN_NAME_FIELD = "computerName";
@@ -37,12 +39,15 @@ public class WebUserInterfaceTest {
 	private static final String BEAN_INTRO_DATE = "15/02/2015";
 	private static final String BEAN_DIS_DATE = "14/04/2015";
 	private static final String BEAN_COMPANY = "Commodore International";
+
+	private WebDriver driver;
 	
 	@Autowired
 	ComputerService computerService;
 	
 	@Before
 	public void initDriver() {
+		LOG.debug("initDriver()");
 		ComputerDTO c = new ComputerDTO();
 		c.setName(BEAN_NAME);
 		computerService.create(c);
@@ -53,6 +58,7 @@ public class WebUserInterfaceTest {
 	
 	@After
 	public void closeDriver() {
+		LOG.debug("closeDriver()");
 	    //Close the browser
 	    driver.quit();
 	    List<ComputerDTO> list = computerService.getFiltered(BEAN_NAME, 10, 0);
@@ -63,6 +69,7 @@ public class WebUserInterfaceTest {
 
 	@Test
 	public void addAComputerWithNullDateAndCompanyShouldSetFields() {
+		LOG.debug("addAComputerWithNullDateAndCompanyShouldSetFields()");
 		// Given
 		ComputerDTO dto = new ComputerDTO();
 		dto.setName(BEAN_NAME);
@@ -82,6 +89,7 @@ public class WebUserInterfaceTest {
 	
 	@Test
 	public void addAComputerShouldAddOneToCountAndSetFields() {
+		LOG.debug("addAComputerShouldAddOneToCountAndSetFields()");
 		// Given
 		int expectedNbItems = computerService.countAllLines();
 		++expectedNbItems;
@@ -106,6 +114,7 @@ public class WebUserInterfaceTest {
 	
 	@Test
 	public void editComputerShouldUpdateTheComputer() {
+		LOG.debug("editComputerShouldUpdateTheComputer()");
 		// Given
 		String editedItemId = "computer3";
 		WebElement element = driver.findElement(By.id(editedItemId));
@@ -125,6 +134,7 @@ public class WebUserInterfaceTest {
 
 	@Test
 	public void deleteAComputerShouldRemoveOneToCount() {
+		LOG.debug("deleteAComputerShouldRemoveOneToCount()");
 		// Given
 		ComputerDTO newBean = new ComputerDTO();
 		newBean.setName(BEAN_NAME);
@@ -161,6 +171,7 @@ public class WebUserInterfaceTest {
 	
 	@Test
 	public void searchComputer() {
+		LOG.debug("searchComputer()");
 		// Given
 		String searchFieldId = "searchbox";
 		String itemsCount = "homeTitle";
@@ -178,6 +189,7 @@ public class WebUserInterfaceTest {
 	
 	@Test
 	public void searchCompany()	 {
+		LOG.debug("searchCompany()");
 		// Given
 		String searchFieldId = "searchbox";
 		String itemsCount = "homeTitle";
@@ -195,6 +207,7 @@ public class WebUserInterfaceTest {
 
 	@Test
 	public void orderByComputerNameAsc() {
+		LOG.debug("orderByComputerNameAsc()");
 		// Given
 		String orderByCmptrAscField = "orderByComputerNameAsc";
 		String computerName = "ACE";
@@ -209,6 +222,7 @@ public class WebUserInterfaceTest {
 
 	@Test
 	public void orderByIntroducedDateDesc() {
+		LOG.debug("orderByIntroducedDateDesc()");
 		// Given
 		String orderByIntroDescField = "orderByIntroducedDesc";
 		String computerName = "HP TouchPad";
@@ -223,6 +237,7 @@ public class WebUserInterfaceTest {
 
 	@Test
 	public void orderByCompanyNameDesc() {
+		LOG.debug("orderByCompanyNameDesc()");
 		// Given
 		String orderByCompanyDescField = "orderByCompanyNameDesc";
 		String computerName = "MSX";
@@ -237,6 +252,7 @@ public class WebUserInterfaceTest {
 	
 	@Test
 	public void filteredByCompanyNameAndOrderByComputerNameAsc() {
+		LOG.debug("filteredByCompanyNameAndOrderByComputerNameAsc()");
 		// Given
 		String searchFieldId = "searchbox";
 		String orderByCmptrAscField = "orderByComputerNameAsc";
@@ -260,6 +276,7 @@ public class WebUserInterfaceTest {
 	 * Entre les infos du DTO dans le formulaire de création.
 	 */
 	private void addBean(ComputerDTO bean) {
+		LOG.debug("addBean(" + bean + ")");
 		// Given
 		String addButtonId = "addComputer";
 	    WebElement element = driver.findElement(By.id(COMPUTER_COUNT_FIELD));

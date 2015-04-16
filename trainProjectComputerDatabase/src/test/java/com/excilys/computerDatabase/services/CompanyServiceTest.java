@@ -1,23 +1,25 @@
 package com.excilys.computerDatabase.services;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.daos.CompanyDAO;
-import com.excilys.computerDatabase.services.CompanyService;
+import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.sql.SQLException;
-import java.util.List;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.daos.CompanyDAO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class CompanyServiceTest {
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceTest.class);
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
@@ -25,6 +27,7 @@ public class CompanyServiceTest {
 	
 	@Test
 	public void getById() throws SQLException {
+		LOG.debug("getById()");
 		// Given
 		Long id = new Long(3);
 		Company expectedCompany = companyDao.getById(id);
@@ -36,6 +39,7 @@ public class CompanyServiceTest {
 	
 	@Test
 	public void getAll() throws SQLException {
+		LOG.debug("getAll()");
 		// Given
 		List<Company> expectedCompanies = companyDao.getAll();
 		// When
@@ -46,6 +50,7 @@ public class CompanyServiceTest {
 	
 	@Test
 	public void countAllLines() throws SQLException {
+		LOG.debug("countAllLines()");
 		// Given
 		int expectedNbLines = companyDao.countLines();
 		// When
@@ -57,6 +62,7 @@ public class CompanyServiceTest {
 	@Ignore
 	@Test
 	public void delete() {
+		LOG.debug("delete()");
 		// TODO
 	}
 	

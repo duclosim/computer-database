@@ -1,23 +1,25 @@
 package com.excilys.computerDatabase.persistence.daos;
 
-import com.excilys.computerDatabase.model.beans.Company;
-import com.excilys.computerDatabase.persistence.daos.CompanyDAOImpl;
-import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
+import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.sql.SQLException;
-import java.util.List;
+import com.excilys.computerDatabase.model.beans.Company;
+import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class CompanyDAOTest {
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAOTest.class);
 	@Autowired
 	private CompanyDAOImpl companyDAO;
 	@Autowired
@@ -41,6 +43,7 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void getByIdShouldReturnABean() throws SQLException {
+		LOG.debug("getByIdShouldReturnABean()");
 		// Given
 		Company bean;
 		Long id = new Long(10);
@@ -57,6 +60,7 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void getByNonFindableIdShouldReturnNullResult() throws SQLException {
+		LOG.debug("getByNonFindableIdShouldReturnNullResult()");
 		// Given
 		Company bean;
 		Long id = new Long(-10);
@@ -68,6 +72,7 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void getAllShouldReturnMultipleBeans() throws SQLException {
+		LOG.debug("getAllShouldReturnMultipleBeans()");
 		// Given
 		int limit = 15;
 		int offset = 5;
@@ -82,6 +87,7 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void countLinesShouldReturnTheNumberOfRowsInTheDatabase() throws SQLException {
+		LOG.debug("countLinesShouldReturnTheNumberOfRowsInTheDatabase()");
 		// Given
 		int nbLines;
 		String query = "SELECT COUNT(*) FROM company;";
