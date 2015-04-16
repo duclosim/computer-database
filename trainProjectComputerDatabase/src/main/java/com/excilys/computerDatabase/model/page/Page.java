@@ -4,7 +4,7 @@ import com.excilys.computerDatabase.model.dtos.ComputerDTO;
 import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
 import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 import com.excilys.computerDatabase.services.ComputerService;
-import com.excilys.computerDatabase.utils.UserInputsValidator;
+import com.excilys.computerDatabase.validators.UserInputsValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -13,7 +13,8 @@ import com.excilys.computerDatabase.model.dtos.ComputerDTOMapper;
 import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
 import com.excilys.computerDatabase.persistence.daos.ComputerDAO;
 import com.excilys.computerDatabase.persistence.daos.OrderingWay;
-import com.excilys.computerDatabase.utils.UserInputsValidator;
+import com.excilys.computerDatabase.validators.DateValidator;
+import com.excilys.computerDatabase.validators.UserInputsValidator;
 
 /**
  * 
@@ -30,7 +31,7 @@ public class ComputerServiceImpl implements ComputerService {
 	@Autowired
 	private ComputerDTOMapper computerDTOMapper;
 	@Autowired
-	private UserInputsValidator userInputsValidator;
+	private DateValidator dateValidator;
 	
 	@Override
 	public ComputerDTO getById(Long id) {
@@ -145,11 +146,11 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Nom non valide.\n");
 			throw new IllegalArgumentException("Nom non valide.\n");
 		}
-		if ((introDate != null) && !userInputsValidator.isValidDate(introDate)) {
+		if (!dateValidator.isValidDate(introDate)) {
 			LOG.error("Date d'introduction non valide.\n");
 			throw new IllegalArgumentException("Date d'introduction non valide.\n");
 		}
-		if ((disDate != null) && !userInputsValidator.isValidDate(disDate)) {
+		if (!dateValidator.isValidDate(disDate)) {
 			LOG.error("Date de sortie non valide.\n");
 			throw new IllegalArgumentException("Date de sortie non valide.\n");
 		}

@@ -1,7 +1,6 @@
 package com.excilys.computerDatabase.model.dtos;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -31,9 +30,9 @@ public class ComputerDTOMapper {
 	private MessageSource messageSource;
 	
 	/**
-	 * 
-	 * @param dto
-	 * @return
+	 * Transforme un DTO en bean.
+	 * @param dto Le dto à transformer.
+	 * @return Le bean tel qu'utilisable par la couche dao.
 	 */
 	public Computer DTOToBean(ComputerDTO dto) {
 		LOG.info("DTOToBean(" + dto + ")");
@@ -47,28 +46,12 @@ public class ComputerDTOMapper {
 			bean.setId(Long.parseLong(dto.getId()));
 		}
 		LocalDate lDate;
-		// TODO assigner le format à partir du fichier de properties
-		String dateFormat = null;
-		Locale locale = LocaleContextHolder.getLocale();
-		if (messageSource == null) {
-			switch(locale.getLanguage()) {
-			case "fr" :
-				dateFormat = "dd/MM/uuuu";
-				break;
-			case "en" :
-				dateFormat = "uuuu-MM-dd";
-				break;
-			}
-		} else {
-			dateFormat = messageSource.getMessage(DATE_FORMAT_MESSAGE_CODE, null, locale);
-		}
-		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
 		if (dto.getIntroducedDate() != null) {
-			lDate = LocalDate.parse(dto.getIntroducedDate(), dateFormatter);
+			lDate = LocalDate.parse(dto.getIntroducedDate(), getFormatter());
 			bean.setIntroducedDate(lDate.atStartOfDay());
 		}
 		if (dto.getDiscontinuedDate() != null) {
-			lDate = LocalDate.parse(dto.getDiscontinuedDate(), dateFormatter);
+			lDate = LocalDate.parse(dto.getDiscontinuedDate(), getFormatter());
 			bean.setDiscontinuedDate(lDate.atStartOfDay());
 		}
 		if ((dto.getCompanyId() != null) && (dto.getCompanyName() != null)) {
@@ -91,12 +74,11 @@ public class ComputerDTOMapper {
 		dto.setDiscontinuedDate(null);
 		dto.setCompanyId(null);
 		dto.setCompanyName(null);
-		Locale locale = LocaleContextHolder.getLocale();
 		if (bean.getIntroducedDate() != null) {
-			dto.setIntroducedDate(localDateToLocalizedString(bean.getIntroducedDate(), locale));
+			dto.setIntroducedDate(bean.getIntroducedDate().format(getFormatter()));
 		}
 		if (bean.getDiscontinuedDate() != null) {
-			dto.setDiscontinuedDate(localDateToLocalizedString(bean.getDiscontinuedDate(), locale));
+			dto.setDiscontinuedDate(bean.getDiscontinuedDate().format(getFormatter()));
 		}
 		if (bean.getCompany() != null) {
 			dto.setCompanyId(bean.getCompany().getId().toString());
@@ -105,32 +87,13 @@ public class ComputerDTOMapper {
 		return dto;
 	}
 	
-	/**
-	 * 
-	 * @param beans
-	 * @return
-	 */
 	public List<ComputerDTO> BeansToDTOs(List<Computer> beans) {
         return beans.stream().map(this::BeanToDTO).collect(Collectors.toList());
 	}
 	
-	private String localDateToLocalizedString(LocalDateTime date, Locale locale) {
-		String strDate = null;
-		int day = date.getDayOfMonth();
-		int month = date.getMonthValue();
-		int year = date.getYear();
-		switch (locale.getLanguage()) {
-		case "fr" :
-			strDate = new StringBuilder(day).append("/")
-				.append(month).append("/")
-				.append(year).toString();
-			break;
-		case "en" :
-			strDate = new StringBuilder(year).append("-")
-			.append(month).append("-")
-			.append(day).toString();
-			break;
-		}
-		return strDate;
+	private DateTimeFormatter getFormatter() {
+		Locale locale = LocaleContextHolder.getLocale();
+		String dateFormat = messageSource.getMessage(DATE_FORMAT_MESSAGE_CODE, null, locale);
+		return DateTimeFormatter.ofPattern(dateFormat);
 	}
 }

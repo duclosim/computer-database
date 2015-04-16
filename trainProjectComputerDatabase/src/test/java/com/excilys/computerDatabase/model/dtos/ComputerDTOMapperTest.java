@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.model.dtos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,16 +17,17 @@ import com.excilys.computerDatabase.model.beans.Computer;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class ComputerDTOMapperTest {
+	private static final String DATE_PATTERN = "dd/MM/yyyy";
 	private static final String STR_ID = "16";
 	private static final String NAME = "Apple II";
-	private static final String STR_INTRO_DATE = "1977-04-01";
-	private static final String STR_DIS_DATE = "1993-10-01";
+	private static final String STR_INTRO_DATE = "01/04/1977";
+	private static final String STR_DIS_DATE = "01/10/1993";
 	private static final String STR_COMPANY_ID = "1";
 	private static final String COMPANY_NAME = "Apple Inc.";
 	
 	private static final Long ID = Long.parseLong(STR_ID);
-	private static final LocalDateTime INTRO_DATE = LocalDate.parse(STR_INTRO_DATE).atStartOfDay();
-	private static final LocalDateTime DIS_DATE = LocalDate.parse(STR_DIS_DATE).atStartOfDay();
+	private static final LocalDateTime INTRO_DATE = LocalDate.parse(STR_INTRO_DATE, DateTimeFormatter.ofPattern(DATE_PATTERN)).atStartOfDay();
+	private static final LocalDateTime DIS_DATE = LocalDate.parse(STR_DIS_DATE, DateTimeFormatter.ofPattern(DATE_PATTERN)).atStartOfDay();
 	private static final Long COMPANY_ID = Long.parseLong(STR_COMPANY_ID);
 
 	@Autowired
@@ -49,7 +51,7 @@ public class ComputerDTOMapperTest {
 		expectedDTO.setCompanyName(COMPANY_NAME);
 		ComputerDTO dto = null;
 		// When
-		dto = ComputerDTOMapper.BeanToDTO(bean);
+		dto = dtoMapper.BeanToDTO(bean);
 		// Then
 		Assert.assertEquals("Erreur de mapping de bean.", expectedDTO, dto);
 	}

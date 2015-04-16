@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.model.dtos;
+package com.excilys.computerDatabase.validators;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +8,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.excilys.computerDatabase.utils.UserInputsValidator;
+import com.excilys.computerDatabase.model.dtos.ComputerDTO;
 
 @Component
 public class ComputerDTOValidator implements Validator {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOValidator.class);
+	private static final String DATE_ERROR_MESSAGE_CODE = "DateTimeFormat.computerDTO";
 	
 	@Autowired
-	private UserInputsValidator userInputsValidator;
+	private DateValidator dateValidator;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -30,12 +31,12 @@ public class ComputerDTOValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.computerDTO.name");
 		ComputerDTO computer = (ComputerDTO) target;
 		String intDate = computer.getIntroducedDate();
-		if (intDate != null && !userInputsValidator.isValidDate(intDate)) {
-			errors.rejectValue("introducedDate", "DateTimeFormat.computerDTO.introducedDate");
+		if (!dateValidator.isValidDate(intDate)) {
+			errors.rejectValue("introducedDate", DATE_ERROR_MESSAGE_CODE);
 		}
 		String disDate = computer.getDiscontinuedDate();
-		if (disDate != null && !userInputsValidator.isValidDate(disDate)) {
-			errors.rejectValue("discontinuedDate", "DateTimeFormat.computerDTO.discontinuedDate");
+		if (!dateValidator.isValidDate(disDate)) {
+			errors.rejectValue("discontinuedDate", DATE_ERROR_MESSAGE_CODE);
 		}
 	}
 

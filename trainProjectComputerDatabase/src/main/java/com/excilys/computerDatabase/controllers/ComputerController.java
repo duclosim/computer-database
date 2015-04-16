@@ -23,7 +23,7 @@ import com.excilys.computerDatabase.persistence.daos.ComputerColumn;
 import com.excilys.computerDatabase.persistence.daos.OrderingWay;
 import com.excilys.computerDatabase.services.CompanyService;
 import com.excilys.computerDatabase.services.ComputerService;
-import com.excilys.computerDatabase.utils.UserInputsValidator;
+import com.excilys.computerDatabase.validators.UserInputsValidator;
 
 @Controller
 @RequestMapping("/")
@@ -185,7 +185,7 @@ public class ComputerController {
 	private String saveOrUpdateComputer(SaveOrUpdate method, 
 			ComputerDTO computer, 
 			BindingResult bindingResult) {
-		LOG.info(new StringBuilder("editComputer(")
+		LOG.info(new StringBuilder("saveOrUpdateComputer(")
 			.append(method).append(", ")
 			.append(computer).append(", ")
 			.append(bindingResult).append(")").toString());
@@ -207,7 +207,14 @@ public class ComputerController {
 				return "redirect:dashboard";
 			}
 		}
-		return "editComputer";
+		switch (method) {
+		case SAVE :
+			return "addComputer";
+		case UPDATE :
+			return "editComputer";
+		default :
+			return "redirect:dashboard";
+		}
 	}
 	
 	private static void nullifyEmptyStrings(ComputerDTO computer) {

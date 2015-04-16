@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.utils;
+package com.excilys.computerDatabase.validators;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.excilys.computerDatabase.validators.UserInputsValidator;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class ValidatorTest {
+public class ValidatorsTest {
 	@Autowired
-	private UserInputsValidator userInputsValidator;
+	private DateValidator dateValidator;
 	
 	@Test
 	public void shouldValidateTheString() {
@@ -71,7 +73,7 @@ public class ValidatorTest {
 		// Given
 		String date = "22/03/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertTrue("Erreur sur le valideur de dates.", result);
 	}
@@ -81,7 +83,7 @@ public class ValidatorTest {
 		// Given
 		String date = "29/02/2016";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertTrue("Erreur sur le valideur de dates.", result);
 	}
@@ -89,9 +91,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongYearFormat() {
 		// Given
-		String date = "15-03-22";
+		String date = "22/03/15";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -99,9 +101,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongMonthFormat() {
 		// Given
-		String date = "2015-3-22";
+		String date = "22/3/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -109,9 +111,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongDayFormat() {
 		// Given
-		String date = "2015-03-2";
+		String date = "2/03/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -119,9 +121,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongYear() {
 		// Given
-		String date = "9999-03-22";
+		String date = "22/03/9999";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -129,9 +131,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongMonth() {
 		// Given
-		String date = "2015-27-22";
+		String date = "22/27/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -139,9 +141,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongDay() {
 		// Given
-		String date = "2015-27-37";
+		String date = "37/27/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -149,9 +151,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongDayOfThirtyDayMonth() {
 		// Given
-		String date = "2015-06-31";
+		String date = "31/06/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -159,9 +161,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfWrongDayOfThirtyOneDayMonth() {
 		// Given
-		String date = "2015-07-32";
+		String date = "32/07/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
@@ -169,9 +171,9 @@ public class ValidatorTest {
 	@Test
 	public void shoudlNotValidateTheDateBecauseOfBissextileYear() {
 		// Given
-		String date = "2015-02-29";
+		String date = "29/02/2015";
 		// When
-		boolean result = userInputsValidator.isValidDate(date);
+		boolean result = dateValidator.isValidDate(date);
 		// Then
 		Assert.assertFalse("Erreur sur le valideur de dates.", result);
 	}
