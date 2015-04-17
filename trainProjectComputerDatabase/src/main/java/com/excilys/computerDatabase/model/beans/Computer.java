@@ -1,17 +1,21 @@
 package com.excilys.computerDatabase.model.beans;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.excilys.computerDatabase.persistence.daos.LocalDateTimeToTimestampConverter;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 
@@ -20,19 +24,22 @@ import org.slf4j.LoggerFactory;
  *
  */
 @Entity
-@Table(name = "company")
-public class Computer {
+@Table(name = "computer")
+public class Computer implements Serializable {
+	private static final long serialVersionUID = -683912164717549922L;
 	private static final Logger LOG = LoggerFactory.getLogger(Computer.class);
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
+	@Convert(converter = LocalDateTimeToTimestampConverter.class)
 	@Column(name = "introduced")
 	private LocalDateTime introducedDate;
+	@Convert(converter = LocalDateTimeToTimestampConverter.class)
 	@Column(name = "discontinued")
 	private LocalDateTime discontinuedDate;
-	@ManyToOne
+	@OneToOne
 	private Company company;
 
 	public Computer(Long id, String name, LocalDateTime introduced,

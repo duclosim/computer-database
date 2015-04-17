@@ -15,6 +15,7 @@
 		<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
 			destroy-method="close" p:driverClassName="${jdbc.dev.driverClassName}"
 			p:url="${jdbc.dev.url}" p:username="${jdbc.dev.username}" p:password="${jdbc.dev.password}" />
+
 		<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 			<property name="dataSource" ref="dataSource" />
 		</bean>

@@ -21,7 +21,7 @@ import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 public class CompanyDAOTest {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAOTest.class);
 	@Autowired
-	private CompanyDAOImpl companyDAO;
+	private CompanyDAO companyDAO;
 	@Autowired
 	private CompanyMapper mapper;
 	@Autowired

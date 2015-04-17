@@ -1,5 +1,7 @@
 package com.excilys.computerDatabase.model.beans;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +19,8 @@ import org.slf4j.LoggerFactory;
  */
 @Entity
 @Table(name = "company")
-public class Company {
+public class Company implements Serializable {
+	private static final long serialVersionUID = 4212246981996257432L;
 	private static final Logger LOG = LoggerFactory.getLogger(Company.class);
 
 	@Id

@@ -1,17 +1,12 @@
 package com.excilys.computerDatabase.persistence.daos;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.model.beans.Computer;
@@ -28,141 +23,145 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Autowired
 	private ComputerMapper mapper;
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private SessionFactory sessionFactory;
+	private Session session;
 
-	private static final String GET_BY_ID = "SELECT * FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "WHERE computer.id=?;";
+	private static final String HQL_GET = "select computer from Computer computer "
+			+ "left join computer.company as company "
+			+ "where computer.id = :id";
 	@Override
 	public Computer getById(Long id) {
 		LOG.info("getById(" + id + ")");
-		List<Computer> result = jdbcTemplate.query(GET_BY_ID, new Object[]{id}, mapper);
-		return result.isEmpty() ? null : result.get(0);
+		session  = sessionFactory.openSession();
+		Computer result = (Computer) session.createQuery(HQL_GET)
+				.setLong("id", id)
+				.uniqueResult();
+		session.close();
+		return result;
 	}
 
-	private static final String GET_ALL = "SELECT * "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "LIMIT ? OFFSET ?;";
+	private static final String HQL_GET_ALL = "select computer from Computer computer "
+			+ "left join computer.company as company ";
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Computer> getAll(int limit, int offset) {
 		LOG.info(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
-		if (limit <= 0) {
-			LOG.error("limit est négatif ou nul.");
-			throw new IllegalArgumentException("limit est négatif ou nul.");
-		}
-		if (offset < 0) {
-			LOG.error("offset est négatif.");
-			throw new IllegalArgumentException("offset est négatif.");
-		}
-		return jdbcTemplate.query(GET_ALL, new Object[]{limit, offset}, mapper);
+		session  = sessionFactory.openSession();
+		List<Computer> result = (List<Computer>) session.createQuery(HQL_GET_ALL)
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.list();
+		session.close();
+		return result;
 	}
 
-	private static final String GET_FILTERED = "SELECT * "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "WHERE computer.name LIKE ? "
-			+ "OR company.name LIKE ? "
-			+ "LIMIT ? OFFSET ?;";
+	private static final String HQL_GET_FILTERED = "select computer from Computer computer "
+			+ "left join computer.company as company "
+			+ "where computer.name like :name "
+			+ "or company.name like :name ";
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Computer> getFiltered(int limit, int offset, String name) {
-		LOG.info(new StringBuilder("getByNameOrCompanyName(")
+		LOG.info(new StringBuilder("getFiltered(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(")").toString());
-		return jdbcTemplate.query(GET_FILTERED, new Object[]{
-			new StringBuilder("%").append(name).append("%").toString(), 
-			new StringBuilder("%").append(name).append("%").toString(),
-			limit, offset},
-			mapper);
+		session  = sessionFactory.openSession();
+		List<Computer> result = (List<Computer>) session.createQuery(HQL_GET_FILTERED)
+				.setString("name", '%' + name + '%')
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.list();
+		session.close();
+		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Computer> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way) {
-		LOG.info(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getOrdered(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		if (limit <= 0) {
-			LOG.error("limit est négatif ou nul.");
-			throw new IllegalArgumentException("limit est négatif ou nul.");
-		}
-		if (offset < 0) {
-			LOG.error("offset est négatif.");
-			throw new IllegalArgumentException("offset est négatif.");
-		}
-		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
-			.append("LEFT JOIN company ON computer.company_id = company.id ");
+		StringBuilder query = new StringBuilder("select computer from Computer computer ")
+			.append("left join computer.company as company ");
 		if (column != null && way != null) {
-			query.append("ORDER BY ")
+			query.append("order by ")
 				.append(column.getColumnName()).append(" ")
 				.append(way.getWay()).append(", ")
-				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ");
+				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" asc ");
 		}
-		query.append("LIMIT ? OFFSET ?;");
-		return jdbcTemplate.query(query.toString(), new Object[]{limit, offset}, mapper);
+		session  = sessionFactory.openSession();
+		List<Computer> result = (List<Computer>) session.createQuery(query.toString())
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.list();
+		session.close();
+		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Computer> getFilteredAndOrdered(int limit, int offset,
 			String name, ComputerColumn column, OrderingWay way) {
-		LOG.info(new StringBuilder("getAll(")
+		LOG.info(new StringBuilder("getFilteredAndOrdered(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(",")
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		if (limit <= 0) {
-			LOG.error("limit est négatif ou nul.");
-			throw new IllegalArgumentException("limit est négatif ou nul.");
-		}
-		if (offset < 0) {
-			LOG.error("offset est négatif.");
-			throw new IllegalArgumentException("offset est négatif.");
-		}
-		StringBuilder query = new StringBuilder("SELECT * FROM computer ")
-			.append("LEFT JOIN company ON computer.company_id = company.id ");
+		StringBuilder query = new StringBuilder("select computer from Computer computer ")
+			.append("left join computer.company as company ");
 		if (name != null) {
-			query.append("WHERE computer.name LIKE ? ")
-				.append("OR company.name LIKE ? ");
+			query.append("where computer.name like :name ")
+				.append("or company.name like :name ");
 		}
 		if (column != null && way != null) {
-			query.append("ORDER BY ")
+			query.append("order by ")
 				.append(column.getColumnName()).append(" ")
 				.append(way.getWay()).append(", ")
-				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" ASC ");
+				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" asc ");
 		}
-		query.append("LIMIT ? OFFSET ?;");
-		return jdbcTemplate.query(query.toString(), new Object[]{
-			new StringBuilder("%").append(name).append("%").toString(), 
-			new StringBuilder("%").append(name).append("%").toString(),
-			limit, offset}, mapper);
+		session  = sessionFactory.openSession();
+		List<Computer> result = (List<Computer>) session.createQuery(query.toString())
+				.setString("name", '%' + name + '%')
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.list();
+		session.close();
+		return result;
 	}
 
-	private static final String COUNT = "SELECT COUNT(*) FROM computer;";
+	private static final String HQL_COUNT = "select count(*) from Computer ";
 	@Override
 	public int countLines() {
 		LOG.info("countLine()");
-		return jdbcTemplate.queryForObject(COUNT, Integer.class);
+		session  = sessionFactory.openSession();
+		Long result = (Long) session.createQuery(HQL_COUNT).uniqueResult();
+		session.close();
+		return result.intValue();
 	}
 
-	private static final String COUNT_FILTERED = "SELECT COUNT(*) "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "WHERE computer.name LIKE ? "
-			+ "OR company.name LIKE ?;";
+	private static final String HQL_COUNT_FILTERED = "select count(*) from Computer as computer "
+			+ "left join computer.company as company "
+			+ "where computer.name like :name "
+			+ "or company.name like :name ";
 	@Override
 	public int countFilteredLines(String name) {
 		LOG.info("countFilteredLines(" + name + ")");
-		String usableName = new StringBuilder("%").append(name).append("%").toString();
-		return jdbcTemplate.queryForObject(COUNT_FILTERED, new Object[]{usableName, usableName}, Integer.class);
+		session  = sessionFactory.openSession();
+		Long result = (Long) session.createQuery(HQL_COUNT_FILTERED)
+				.setString("name", '%' + name + '%')
+				.uniqueResult();
+		session.close();
+		return result.intValue();
 	}
 
 	@Override
@@ -172,50 +171,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
-		StringBuilder query = new StringBuilder("INSERT INTO computer (")
-			.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
-			.append(", ")
-			.append(ComputerColumn.INTRODUCED_COLUMN_LABEL.getColumnName())
-			.append(", ")
-			.append(ComputerColumn.DISCONTINUED_COLUMN_LABEL.getColumnName());
-		if (computer.getCompany() != null) {
-			query.append(", ")
-				.append(ComputerColumn.COMPANY_ID_COLUMN_LABEL.getColumnName());
-		}
-		query.append(") VALUES (?, ?, ?");
-		if (computer.getCompany() != null) {
-			query.append(", ?");
-		}
-		query.append(");");
-		final Timestamp introduced;
-		final Timestamp discontinued;
-		if (computer.getIntroducedDate() != null) {
-			introduced = Timestamp.valueOf(computer.getIntroducedDate());
-		} else {
-			introduced = null;
-		}
-		if (computer.getDiscontinuedDate() != null) {
-			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
-		} else {
-			discontinued = null;
-		}
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update(
-				connection -> {
-					PreparedStatement ps =
-							connection.prepareStatement(query.toString(),
-									Statement.RETURN_GENERATED_KEYS);
-					int paramIndex = 0;
-					ps.setString(++paramIndex, computer.getName());
-					ps.setTimestamp(++paramIndex, introduced);
-					ps.setTimestamp(++paramIndex, discontinued);
-					if (computer.getCompany() != null) {
-						ps.setLong(++paramIndex, computer.getCompany().getId());
-					}
-					return ps;
-				},
-			keyHolder);
-		computer.setId(keyHolder.getKey().longValue());
+		session  = sessionFactory.openSession();
+		session.saveOrUpdate(computer);
+		session.close();
 	}
 
 	@Override
@@ -229,44 +187,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computerName est à null.");
 			throw new IllegalArgumentException("computerName est à null.");
 		}
-		StringBuilder query = new StringBuilder("UPDATE computer SET ")
-		.append(ComputerColumn.NAME_COLUMN_LABEL.getColumnName())
-		.append("=?, ")
-		.append(ComputerColumn.INTRODUCED_COLUMN_LABEL.getColumnName())
-		.append("=?, ")
-		.append(ComputerColumn.DISCONTINUED_COLUMN_LABEL.getColumnName())
-		.append("=?");
-		if (computer.getCompany() != null) {
-			query.append(", ")
-			.append(ComputerColumn.COMPANY_ID_COLUMN_LABEL.getColumnName())
-			.append("=?");
-		}
-		query.append(" WHERE id = ?;");
-		Timestamp introduced = null;
-		Timestamp discontinued = null;
-		if (computer.getIntroducedDate() != null) {
-			introduced = Timestamp.valueOf(computer.getIntroducedDate());
-		}
-		if (computer.getDiscontinuedDate() != null) {
-			discontinued = Timestamp.valueOf(computer.getDiscontinuedDate());
-		}
-		List<Object> params = new ArrayList<>();
-		// name
-		params.add(computer.getName());
-		// introduced date
-		params.add(introduced);
-		// discontinued date
-		params.add(discontinued);
-		// company id
-		if (computer.getCompany() != null) {
-			params.add(computer.getCompany().getId());
-		}
-		// id
-		params.add(computer.getId());
-		jdbcTemplate.update(query.toString(), params.toArray());
+		session  = sessionFactory.openSession();
+		session.update(computer);
+		session.flush();
+		session.close();
 	}
 
-	private static final String DELETE  = "DELETE FROM computer WHERE id=?";
+	private static final String HQL_DELETE = "delete from Computer where id = :id ";
 	@Override
 	public void delete(Computer computer) {
 		LOG.info("delete(" + computer + ")");
@@ -274,13 +201,21 @@ public class ComputerDAOImpl implements ComputerDAO {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
 		}
-		jdbcTemplate.update(DELETE, computer.getId());
+		session  = sessionFactory.openSession();
+		session.createQuery(HQL_DELETE)
+				.setLong("id", computer.getId())
+				.executeUpdate();
+		session.close();
 	}
 
-	private static final String DELETE_BY_COMPANY_ID = "DELETE FROM computer WHERE company_id=?";
+	private static final String HQL_DELETE_BY_COMPANY_ID = "delete from Computer where company_id = :id ";
 	@Override
 	public void deleteByCompanyId(Long companyId) {
 		LOG.info("deleteByCompanyId(" + companyId + ")");
-		jdbcTemplate.update(DELETE_BY_COMPANY_ID, companyId);
+		session  = sessionFactory.openSession();
+		session.createQuery(HQL_DELETE_BY_COMPANY_ID)
+				.setLong("id", companyId)
+				.executeUpdate();
+		session.close();
 	}
 }
