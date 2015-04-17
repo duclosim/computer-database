@@ -1,8 +1,13 @@
 package com.excilys.computerDatabase.model.beans;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 
@@ -10,10 +15,13 @@ import org.springframework.stereotype.Component;
  * @author excilys
  *
  */
-@Component
+@Entity
+@Table(name = "company")
 public class Company {
 	private static final Logger LOG = LoggerFactory.getLogger(Company.class);
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
 	

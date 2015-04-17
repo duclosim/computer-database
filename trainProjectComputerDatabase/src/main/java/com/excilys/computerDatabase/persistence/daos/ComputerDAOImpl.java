@@ -20,39 +20,19 @@ import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 /**
  * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.
  * @author excilys
- *
  */
 @Repository
 public class ComputerDAOImpl implements ComputerDAO {
-	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOImpl.class);
-	private static final String GET_BY_ID = "SELECT * FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "WHERE computer.id=?;";
-	private static final String GET_ALL = "SELECT * "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "LIMIT ? OFFSET ?;";
-	private static final String GET_FILTERED = "SELECT * "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "WHERE computer.name LIKE ? "
-			+ "OR company.name LIKE ? "
-			+ "LIMIT ? OFFSET ?;";
-	private static final String COUNT = "SELECT COUNT(*) FROM computer;";
-	private static final String COUNT_FILTERED = "SELECT COUNT(*) "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id "
-			+ "WHERE computer.name LIKE ? "
-			+ "OR company.name LIKE ?;";
-	private static final String DELETE  = "DELETE FROM computer WHERE id=?";
-	private static final String DELETE_BY_COMPANY_ID = "DELETE FROM computer WHERE company_id=?";
 	
 	@Autowired
 	private ComputerMapper mapper;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
+
+	private static final String GET_BY_ID = "SELECT * FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "WHERE computer.id=?;";
 	@Override
 	public Computer getById(Long id) {
 		LOG.info("getById(" + id + ")");
@@ -60,6 +40,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
+	private static final String GET_ALL = "SELECT * "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "LIMIT ? OFFSET ?;";
 	@Override
 	public List<Computer> getAll(int limit, int offset) {
 		LOG.info(new StringBuilder("getAll(")
@@ -77,6 +61,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return jdbcTemplate.query(GET_ALL, new Object[]{limit, offset}, mapper);
 	}
 
+	private static final String GET_FILTERED = "SELECT * "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "WHERE computer.name LIKE ? "
+			+ "OR company.name LIKE ? "
+			+ "LIMIT ? OFFSET ?;";
 	@Override
 	public List<Computer> getFiltered(int limit, int offset, String name) {
 		LOG.info(new StringBuilder("getByNameOrCompanyName(")
@@ -156,12 +146,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 			limit, offset}, mapper);
 	}
 
+	private static final String COUNT = "SELECT COUNT(*) FROM computer;";
 	@Override
 	public int countLines() {
 		LOG.info("countLine()");
 		return jdbcTemplate.queryForObject(COUNT, Integer.class);
 	}
 
+	private static final String COUNT_FILTERED = "SELECT COUNT(*) "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id "
+			+ "WHERE computer.name LIKE ? "
+			+ "OR company.name LIKE ?;";
 	@Override
 	public int countFilteredLines(String name) {
 		LOG.info("countFilteredLines(" + name + ")");
@@ -270,6 +266,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		jdbcTemplate.update(query.toString(), params.toArray());
 	}
 
+	private static final String DELETE  = "DELETE FROM computer WHERE id=?";
 	@Override
 	public void delete(Computer computer) {
 		LOG.info("delete(" + computer + ")");
@@ -280,6 +277,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		jdbcTemplate.update(DELETE, computer.getId());
 	}
 
+	private static final String DELETE_BY_COMPANY_ID = "DELETE FROM computer WHERE company_id=?";
 	@Override
 	public void deleteByCompanyId(Long companyId) {
 		LOG.info("deleteByCompanyId(" + companyId + ")");

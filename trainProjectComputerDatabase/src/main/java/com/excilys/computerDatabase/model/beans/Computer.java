@@ -1,11 +1,17 @@
 package com.excilys.computerDatabase.model.beans;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 /**
  * Cette classe contient les informations contenue dans une ligne de 
@@ -13,15 +19,20 @@ import java.time.LocalDateTime;
  * @author excilys
  *
  */
-@Component
+@Entity
+@Table(name = "company")
 public class Computer {
 	private static final Logger LOG = LoggerFactory.getLogger(Computer.class);
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
+	@Column(name = "introduced")
 	private LocalDateTime introducedDate;
+	@Column(name = "discontinued")
 	private LocalDateTime discontinuedDate;
-	@Autowired
+	@ManyToOne
 	private Company company;
 
 	public Computer(Long id, String name, LocalDateTime introduced,

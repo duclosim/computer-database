@@ -8,10 +8,12 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<import resource="messageContext.xml" />
-	<import resource="testTransactionContext.xml" />
+	<import resource="dataSource.xml" />
+	<import resource="Hibernate.xml" />
+	<!-- Component scan -->
 	<context:annotation-config />
-
-	<context:component-scan base-package="com.excilys.computerDatabase.model.beans, 
+	<context:component-scan base-package="
+		com.excilys.computerDatabase.model.beans, 
 		com.excilys.computerDatabase.validators, 
 		com.excilys.computerDatabase.model.dtos, 
 		com.excilys.computerDatabase.persistence.mappers, 
