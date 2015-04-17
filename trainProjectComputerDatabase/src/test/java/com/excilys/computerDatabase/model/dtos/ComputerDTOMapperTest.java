@@ -43,8 +43,8 @@ public class ComputerDTOMapperTest {
 		Computer bean = new Computer();
 		bean.setId(ID);
 		bean.setName(NAME);
-		bean.setIntroducedDate(INTRO_DATE);
-		bean.setDiscontinuedDate(DIS_DATE);
+		bean.setIntroduced(INTRO_DATE);
+		bean.setDiscontinued(DIS_DATE);
 		bean.setCompany(new Company(COMPANY_ID, COMPANY_NAME));
 		ComputerDTO expectedDTO = new ComputerDTO();
 		expectedDTO.setId(STR_ID);
@@ -67,8 +67,8 @@ public class ComputerDTOMapperTest {
 		Computer expectedBean = new Computer();
 		expectedBean.setId(ID);
 		expectedBean.setName(NAME);
-		expectedBean.setIntroducedDate(INTRO_DATE);
-		expectedBean.setDiscontinuedDate(DIS_DATE);
+		expectedBean.setIntroduced(INTRO_DATE);
+		expectedBean.setDiscontinued(DIS_DATE);
 		expectedBean.setCompany(new Company(COMPANY_ID, COMPANY_NAME));
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(STR_ID);

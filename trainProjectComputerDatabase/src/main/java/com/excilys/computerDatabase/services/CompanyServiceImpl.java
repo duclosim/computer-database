@@ -21,7 +21,6 @@ import com.excilys.computerDatabase.persistence.daos.OrderingWay;
  */
 @Service
 public class CompanyServiceImpl implements CompanyService {
-	
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
 	
 	@Autowired

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
@@ -18,6 +19,7 @@ import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
  *
  */
 @Repository
+@Transactional
 public class CompanyDAOImpl implements CompanyDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
@@ -25,31 +27,26 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private CompanyMapper mapper;
 	@Autowired
 	private SessionFactory sessionFactory;
-	private Session session;
 
-	private static final String HQL_GET = "select company from Company company where id = :id ";
+	private static final String HQL_GET = "select company from Company company where id= :id";
 	@Override
 	public Company getById(Long id) {
 		LOG.info("getById(" + id + ")");
-		session  = sessionFactory.openSession();
-		Company result = (Company) session.createQuery(HQL_GET)
+ 		Company result = (Company) getSession().createQuery(HQL_GET)
 				.setLong("id", id)
 				.uniqueResult();
-		session.close();
 		return result;
 	}
 
-	private static final String HQL_GET_ALL = "select company from Company company ";
+	private static final String HQL_GET_ALL = "select company from Company company";
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Company> getAll(int limit, int offset) {
 		LOG.info("getAll(" + limit + ", " + offset + ")");
-		session  = sessionFactory.openSession();
-		List<Company> result = (List<Company>) session.createQuery(HQL_GET_ALL)
+		List<Company> result = (List<Company>) getSession().createQuery(HQL_GET_ALL)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.list();
-		session.close();
 		return result;
 	}
 
@@ -57,10 +54,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll() {
 		LOG.info("getAll()");
-		session  = sessionFactory.openSession();
-		List<Company> result = (List<Company>) session.createQuery(HQL_GET_ALL)
+		List<Company> result = (List<Company>) getSession().createQuery(HQL_GET_ALL)
 				.list();
-		session.close();
 		return result;
 	}
 
@@ -81,13 +76,11 @@ public class CompanyDAOImpl implements CompanyDAO {
 		throw new UnsupportedOperationException();
 	}
 
-	private static final String HQL_COUNT = "select count(*) from Company ";
+	private static final String HQL_COUNT = "select count(*) from Company";
 	@Override
 	public int countLines() {
 		LOG.info("countLine()");
-		session  = sessionFactory.openSession();
-		Long result = (Long) session.createQuery(HQL_COUNT).uniqueResult();
-		session.close();
+		Long result = (Long) getSession().createQuery(HQL_COUNT).uniqueResult();
 		return result.intValue();
 	}
 
@@ -103,7 +96,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		
 	}
 
-	private static final String HQL_DELETE = "delete from Company where id = :id ";
+	private static final String HQL_DELETE = "delete from Company where id= :id";
 	@Override
 	public void delete(Company company) {
 		LOG.info("delete(" + company + ")");
@@ -111,10 +104,12 @@ public class CompanyDAOImpl implements CompanyDAO {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");
 		}
-		session  = sessionFactory.openSession();
-		session.createQuery(HQL_DELETE)
+		getSession().createQuery(HQL_DELETE)
 				.setLong("id", company.getId())
 				.executeUpdate();
-		session.close();
+	}
+	
+	private Session getSession() {
+		return sessionFactory.getCurrentSession();
 	}
 }

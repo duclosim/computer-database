@@ -23,7 +23,6 @@ import com.excilys.computerDatabase.validators.UserInputsValidator;
  */
 @Service
 public class ComputerServiceImpl implements ComputerService {
-	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
 	
 	@Autowired

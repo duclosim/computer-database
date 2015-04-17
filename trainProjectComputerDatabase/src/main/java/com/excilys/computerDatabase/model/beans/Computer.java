@@ -3,7 +3,6 @@ package com.excilys.computerDatabase.model.beans;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,11 +33,9 @@ public class Computer implements Serializable {
 	private Long id;
 	private String name;
 	@Convert(converter = LocalDateTimeToTimestampConverter.class)
-	@Column(name = "introduced")
-	private LocalDateTime introducedDate;
+	private LocalDateTime introduced;
 	@Convert(converter = LocalDateTimeToTimestampConverter.class)
-	@Column(name = "discontinued")
-	private LocalDateTime discontinuedDate;
+	private LocalDateTime discontinued;
 	@OneToOne
 	private Company company;
 
@@ -53,8 +50,8 @@ public class Computer implements Serializable {
 			.toString());
 		this.id = id;
 		this.name = name;
-		this.introducedDate = introduced;
-		this.discontinuedDate = discontinued;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
 		this.company = company;
 	}
 	
@@ -78,21 +75,21 @@ public class Computer implements Serializable {
 		LOG.info("setName(" + name + ")");
 		this.name = name;
 	}
-	public LocalDateTime getIntroducedDate() {
+	public LocalDateTime getIntroduced() {
 		LOG.info("getIntroducedDate()");
-		return introducedDate;
+		return introduced;
 	}
-	public void setIntroducedDate(LocalDateTime introducedDate) {
+	public void setIntroduced(LocalDateTime introducedDate) {
 		LOG.info("setIntroducedDate(" + introducedDate + ")");
-		this.introducedDate = introducedDate;
+		this.introduced = introducedDate;
 	}
-	public LocalDateTime getDiscontinuedDate() {
+	public LocalDateTime getDiscontinued() {
 		LOG.info("getDiscontinuedDate()");
-		return discontinuedDate;
+		return discontinued;
 	}
-	public void setDiscontinuedDate(LocalDateTime discontinuedDate) {
+	public void setDiscontinued(LocalDateTime discontinuedDate) {
 		LOG.info("setDiscontinuedDate(" + discontinuedDate + ")");
-		this.discontinuedDate = discontinuedDate;
+		this.discontinued = discontinuedDate;
 	}
 	public Company getCompany() {
 		LOG.info("getCompany()");
@@ -110,10 +107,10 @@ public class Computer implements Serializable {
 		result = prime * result
 				+ ((company == null) ? 0 : company.hashCode());
 		result = prime * result
-				+ ((discontinuedDate == null) ? 0 : discontinuedDate.hashCode());
+				+ ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
-				+ ((introducedDate == null) ? 0 : introducedDate.hashCode());
+				+ ((introduced == null) ? 0 : introduced.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -132,20 +129,20 @@ public class Computer implements Serializable {
 				return false;
 		} else if (!company.equals(other.company))
 			return false;
-		if (discontinuedDate == null) {
-			if (other.discontinuedDate != null)
+		if (discontinued == null) {
+			if (other.discontinued != null)
 				return false;
-		} else if (!discontinuedDate.equals(other.discontinuedDate))
+		} else if (!discontinued.equals(other.discontinued))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (introducedDate == null) {
-			if (other.introducedDate != null)
+		if (introduced == null) {
+			if (other.introduced != null)
 				return false;
-		} else if (!introducedDate.equals(other.introducedDate))
+		} else if (!introduced.equals(other.introduced))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -158,7 +155,7 @@ public class Computer implements Serializable {
 	@Override
 	public String toString() {
 		return "ComputerBean [id=" + id + ", name=" + name + ", introduced="
-				+ introducedDate + ", discontinued=" + discontinuedDate
+				+ introduced + ", discontinued=" + discontinued
 				+ ", company=" + company + "]";
 	}
 }

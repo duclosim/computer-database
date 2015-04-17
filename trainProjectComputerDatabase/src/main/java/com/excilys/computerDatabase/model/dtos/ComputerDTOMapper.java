@@ -39,8 +39,8 @@ public class ComputerDTOMapper {
 		Computer bean = new Computer();
 		bean.setId(null);
 		bean.setName(dto.getName());
-		bean.setIntroducedDate(null);
-		bean.setDiscontinuedDate(null);
+		bean.setIntroduced(null);
+		bean.setDiscontinued(null);
 		bean.setCompany(null);
 		if (dto.getId() != null) {
 			bean.setId(Long.parseLong(dto.getId()));
@@ -48,11 +48,11 @@ public class ComputerDTOMapper {
 		LocalDate lDate;
 		if (dto.getIntroducedDate() != null) {
 			lDate = LocalDate.parse(dto.getIntroducedDate(), getFormatter());
-			bean.setIntroducedDate(lDate.atStartOfDay());
+			bean.setIntroduced(lDate.atStartOfDay());
 		}
 		if (dto.getDiscontinuedDate() != null) {
 			lDate = LocalDate.parse(dto.getDiscontinuedDate(), getFormatter());
-			bean.setDiscontinuedDate(lDate.atStartOfDay());
+			bean.setDiscontinued(lDate.atStartOfDay());
 		}
 		if ((dto.getCompanyId() != null) && (dto.getCompanyName() != null)) {
 			bean.setCompany(new Company(Long.parseLong(dto.getCompanyId()), dto.getCompanyName()));
@@ -74,11 +74,11 @@ public class ComputerDTOMapper {
 		dto.setDiscontinuedDate(null);
 		dto.setCompanyId(null);
 		dto.setCompanyName(null);
-		if (bean.getIntroducedDate() != null) {
-			dto.setIntroducedDate(bean.getIntroducedDate().format(getFormatter()));
+		if (bean.getIntroduced() != null) {
+			dto.setIntroducedDate(bean.getIntroduced().format(getFormatter()));
 		}
-		if (bean.getDiscontinuedDate() != null) {
-			dto.setDiscontinuedDate(bean.getDiscontinuedDate().format(getFormatter()));
+		if (bean.getDiscontinued() != null) {
+			dto.setDiscontinuedDate(bean.getDiscontinued().format(getFormatter()));
 		}
 		if (bean.getCompany() != null) {
 			dto.setCompanyId(bean.getCompany().getId().toString());
