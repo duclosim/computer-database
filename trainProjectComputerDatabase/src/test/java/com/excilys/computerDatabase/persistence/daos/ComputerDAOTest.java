@@ -19,7 +19,7 @@ import com.excilys.computerDatabase.model.beans.Computer;
 import com.excilys.computerDatabase.persistence.mappers.ComputerMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class ComputerDAOTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAOTest.class);
 	@Autowired

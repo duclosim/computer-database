@@ -17,7 +17,7 @@ import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.mappers.CompanyMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class CompanyDAOTest {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAOTest.class);
 	@Autowired

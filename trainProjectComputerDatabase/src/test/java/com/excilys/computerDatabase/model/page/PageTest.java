@@ -18,7 +18,7 @@ import com.excilys.computerDatabase.model.dtos.ComputerDTO;
 import com.excilys.computerDatabase.services.ComputerServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class PageTest {
 	private static final Logger LOG = LoggerFactory.getLogger(PageTest.class);
 	private static final int DEFAULT_LIMIT = 10;

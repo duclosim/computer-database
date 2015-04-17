@@ -15,7 +15,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class CLIServiceTest {
 	private static final Logger LOG = LoggerFactory.getLogger(DateValidator.class);
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();

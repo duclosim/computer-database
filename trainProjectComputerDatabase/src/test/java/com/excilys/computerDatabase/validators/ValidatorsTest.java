@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class ValidatorsTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ValidatorsTest.class);
 	

@@ -17,7 +17,7 @@ import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.model.beans.Computer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class ComputerDTOMapperTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOMapperTest.class);
 	private static final String DATE_PATTERN = "dd/MM/yyyy";

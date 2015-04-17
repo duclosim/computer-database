@@ -17,7 +17,7 @@ import com.excilys.computerDatabase.model.beans.Company;
 import com.excilys.computerDatabase.persistence.daos.CompanyDAO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class CompanyServiceTest {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceTest.class);
 	@Autowired

@@ -26,7 +26,7 @@ import com.excilys.computerDatabase.services.ComputerService;
 
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+@ContextConfiguration(locations = "classpath:mainApplicationContext.xml")
 public class WebUserInterfaceTest {
 	private static final Logger LOG = LoggerFactory.getLogger(WebUserInterfaceTest.class);
 	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";
