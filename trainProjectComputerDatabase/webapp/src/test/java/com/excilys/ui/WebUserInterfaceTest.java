@@ -29,7 +29,7 @@ import com.excilys.services.ComputerService;
 @ContextConfiguration(locations = "classpath:webapp-context.xml")
 public class WebUserInterfaceTest {
 	private static final Logger LOG = LoggerFactory.getLogger(WebUserInterfaceTest.class);
-	private static final String HOME_PAGE = "http://localhost:8080/trainProjectComputerDatabase/dashboard";
+	private static final String HOME_PAGE = "http://http://localhost:8080/computer-database/dashboard";
 	// Field ids/names
 	private static final String BEAN_NAME_FIELD = "computerName";
 	private static final String BEAN_INTRO_DATE_FIELD = "introduced";

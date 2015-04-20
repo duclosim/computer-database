@@ -12,9 +12,9 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="classpath:webapp-context.xml" />
-	
-	<context:component-scan base-package="com.excilys.computerDatabase.controllers" />
+	<!-- Component scan -->
 	<context:annotation-config />
+	<context:component-scan base-package="com.excilys.controllers" />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
