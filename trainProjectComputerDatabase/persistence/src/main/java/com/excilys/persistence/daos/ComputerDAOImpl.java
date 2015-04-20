@@ -33,10 +33,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public Computer getById(Long id) {
 		LOG.info("getById(" + id + ")");
-		Computer result = (Computer) getSession().createQuery(HQL_GET)
+		return (Computer) getSession().createQuery(HQL_GET)
 				.setLong("id", id)
 				.uniqueResult();
-		return result;
 	}
 
 	private static final String HQL_GET_ALL = "select computer from Computer computer "
@@ -48,11 +47,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
-		List<Computer> result = (List<Computer>) getSession().createQuery(HQL_GET_ALL)
+		return (List<Computer>) getSession().createQuery(HQL_GET_ALL)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.list();
-		return result;
 	}
 
 	private static final String HQL_GET_FILTERED = "select computer from Computer computer "
@@ -66,12 +64,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(")").toString());
-		List<Computer> result = (List<Computer>) getSession().createQuery(HQL_GET_FILTERED)
+		return (List<Computer>) getSession().createQuery(HQL_GET_FILTERED)
 				.setString("name", '%' + name + '%')
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.list();
-		return result;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -92,11 +89,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 				.append(way.getWay()).append(", ")
 				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" asc ");
 		}
-		List<Computer> result = (List<Computer>) getSession().createQuery(query.toString())
+		return (List<Computer>) getSession().createQuery(query.toString())
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.list();
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -122,12 +118,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 				.append(way.getWay()).append(", ")
 				.append(ComputerColumn.ID_COLUMN_LABEL.getColumnName()).append(" asc ");
 		}
-		List<Computer> result = (List<Computer>) getSession().createQuery(query.toString())
+		return (List<Computer>) getSession().createQuery(query.toString())
 				.setString("name", '%' + name + '%')
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.list();
-		return result;
 	}
 
 	private static final String HQL_COUNT = "select count(*) from Computer";

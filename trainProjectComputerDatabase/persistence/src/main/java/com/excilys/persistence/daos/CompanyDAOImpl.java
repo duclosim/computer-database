@@ -32,10 +32,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public Company getById(Long id) {
 		LOG.info("getById(" + id + ")");
- 		Company result = (Company) getSession().createQuery(HQL_GET)
-				.setLong("id", id)
-				.uniqueResult();
-		return result;
+		return (Company) getSession().createQuery(HQL_GET)
+               .setLong("id", id)
+               .uniqueResult();
 	}
 
 	private static final String HQL_GET_ALL = "select company from Company company";
@@ -43,20 +42,18 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll(int limit, int offset) {
 		LOG.info("getAll(" + limit + ", " + offset + ")");
-		List<Company> result = (List<Company>) getSession().createQuery(HQL_GET_ALL)
+		return (List<Company>) getSession().createQuery(HQL_GET_ALL)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.list();
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Company> getAll() {
 		LOG.info("getAll()");
-		List<Company> result = (List<Company>) getSession().createQuery(HQL_GET_ALL)
+		return (List<Company>) getSession().createQuery(HQL_GET_ALL)
 				.list();
-		return result;
 	}
 
 	@Override

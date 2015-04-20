@@ -27,3 +27,12 @@ hs_err_pid*
 
 trainProjectComputerDatabase/*.iml
 trainProjectComputerDatabase/*.log
+trainProjectComputerDatabase/.project
+trainProjectComputerDatabase/computerDatabase.iml
+trainProjectComputerDatabase/computerDatabaseTestLog.log
+trainProjectComputerDatabase/webapp/webapp.iml
+trainProjectComputerDatabase/service/service.iml
+trainProjectComputerDatabase/persistence/persistence.iml
+trainProjectComputerDatabase/core/core.iml
+trainProjectComputerDatabase/console/console.iml
+trainProjectComputerDatabase/binding/binding.iml
