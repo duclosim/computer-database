@@ -11,10 +11,8 @@
 	<http auto-config="true">
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
-		<intercept-url pattern="/dashboard*" method="GET"
-			access="hasRole('USER')" />
-		<intercept-url pattern="/dashboard*" method="POST"
-			access="hasRole('USER')" />
+		<intercept-url pattern="/dashboard*" method="GET" access="hasRole('USER')" />
+		<intercept-url pattern="/dashboard*" method="POST" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/addComputer*" access="hasRole('USER')" />
 		<intercept-url pattern="/editComputer*" access="hasRole('USER')" />
 		<http-basic />
@@ -25,4 +23,16 @@
 			<jdbc-user-service id="userService" data-source-ref="dataSource" />
 		</authentication-provider>
 	</authentication-manager>
+	<!-- DigestAuthentication -->
+	<beans:bean id="digestFilter"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+		<beans:property name="userDetailsService" ref="userService" />
+		<beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
+	</beans:bean>
+
+	<beans:bean id="digestEntryPoint"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+		<beans:property name="realmName" value="Contacts Realm via Digest Authentication" />
+		<beans:property name="key" value="acegi" />
+	</beans:bean>
 </beans:beans>
