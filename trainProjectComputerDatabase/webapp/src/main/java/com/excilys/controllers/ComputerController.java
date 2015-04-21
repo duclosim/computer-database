@@ -38,6 +38,12 @@ public class ComputerController {
 	private Page page; 
     @Autowired
     private Validator computerDTOValidator;
+    
+    // --- REDIRECT ---
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ModelAndView redirect() {
+    	return new ModelAndView("redirect:dashboard");
+    }
  
 	// --- DASHBOARD ---
 	@RequestMapping(value = "dashboard", method = RequestMethod.GET)
