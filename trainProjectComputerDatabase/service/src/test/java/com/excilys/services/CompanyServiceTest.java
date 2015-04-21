@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.model.beans.Company;
 import com.excilys.persistence.daos.CompanyDAO;
@@ -58,12 +59,22 @@ public class CompanyServiceTest {
 		// Then
 		Assert.assertEquals("Mauvais bean récupéré", expectedNbLines, result);
 	}
-	
+
 	@Ignore
 	@Test
+	@Transactional
 	public void delete() {
 		LOG.debug("delete()");
-		// TODO
+		// Given
+		Long id = new Long(10);
+		Company bean = companyService.getById(id);
+		String newBeanName = "newBean";
+		bean.setName(newBeanName);
+		// When
+		companyService.delete(bean);
+		bean = companyService.getById(bean.getId());
+		// Then
+		Assert.assertNull("Erreur sur le bean", bean);
 	}
 	
 }

@@ -67,6 +67,9 @@ public class ComputerDTOMapper {
 	 */
 	public ComputerDTO BeanToDTO(Computer bean) {
 		LOG.info("BeanToDTO(" + bean + ")");
+		if (bean == null) {
+			return null;
+		}
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(bean.getId().toString());
 		dto.setName(bean.getName());
