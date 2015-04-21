@@ -107,7 +107,7 @@ public class ComputerController {
 		model.addObject("page", page);
 		return model;
 	}
-
+	
 	@RequestMapping(value = "dashboard", method = RequestMethod.POST)
 	public ModelAndView delete(@RequestParam("selection") String selectedComputersId) {
 		LOG.info(new StringBuilder("delete(")

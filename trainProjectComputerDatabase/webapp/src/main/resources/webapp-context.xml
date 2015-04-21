@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="classpath:/service-context.xml" />
-	<import resource="messageContext.xml" />
+	<import resource="classpath:/messageContext.xml" />
+	<import resource="spring-security.xml" />
+	<!-- DigestAuthentication -->
+	<bean id="digestFilter"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+		<property name="userDetailsService" ref="userService" />
+		<property name="authenticationEntryPoint" ref="digestEntryPoint" />
+	</bean>
+
+	<bean id="digestEntryPoint"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+		<property name="realmName" value="Contacts Realm via Digest Authentication" />
+		<property name="key" value="acegi" />
+	</bean>
 </beans>

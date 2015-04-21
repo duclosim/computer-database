@@ -2,9 +2,9 @@
 <!DOCTYPE xml>
 
 <web-app id="WebApp_ID" version="2.4"
-		 xmlns="http://java.sun.com/xml/ns/j2ee">
+	xmlns="http://java.sun.com/xml/ns/j2ee">
 	<display-name>Computer Database</display-name>
-	
+
 	<jsp-config>
 		<jsp-property-group>
 			<url-pattern>*.jsp</url-pattern>
@@ -29,7 +29,7 @@
 		<load-on-startup>1</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
-		
+
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
@@ -38,6 +38,24 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+
+	<!-- Loads Spring Security config file -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring-security.xml</param-value>
+	</context-param>
+
+	<!-- Spring Security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<!-- Mapping error pages -->
 	<error-page>
 		<error-code>403</error-code>
