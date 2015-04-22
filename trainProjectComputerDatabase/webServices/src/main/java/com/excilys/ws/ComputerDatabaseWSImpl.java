@@ -14,7 +14,8 @@ import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.services.CompanyService;
 import com.excilys.services.ComputerService;
 
-@WebService(endpointInterface = "com.excilys.ComputerDatabaseWS")
+// Service Implementation
+@WebService(endpointInterface = "com.excilys.ws.ComputerDatabaseWS")
 public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabaseWSImpl.class);
 

@@ -9,25 +9,13 @@
 	</parent>
 	<artifactId>webServices</artifactId>
 	<packaging>war</packaging>
-
-	<name>Computer Database - Webapp API</name>
+	<name>Computer Database - WebService API</name>
 
 	<dependencies>
 		<!-- Modules -->
 		<dependency>
 			<groupId>${groupId}</groupId>
 			<artifactId>service</artifactId>
-		</dependency>
-		<!-- Views -->
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<!-- Servlet -->
 		<dependency>
@@ -54,27 +42,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-		<!-- Spring Security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-		</dependency>
 		<!-- Spring Test -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -90,11 +57,6 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
