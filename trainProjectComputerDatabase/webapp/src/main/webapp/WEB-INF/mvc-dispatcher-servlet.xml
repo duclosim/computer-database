@@ -11,10 +11,8 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<import resource="classpath:webapp-context.xml" />
-	<!-- Component scan -->
-	<context:annotation-config />
-	<context:component-scan base-package="com.excilys.controllers" />
+	<import resource="classpath:/webapp-context.xml" />
+	<import resource="spring-security.xml" />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -30,4 +28,7 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" />
  	<mvc:default-servlet-handler />
  	<mvc:annotation-driven />
+	<!-- Component scan -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.excilys.controllers" />
 </beans>

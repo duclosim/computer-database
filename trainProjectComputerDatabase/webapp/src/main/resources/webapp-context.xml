@@ -6,6 +6,4 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="classpath:/service-context.xml" />
-	<import resource="classpath:/messageContext.xml" />
-	<import resource="spring-security.xml" />
 </beans>
