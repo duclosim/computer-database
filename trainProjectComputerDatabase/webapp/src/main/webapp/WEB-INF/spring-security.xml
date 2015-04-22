@@ -27,7 +27,7 @@
 		<property name="key" value="acegi" />
 	</bean>
 	
-	<security:http auto-config="true">
+	<security:http auto-config="true" entry-point-ref="digestEntryPoint">
 		<!-- access denied page -->
 		<security:access-denied-handler error-page="/403" />
 		<security:intercept-url pattern="/dashboard*" method="GET" access="hasRole('USER')" />

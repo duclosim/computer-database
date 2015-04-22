@@ -2,7 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="p"%>
 
 <!DOCTYPE html>
@@ -34,21 +35,20 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
-							code="addMode.button" />
-					</a>
+							code="addMode.button" /> </a>
 					<sec:authorize access="hasRole('ADMIN')">
-					<a class="btn btn-default"
-						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="editMode.button" />
-					</a>
+						<a class="btn btn-default" id="editComputer" href="#"
+							onclick="$.fn.toggleEditMode();"><spring:message
+								code="editMode.button" /> </a>
 					</sec:authorize>
 				</div>
 			</div>
 		</div>
 
 		<form id="deleteForm" action="dashboard" method="POST">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" /> <input type="hidden" name="selection"
+				value="">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -57,13 +57,15 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
+						<th class="editMode" style="width: 60px; height: 22px;"><sec:authorize
+								access="hasRole('ADMIN')">
+								<input type="checkbox" id="selectall" />
+								<span style="vertical-align: top;"> - <a href="#"
+									id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+										class="fa fa-trash-o fa-lg"></i>
+								</a>
+								</span>
+							</sec:authorize></th>
 						<th><spring:message code="column.computerName" /> <a
 							id="orderByComputerNameAsc"
 							href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
@@ -117,8 +119,11 @@
 				<tbody id="results">
 					<c:forEach var="item" items="${page.entities}">
 						<tr>
-							<td class="editMode"><input id="computerRm${item.id}"
-								type="checkbox" name="cb" class="cb" value="${item.id}"></td>
+							<td class="editMode"><sec:authorize
+									access="hasRole('ADMIN')">
+									<input id="computerRm${item.id}" type="checkbox" name="cb"
+										class="cb" value="${item.id}">
+								</sec:authorize></td>
 							<td><a id="computer${item.id}"
 								href="<c:url value="editComputer">
 								<c:param name="beanId" value="${item.id}"/>
