@@ -9,7 +9,6 @@ public class UserInputsValidator {
 	private static final Logger LOG = LoggerFactory.getLogger(UserInputsValidator.class);
 	private static final String NUMBER_REGEX = "[0-9]*";
 
-	// TODO chercher usages via IntelliJ
 	public static boolean isValidString(String string) {
 		LOG.info("isValidString(" + string + ")");
 		return ((string != null) && (!string.trim().isEmpty()));

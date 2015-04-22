@@ -1,12 +1,13 @@
 package com.excilys.cli;
 
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.excilys.binding.dtos.ComputerDTO;
@@ -22,9 +23,10 @@ import com.excilys.services.ComputerService;
  */
 @Component
 class CLIService {
-	private static final String UNKNOWN_COMMAND = "Commande non reconnue.";
 	private static final Logger LOG = LoggerFactory.getLogger(CLIService.class);
-	
+
+	@Autowired
+	private MessageSource messageSource;
 	@Autowired
 	private Page page;
 	@Autowired
@@ -39,7 +41,7 @@ class CLIService {
 	 * @return true if the program is over.
 	 */
 	public boolean interpretCommand(String command, Scanner sc) {
-		LOG.info(new StringBuilder("new interpretCommand(")
+		LOG.info(new StringBuilder("interpretCommand(")
 			.append(command).append(", ")
 			.append(sc).append(")").toString());
 		if (command == null) {
@@ -78,7 +80,7 @@ class CLIService {
 			isExit = true;
 			break;
 		default :
-			System.out.println(UNKNOWN_COMMAND);
+			System.out.println();
 			break;
 		}
 		return isExit;
@@ -86,43 +88,42 @@ class CLIService {
 	
 	private void getCompanies() {
 		LOG.info("getCompanies()");
-		List<Company> page = companyService.getAll();
-		System.out.println(page);
+		for (Company cmpny : companyService.getAll()) {
+			System.out.println(cmpny);
+		}
 	}
 	
 	private void getComputers(Scanner sc) {
 		LOG.info("getComputers(" + sc + ")");
-		System.out.println(page);
-		for (int k = 2; k < page.getLastPageNb(); ++k) {
+		for (int k = 1; k <= page.getLastPageNb(); ++k) {
 			page.setPageNum(k);
 			System.out.println(page);
-			sc.nextLine();
 		}
 	}
 	
 	private void createComputer(Scanner sc) {
 		LOG.info("createComputer(" + sc + ")");
 		ComputerDTO computer = new ComputerDTO();
-		System.out.println("Nom du nouvel ordinateur : ");
+		System.out.println(getMessage("console.newComputer.name"));
 		String args = sc.next();
 		if (!("").equals(args)) {
 			computer.setName(args);
 		}
-		System.out.println("Date d'introduction du nouvel ordinateur (format 2007-12-03T10:15:30) : ");
+		System.out.println(getMessage("console.newComputer.intro"));
 		args = sc.nextLine();
 		try {
 			computer.setIntroducedDate(args);
 		} catch (DateTimeParseException e) {
 			LOG.error("Date impossible à reconnaître.");
 		}
-		System.out.println("Date de sortie du nouvel ordinateur (format 2007-12-03T10:15:30) : ");
+		System.out.println(getMessage("console.newComputer.dis"));
 		args = sc.nextLine();
 		try {
 			computer.setDiscontinuedDate(args);
 		} catch (DateTimeParseException e) {
 			LOG.error("Date impossible à reconnaître.");
 		}
-		System.out.println("Id d'entreprise du nouvel ordinateur : ");
+		System.out.println(getMessage("console.newComputer.companyId"));
 		args = sc.nextLine();
 		try {
 			computer.setCompanyId(args);
@@ -135,12 +136,12 @@ class CLIService {
 	private void deleteCompany(Scanner sc) {
 		LOG.info("deleteCompany(" + sc + ")");
 		try {
-			System.out.println("Entrez l'id de la companie à supprimer : ");
+			System.out.println(getMessage("console.delete.companyId"));
 			String args = sc.next();
 			Long companyId = Long.parseLong(args);
 			Company company = companyService.getById(companyId);
 			companyService.delete(company);
-			System.out.println(company + " a été supprimée avec succès.");
+			System.out.println(company + " " + getMessage("console.delete.companySucces"));
 		} catch (NumberFormatException e) {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
@@ -149,12 +150,12 @@ class CLIService {
 	private void deleteComputer(Scanner sc) {
 		LOG.info("deleteComputer(" + sc + ")");
 		try {
-			System.out.println("Entrez l'id de l'ordinateur à supprimer : ");
+			System.out.println(getMessage("console.delete.computerId"));
 			String args = sc.next();
 			Long computerId = Long.parseLong(args);
 			ComputerDTO computer = computerService.getById(computerId);
 			computerService.delete(computer);
-			System.out.println(computer + " a été supprimé avec succès.");
+			System.out.println(computer + " " + getMessage("console.delete.computerSucces"));
 		} catch (NumberFormatException e) {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
@@ -163,7 +164,7 @@ class CLIService {
 	private void detailComputer(Scanner sc) {
 		LOG.info("detailComputer(" + sc + ")");
 		try {
-			System.out.println("Entrez l'id de l'ordinateur recherché : ");
+			System.out.println(getMessage("console.detail.computerId"));
 			String args = sc.next();
 			Long computerId = Long.parseLong(args);
 			ComputerDTO computer = computerService.getById(computerId);
@@ -173,26 +174,21 @@ class CLIService {
 		}
 	}
 	
-	private void exit() {
-		LOG.info("exit()");
-		System.out.println("Fin du programme");
-	}
-	
 	private void updateComputer(Scanner sc) {
 		LOG.info("updateComputer(" + sc + ")");
-		System.out.println("Entrez l'id de l'ordinateur à modifier : ");
+		System.out.println(getMessage("console.edit.computerId"));
 		String args = sc.next();
 		try {
 			Long id = Long.parseLong(args);
 			ComputerDTO computer = computerService.getById(id);
-			System.out.println("L'ordinateur à modifier est le suivant : ");
+			System.out.println(getMessage("console.edit.computerDetail"));
 			System.out.println(computer);
-			System.out.println("Nouveau nom : ");
+			System.out.println(getMessage("console.edit.name"));
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				computer.setName(args);
 			}
-			System.out.println("Nouvelle date d'introduction (format 2007-12-03T10:15:30) : ");
+			System.out.println(getMessage("console.edit.intro"));
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
@@ -203,7 +199,7 @@ class CLIService {
 			} else {
 				computer.setIntroducedDate(null);
 			}
-			System.out.println("Nouvelle date de sortie (format 2007-12-03T10:15:30) : ");
+			System.out.println(getMessage("console.edit.dis"));
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
@@ -214,7 +210,7 @@ class CLIService {
 			} else {
 				computer.setDiscontinuedDate(null);
 			}
-			System.out.println("Nouvel id d'entreprise : ");
+			System.out.println(getMessage("console.edit.companyId"));
 			args = sc.nextLine();
 			if (!("").equals(args)) {
 				try {
@@ -230,4 +226,14 @@ class CLIService {
 			LOG.error("Nombre impossible à reconnaître");
 		}
     }
+	
+	private void exit() {
+		LOG.info("exit()");
+		System.out.println(getMessage("console.exit"));
+	}
+	
+	private String getMessage(String code) {
+		return messageSource
+				.getMessage(code, null, LocaleContextHolder.getLocale());
+	}
 }

@@ -81,6 +81,7 @@ public class Page {
 	public int getPageNum() {
 		return pageNum;
 	}
+	
 	public int getTotalNbEntities() {
 		int result;
 		if (UserInputsValidator.isValidString(searchedName)) {
@@ -90,6 +91,7 @@ public class Page {
 		}
 		return result;
 	}
+	
 	public int getLastPageNb() {
 		int lastPageNb = getTotalNbEntities() / 
 				maxNbItemsByPage;
@@ -98,6 +100,7 @@ public class Page {
 		}
 		return lastPageNb;
 	}
+	
 	public String getColumn() {
 		if (column == null) {
 			return null;
@@ -105,6 +108,7 @@ public class Page {
 			return column.getColumnName();
 		}
 	}
+	
 	public String getWay() {
 		if (column == null) {
 			return null;
@@ -112,10 +116,12 @@ public class Page {
 			return way.getWay();
 		}
 	}
+	
     public int getStartingPage() {
 		LOG.info("getStartingPage()");
 		return Integer.max(1, getPageNum() - WIDTH);
 	}
+    
 	public int getFinishingPage() {
 		LOG.info("getFinishingPage()");
 		return Integer.min(getLastPageNb(), getPageNum() + WIDTH);
