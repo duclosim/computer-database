@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="p"%>
 
 <!DOCTYPE html>
@@ -33,9 +34,14 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
-							code="addMode.button" /></a> <a class="btn btn-default"
+							code="addMode.button" />
+					</a>
+					<sec:authorize access="hasRole('ADMIN')">
+					<a class="btn btn-default"
 						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="editMode.button" /></a>
+							code="editMode.button" />
+					</a>
+					</sec:authorize>
 				</div>
 			</div>
 		</div>
