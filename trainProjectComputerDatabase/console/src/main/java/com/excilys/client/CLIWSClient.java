@@ -2,6 +2,8 @@ package com.excilys.client;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -105,27 +107,44 @@ class CLIWSClient {
 		LOG.trace("getComputers(" + sc + ")");
 		System.out.println(getMessage("console.detailComputer.limit"));
 		String args = sc.next();
-		int limit = Integer.parseInt(args);
+		int limit = 10;
+		try {
+			limit = Integer.parseInt(args);
+		} catch (NumberFormatException e) {
+			LOG.error("La limite passée n'est pas un nombre.");
+		}
 		System.out.println(getMessage("console.detailComputer.pageNum"));
 		args = sc.next();
-		int offset = Integer.parseInt(args);
-		System.out.println(getMessage("console.detailComputer.searched"));
-		args = sc.next();
-		String searchedName = args;
-		System.out.println(getMessage("console.detailComputer.column"));
-		args = sc.next();
-		ComputerColumn column = null;
-		for (ComputerColumn col : ComputerColumn.values()) {
-			if (col.getColumnName().equals(args)) {
-				column = col;
-			}
+		int offset = 0;
+		try {
+			offset = Integer.parseInt(args);
+		} catch (NumberFormatException e) {
+			LOG.error("Le numéro de page passé n'est pas un nombre.");
 		}
-		System.out.println(getMessage("console.detailComputer.way"));
-		args = sc.next();
+		System.out.println("Entrez 'y' pour indiquer un nom à rechercher : ");
+		String searchedName = null;
+		if (sc.next().equals("y")) {
+			System.out.println(getMessage("console.detailComputer.searched"));
+			args = sc.next();
+			searchedName = args;
+		}
+		ComputerColumn column = null;
 		OrderingWay way = null;
-		for (OrderingWay w : OrderingWay.values()) {
-			if (w.getWay().equals(args)) {
-				way = w;
+		System.out.println("Entrez 'y' pour indiquer une colonne et un sens de tri : ");
+		if (sc.next().equals("y")) {
+			System.out.println(getMessage("console.detailComputer.column"));
+			args = sc.next();
+			for (ComputerColumn col : ComputerColumn.values()) {
+				if (col.getColumnName().equals(args)) {
+					column = col;
+				}
+			}
+			System.out.println(getMessage("console.detailComputer.way"));
+			args = sc.next();
+			for (OrderingWay w : OrderingWay.values()) {
+				if (w.getWay().equals(args)) {
+					way = w;
+				}
 			}
 		}
 		System.out.println(ws.getComputers(limit, offset, searchedName, column, way));
@@ -134,31 +153,43 @@ class CLIWSClient {
 	private void createComputer(Scanner sc) {
 		LOG.trace("createComputer(" + sc + ")");
 		ComputerDTO computer = new ComputerDTO();
+		computer.setName(null);
 		System.out.println(getMessage("console.newComputer.name"));
 		String args = sc.next();
 		if (!("").equals(args)) {
 			computer.setName(args);
 		}
-		System.out.println(getMessage("console.newComputer.intro"));
-		args = sc.next();
-		try {
-			computer.setIntroducedDate(args);
-		} catch (DateTimeParseException e) {
-			LOG.error("Date impossible à reconnaître.");
+		System.out.println("Entrez 'y' pour indiquer une date d'introduction : ");
+		if (sc.next().equals("y")) {
+			System.out.println(getMessage("console.newComputer.intro"));
+			args = sc.next();
+			try {
+				LocalDate.parse(args, getFormatter());
+				computer.setIntroducedDate(args);
+			} catch (DateTimeParseException e) {
+				LOG.error("Date impossible à reconnaître.");
+			}
 		}
-		System.out.println(getMessage("console.newComputer.dis"));
-		args = sc.next();
-		try {
-			computer.setDiscontinuedDate(args);
-		} catch (DateTimeParseException e) {
-			LOG.error("Date impossible à reconnaître.");
+		System.out.println("Entrez 'y' pour indiquer une date de retrait : ");
+		if (sc.next().equals("y")) {
+			System.out.println(getMessage("console.newComputer.dis"));
+			args = sc.next();
+			try {
+				LocalDate.parse(args, getFormatter());
+				computer.setDiscontinuedDate(args);
+			} catch (DateTimeParseException e) {
+				LOG.error("Date impossible à reconnaître.");
+			}
 		}
-		System.out.println(getMessage("console.newComputer.companyId"));
-		args = sc.next();
-		try {
-			computer.setCompanyId(args);
-		} catch (NumberFormatException e) {
-			LOG.error("Nombre impossible à reconnaître.");
+		System.out.println("Entrez 'y' pour indiquer un numéro d'entreprise : ");
+		if (sc.next().equals("y")) {
+			System.out.println(getMessage("console.newComputer.companyId"));
+			args = sc.next();
+			try {
+				computer.setCompanyId(args);
+			} catch (NumberFormatException e) {
+				LOG.error("Nombre impossible à reconnaître.");
+			}
 		}
 		System.out.println(ws.createComputer(computer));
 	}
@@ -209,46 +240,48 @@ class CLIWSClient {
 			ComputerDTO computer = new ComputerDTO();
 			computer.setId(args);
 			System.out.println(getMessage("console.edit.computerDetail"));
-			System.out.println(computer);
-			System.out.println(getMessage("console.edit.name"));
-			args = sc.next();
-			if (!("").equals(args)) {
-				computer.setName(args);
+			System.out.println(ws.detailComputer(Long.parseLong(args)));
+			System.out.println("Entrez 'y' pour indiquer un nouveau nom : ");
+			if (sc.next().equals("y")) {
+				System.out.println(getMessage("console.edit.name"));
+				args = sc.next();
+				if (!("").equals(args)) {
+					computer.setName(args);
+				}
 			}
-			System.out.println(getMessage("console.edit.intro"));
-			args = sc.next();
-			if (!("").equals(args)) {
+			System.out.println("Entrez 'y' pour indiquer une nouvelle date d'introduction : ");
+			if (sc.next().equals("y")) {
 				try {
+					System.out.println(getMessage("console.edit.intro"));
+					args = sc.next();
+					LocalDate.parse(args, getFormatter());
 					computer.setIntroducedDate(args);
 				} catch (DateTimeParseException e) {
 					LOG.error("Date impossible à reconnaître.");
 				}
-			} else {
-				computer.setIntroducedDate(null);
 			}
-			System.out.println(getMessage("console.edit.dis"));
-			args = sc.next();
-			if (!("").equals(args)) {
+			System.out.println("Entrez 'y' pour indiquer une nouvelle date de retrait : ");
+			if (sc.next().equals("y")) {
 				try {
+					System.out.println(getMessage("console.edit.dis"));
+					args = sc.next();
+					LocalDate.parse(args, getFormatter());
 					computer.setDiscontinuedDate(args);
 				} catch (DateTimeParseException e) {
 					LOG.error("Date impossible à reconnaître.");
 				}
-			} else {
-				computer.setDiscontinuedDate(null);
 			}
-			System.out.println(getMessage("console.edit.companyId"));
-			args = sc.next();
-			if (!("").equals(args)) {
+			System.out.println("Entrez 'y' pour indiquer un nouveau numéro d'entreprise : ");
+			if (sc.next().equals("y")) {
+				System.out.println(getMessage("console.edit.companyId"));
+				args = sc.next();
 				try {
 					computer.setCompanyId(args);
 				} catch (NumberFormatException e) {
 					LOG.error("Nombre impossible à reconnaître.");
 				}
-			} else {
-				computer.setCompanyId(null);
 			}
-			System.out.println(ws.updateComputer(computer));
+			ws.updateComputer(computer);
 		} catch (NumberFormatException e) {
 			LOG.error("Nombre impossible à reconnaître");
 		}
@@ -262,5 +295,10 @@ class CLIWSClient {
 	private String getMessage(String code) {
 		return messageSource
 				.getMessage(code, null, LocaleContextHolder.getLocale());
+	}
+	
+	private DateTimeFormatter getFormatter() {
+		String dateFormat = getMessage("date.format");
+		return DateTimeFormatter.ofPattern(dateFormat);
 	}
 }
