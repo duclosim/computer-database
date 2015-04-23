@@ -1,9 +1,13 @@
 package com.excilys.binding.dtos;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ComputerDTO {
+public class ComputerDTO implements Serializable {
+	private static final long serialVersionUID = 7606362106353485291L;
+
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTO.class);
 	
 	private String id;
