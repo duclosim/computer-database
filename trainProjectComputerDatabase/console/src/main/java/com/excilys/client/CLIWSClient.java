@@ -51,7 +51,7 @@ class CLIWSClient {
 	 * @return true if the program is over.
 	 */
 	public boolean interpretCommand(String command, Scanner sc) {
-		LOG.info(new StringBuilder("interpretCommand(")
+		LOG.trace(new StringBuilder("interpretCommand(")
 			.append(command).append(", ")
 			.append(sc).append(")").toString());
 		if (command == null) {
@@ -97,12 +97,12 @@ class CLIWSClient {
 	}
 	
 	private void getCompanies() {
-		LOG.info("getCompanies()");
+		LOG.trace("getCompanies()");
 		System.out.println(ws.getCompanies());
 	}
 	
 	private void getComputers(Scanner sc) {
-		LOG.info("getComputers(" + sc + ")");
+		LOG.trace("getComputers(" + sc + ")");
 		System.out.println(getMessage("console.detailComputer.limit"));
 		String args = sc.next();
 		int limit = Integer.parseInt(args);
@@ -132,7 +132,7 @@ class CLIWSClient {
 	}
 	
 	private void createComputer(Scanner sc) {
-		LOG.info("createComputer(" + sc + ")");
+		LOG.trace("createComputer(" + sc + ")");
 		ComputerDTO computer = new ComputerDTO();
 		System.out.println(getMessage("console.newComputer.name"));
 		String args = sc.next();
@@ -164,7 +164,7 @@ class CLIWSClient {
 	}
 	
 	private void deleteCompany(Scanner sc) {
-		LOG.info("deleteCompany(" + sc + ")");
+		LOG.trace("deleteCompany(" + sc + ")");
 		try {
 			System.out.println(getMessage("console.delete.companyId"));
 			String args = sc.next();
@@ -177,7 +177,7 @@ class CLIWSClient {
 	}
 	
 	private void deleteComputer(Scanner sc) {
-		LOG.info("deleteComputer(" + sc + ")");
+		LOG.trace("deleteComputer(" + sc + ")");
 		try {
 			System.out.println(getMessage("console.delete.computerId"));
 			String args = sc.next();
@@ -190,7 +190,7 @@ class CLIWSClient {
 	}
 	
 	private void detailComputer(Scanner sc) {
-		LOG.info("detailComputer(" + sc + ")");
+		LOG.trace("detailComputer(" + sc + ")");
 		try {
 			System.out.println(getMessage("console.detail.computerId"));
 			String args = sc.next();
@@ -202,7 +202,7 @@ class CLIWSClient {
 	}
 	
 	private void updateComputer(Scanner sc) {
-		LOG.info("updateComputer(" + sc + ")");
+		LOG.trace("updateComputer(" + sc + ")");
 		System.out.println(getMessage("console.edit.computerId"));
 		String args = sc.next();
 		try {
@@ -255,7 +255,7 @@ class CLIWSClient {
     }
 	
 	private void exit() {
-		LOG.info("exit()");
+		LOG.trace("exit()");
 		System.out.println(getMessage("console.exit"));
 	}
 	

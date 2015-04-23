@@ -30,7 +30,7 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	
 	@Override
 	public String getCompanies() {
-		LOG.info("getCompanies()");
+		LOG.trace("getCompanies()");
 		StringBuilder sb = new StringBuilder();
 		for (Company cmpny : companyService.getAll()) {
 			sb.append(cmpny).append('\n');
@@ -41,7 +41,7 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	@Override
 	public String getComputers(int limit, int pageNum, String searchedName, 
 			ComputerColumn column, OrderingWay way) {
-		LOG.info(new StringBuilder("getComputers(")
+		LOG.trace(new StringBuilder("getComputers(")
 			.append(limit).append(", ")
 			.append(pageNum).append(", ")
 			.append(searchedName).append(", ")
@@ -78,32 +78,32 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	
 	@Override
 	public String createComputer(ComputerDTO computer) {
-		LOG.info("createComputer(" + computer + ")");
+		LOG.trace("createComputer(" + computer + ")");
 		computerService.create(computer);
 		return computer.toString();
 	}
 	
 	@Override
 	public void deleteCompany(Long id) {
-		LOG.info("deleteCompany(" + id + ")");
+		LOG.trace("deleteCompany(" + id + ")");
 		companyService.delete(companyService.getById(id));
 	}
 	
 	@Override
 	public void deleteComputer(Long id) {
-		LOG.info("deleteComputer(" + id + ")");
+		LOG.trace("deleteComputer(" + id + ")");
 		computerService.delete(computerService.getById(id));
 	}
 	
 	@Override
 	public String detailComputer(Long id) {
-		LOG.info("detailComputer(" + id + ")");
+		LOG.trace("detailComputer(" + id + ")");
 		return computerService.getById(id).toString();
 	}
 	
 	@Override
 	public String updateComputer(ComputerDTO computer) {
-		LOG.info("updateComputer(" + computer + ")");
+		LOG.trace("updateComputer(" + computer + ")");
 		computerService.update(computer);
 		return computerService.getById(
 				Long.parseLong(computer.getId()))

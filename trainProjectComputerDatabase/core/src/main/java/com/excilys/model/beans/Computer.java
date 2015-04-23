@@ -39,7 +39,7 @@ public class Computer implements Serializable {
 
 	public Computer(Long id, String name, LocalDateTime introduced,
 			LocalDateTime discontinued, Company company) {
-		LOG.info(new StringBuilder("new Computer(")
+		LOG.trace(new StringBuilder("new Computer(")
 			.append(id).append(",")
 			.append(name).append(",")
 			.append(introduced).append(",")
@@ -54,47 +54,47 @@ public class Computer implements Serializable {
 	}
 	
 	public Computer() {
-		LOG.info("new Computer()");
+		LOG.trace("new Computer()");
 	}
 	
 	public Long getId() {
-		LOG.info("getId()");
+		LOG.trace("getId()");
 		return id;
 	}
 	public void setId(Long id) {
-		LOG.info("setId(" + id + ")");
+		LOG.trace("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
-		LOG.info("getName()");
+		LOG.trace("getName()");
 		return name;
 	}
 	public void setName(String name) {
-		LOG.info("setName(" + name + ")");
+		LOG.trace("setName(" + name + ")");
 		this.name = name;
 	}
 	public LocalDateTime getIntroduced() {
-		LOG.info("getIntroducedDate()");
+		LOG.trace("getIntroducedDate()");
 		return introduced;
 	}
 	public void setIntroduced(LocalDateTime introducedDate) {
-		LOG.info("setIntroducedDate(" + introducedDate + ")");
+		LOG.trace("setIntroducedDate(" + introducedDate + ")");
 		this.introduced = introducedDate;
 	}
 	public LocalDateTime getDiscontinued() {
-		LOG.info("getDiscontinuedDate()");
+		LOG.trace("getDiscontinuedDate()");
 		return discontinued;
 	}
 	public void setDiscontinued(LocalDateTime discontinuedDate) {
-		LOG.info("setDiscontinuedDate(" + discontinuedDate + ")");
+		LOG.trace("setDiscontinuedDate(" + discontinuedDate + ")");
 		this.discontinued = discontinuedDate;
 	}
 	public Company getCompany() {
-		LOG.info("getCompany()");
+		LOG.trace("getCompany()");
 		return company;
 	}
 	public void setCompany(Company company) {
-		LOG.info("setCompany(" + company + ")");
+		LOG.trace("setCompany(" + company + ")");
 		this.company = company;
 	}
 

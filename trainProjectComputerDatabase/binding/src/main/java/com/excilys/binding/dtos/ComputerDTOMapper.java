@@ -35,7 +35,7 @@ public class ComputerDTOMapper {
 	 * @return Le bean tel qu'utilisable par la couche dao.
 	 */
 	public Computer DTOToBean(ComputerDTO dto) {
-		LOG.info("DTOToBean(" + dto + ")");
+		LOG.trace("DTOToBean(" + dto + ")");
 		Computer bean = new Computer();
 		bean.setId(null);
 		bean.setName(dto.getName());
@@ -66,7 +66,7 @@ public class ComputerDTOMapper {
 	 * @return
 	 */
 	public ComputerDTO BeanToDTO(Computer bean) {
-		LOG.info("BeanToDTO(" + bean + ")");
+		LOG.trace("BeanToDTO(" + bean + ")");
 		if (bean == null) {
 			return null;
 		}

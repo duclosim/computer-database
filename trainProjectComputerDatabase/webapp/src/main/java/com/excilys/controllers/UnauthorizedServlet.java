@@ -13,7 +13,7 @@ public class UnauthorizedServlet {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String get() {
-		LOG.info("get()");
+		LOG.trace("get()");
 		return "403";
 	}
 }

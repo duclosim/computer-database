@@ -10,7 +10,7 @@ public class UserInputsValidator {
 	private static final String NUMBER_REGEX = "[0-9]*";
 
 	public static boolean isValidString(String string) {
-		LOG.info("isValidString(" + string + ")");
+		LOG.trace("isValidString(" + string + ")");
 		return ((string != null) && (!string.trim().isEmpty()));
 	}
 
@@ -20,7 +20,7 @@ public class UserInputsValidator {
 	 * @return <code>true</code> si le nombre est valide, <code>false</code> sinon.
 	 */
 	public static boolean isValidNumber(String number) {
-		LOG.info("isValidNumber(" + number + ")");
+		LOG.trace("isValidNumber(" + number + ")");
 		return isValidString(number) && Pattern.matches(NUMBER_REGEX, number);
 	}
 }

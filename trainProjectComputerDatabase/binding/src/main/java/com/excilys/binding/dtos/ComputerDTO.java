@@ -18,55 +18,55 @@ public class ComputerDTO implements Serializable {
 	private String companyName;
 	
 	public ComputerDTO() {
-		LOG.info("new ComputerDTO()");
+		LOG.trace("new ComputerDTO()");
 	}
 	
 	public String getId() {
-		LOG.info("getId()");
+		LOG.trace("getId()");
 		return id;
 	}
 	public void setId(String id) {
-		LOG.info("setId(" + id + ")");
+		LOG.trace("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
-		LOG.info("getName()");
+		LOG.trace("getName()");
 		return name;
 	}
 	public void setName(String name) {
-		LOG.info("setName(" + name + ")");
+		LOG.trace("setName(" + name + ")");
 		this.name = name;
 	}
 	public String getIntroducedDate() {
-		LOG.info("getIntroducedDate()");
+		LOG.trace("getIntroducedDate()");
 		return introducedDate;
 	}
 	public void setIntroducedDate(String introducedDate) {
-		LOG.info("setIntroducedDate(" + introducedDate + ")");
+		LOG.trace("setIntroducedDate(" + introducedDate + ")");
 		this.introducedDate = introducedDate;
 	}
 	public String getDiscontinuedDate() {
-		LOG.info("getDiscontinuedDate()");
+		LOG.trace("getDiscontinuedDate()");
 		return discontinuedDate;
 	}
 	public void setDiscontinuedDate(String discontinuedDate) {
-		LOG.info("setDiscontinuedDate(" + discontinuedDate + ")");
+		LOG.trace("setDiscontinuedDate(" + discontinuedDate + ")");
 		this.discontinuedDate = discontinuedDate;
 	}
 	public String getCompanyId() {
-		LOG.info("getCompanyId()");
+		LOG.trace("getCompanyId()");
 		return companyId;
 	}
 	public void setCompanyId(String companyId) {
-		LOG.info("setCompanyId(" + companyId + ")");
+		LOG.trace("setCompanyId(" + companyId + ")");
 		this.companyId = companyId;
 	}
 	public String getCompanyName() {
-		LOG.info("getCompanyName()");
+		LOG.trace("getCompanyName()");
 		return companyName;
 	}
 	public void setCompanyName(String companyName) {
-		LOG.info("setCompanyName(" + companyName + ")");
+		LOG.trace("setCompanyName(" + companyName + ")");
 		this.companyName = companyName;
 	}
 

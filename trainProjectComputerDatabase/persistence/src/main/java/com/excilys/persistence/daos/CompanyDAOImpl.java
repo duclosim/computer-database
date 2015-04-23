@@ -31,7 +31,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private static final String HQL_GET = "select company from Company company where id= :id";
 	@Override
 	public Company getById(Long id) {
-		LOG.info("getById(" + id + ")");
+		LOG.trace("getById(" + id + ")");
 		return (Company) getSession().createQuery(HQL_GET)
                .setLong("id", id)
                .uniqueResult();
@@ -41,7 +41,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Company> getAll(int limit, int offset) {
-		LOG.info("getAll(" + limit + ", " + offset + ")");
+		LOG.trace("getAll(" + limit + ", " + offset + ")");
 		return (List<Company>) getSession().createQuery(HQL_GET_ALL)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
@@ -51,7 +51,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Company> getAll() {
-		LOG.info("getAll()");
+		LOG.trace("getAll()");
 		return (List<Company>) getSession().createQuery(HQL_GET_ALL)
 				.list();
 	}
@@ -76,7 +76,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private static final String HQL_COUNT = "select count(*) from Company";
 	@Override
 	public int countLines() {
-		LOG.info("countLine()");
+		LOG.trace("countLine()");
 		Long result = (Long) getSession().createQuery(HQL_COUNT).uniqueResult();
 		return result.intValue();
 	}
@@ -96,7 +96,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private static final String HQL_DELETE = "delete from Company where id= :id";
 	@Override
 	public void delete(Company company) {
-		LOG.info("delete(" + company + ")");
+		LOG.trace("delete(" + company + ")");
 		if (company == null) {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");

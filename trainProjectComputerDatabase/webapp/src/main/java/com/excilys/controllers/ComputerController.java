@@ -52,7 +52,7 @@ public class ComputerController {
 			@RequestParam(value = "column", required = false) String computerColumnStr,
 			@RequestParam(value = "orderWay", required = false) String orderWayStr,
 			@RequestParam(value = "search", required = false) String searchedName) {
-		LOG.info(new StringBuilder("getDashboard(")
+		LOG.trace(new StringBuilder("getDashboard(")
 			.append(numParam).append(", ")
 			.append(maxItemPageParam).append(", ")
 			.append(computerColumnStr).append(", ")
@@ -116,7 +116,7 @@ public class ComputerController {
 	
 	@RequestMapping(value = "dashboard", method = RequestMethod.POST)
 	public ModelAndView delete(@RequestParam("selection") String selectedComputersId) {
-		LOG.info(new StringBuilder("delete(")
+		LOG.trace(new StringBuilder("delete(")
 			.append(selectedComputersId).append(")").toString());
 		ModelAndView model = new ModelAndView("dashboard");
 		if (selectedComputersId != null) {
@@ -132,7 +132,7 @@ public class ComputerController {
 	// --- ADD COMPUTER ---
 	@RequestMapping(value = "addComputer", method = RequestMethod.GET)
 	public ModelAndView getAddComputer() {
-		LOG.info("getAddComputer()");
+		LOG.trace("getAddComputer()");
 		ModelAndView model = new ModelAndView("addComputer");
 		model.addObject("companies", mapCompanies());
 		model.addObject("computerForm", new ComputerDTO());
@@ -142,7 +142,7 @@ public class ComputerController {
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
 	public ModelAndView createComputer(@ModelAttribute("computerForm") ComputerDTO computer, 
 			BindingResult bindingResult) {
-		LOG.info(new StringBuilder("createComputer(")
+		LOG.trace(new StringBuilder("createComputer(")
 			.append(computer).append(", ")
 			.append(bindingResult).append(")").toString());
 		ModelAndView model = new ModelAndView();
@@ -152,7 +152,7 @@ public class ComputerController {
 	// --- EDIT COMPUTER ---
 	@RequestMapping(value = "editComputer", method = RequestMethod.GET)
 	public ModelAndView getEditComputer(@RequestParam("beanId") Long id) {
-		LOG.info(new StringBuilder("getEditComputer(")
+		LOG.trace(new StringBuilder("getEditComputer(")
 			.append(id).append(")").toString());
 		ModelAndView model = new ModelAndView("editComputer");
 		model.addObject("companies", mapCompanies());
@@ -163,7 +163,7 @@ public class ComputerController {
 	@RequestMapping(value = "editComputer", method = RequestMethod.POST)
 	public ModelAndView editComputer(@ModelAttribute("computerForm") ComputerDTO computer, 
 			BindingResult bindingResult) {
-		LOG.info(new StringBuilder("editComputer(")
+		LOG.trace(new StringBuilder("editComputer(")
 			.append(computer).append(", ")
 			.append(bindingResult).append(")").toString());
 		return saveOrUpdateComputer(SaveOrUpdate.UPDATE, computer, bindingResult)
@@ -175,7 +175,7 @@ public class ComputerController {
 	 * @return
 	 */
 	private Map<Long, String> mapCompanies() {
-		LOG.info("mapCompanies()");
+		LOG.trace("mapCompanies()");
 		Map<Long, String> companies = new HashMap<>();
 		for (Company cmpny : companyService.getAll()) {
 			companies.put(cmpny.getId(), cmpny.getName());
@@ -188,7 +188,7 @@ public class ComputerController {
 	private ModelAndView saveOrUpdateComputer(SaveOrUpdate method, 
 			ComputerDTO computer, 
 			BindingResult bindingResult) {
-		LOG.info(new StringBuilder("saveOrUpdateComputer(")
+		LOG.trace(new StringBuilder("saveOrUpdateComputer(")
 			.append(method).append(", ")
 			.append(computer).append(", ")
 			.append(bindingResult).append(")").toString());
@@ -221,7 +221,7 @@ public class ComputerController {
 	}
 	
 	private static void nullifyEmptyStrings(ComputerDTO computer) {
-		LOG.info("nullifyEmptyStrings(" + computer + ")");
+		LOG.trace("nullifyEmptyStrings(" + computer + ")");
 		computer.setId(nullifyEmptyString(computer.getId()));
 		computer.setIntroducedDate(nullifyEmptyString(computer.getIntroducedDate()));
 		computer.setDiscontinuedDate(nullifyEmptyString(computer.getDiscontinuedDate()));
@@ -229,7 +229,7 @@ public class ComputerController {
 	}
 
 	private static String nullifyEmptyString(String str) {
-		LOG.info("nullifyEmptyStrings(" + str + ")");
+		LOG.trace("nullifyEmptyStrings(" + str + ")");
 		if ((str == null) || (str.trim().isEmpty())) {
 			return null;
 		} else {

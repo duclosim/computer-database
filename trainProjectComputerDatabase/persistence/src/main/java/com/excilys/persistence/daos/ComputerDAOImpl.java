@@ -32,7 +32,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			+ "where computer.id= :id";
 	@Override
 	public Computer getById(Long id) {
-		LOG.info("getById(" + id + ")");
+		LOG.trace("getById(" + id + ")");
 		return (Computer) getSession().createQuery(HQL_GET)
 				.setLong("id", id)
 				.uniqueResult();
@@ -43,7 +43,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Computer> getAll(int limit, int offset) {
-		LOG.info(new StringBuilder("getAll(")
+		LOG.trace(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
@@ -60,7 +60,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Computer> getFiltered(int limit, int offset, String name) {
-		LOG.info(new StringBuilder("getFiltered(")
+		LOG.trace(new StringBuilder("getFiltered(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(")").toString());
@@ -75,7 +75,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public List<Computer> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way) {
-		LOG.info(new StringBuilder("getOrdered(")
+		LOG.trace(new StringBuilder("getOrdered(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(column).append(",")
@@ -99,7 +99,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public List<Computer> getFilteredAndOrdered(int limit, int offset,
 			String name, ComputerColumn column, OrderingWay way) {
-		LOG.info(new StringBuilder("getFilteredAndOrdered(")
+		LOG.trace(new StringBuilder("getFilteredAndOrdered(")
 			.append(limit).append(", ")
 			.append(offset).append(",")
 			.append(name).append(",")
@@ -128,7 +128,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private static final String HQL_COUNT = "select count(*) from Computer";
 	@Override
 	public int countLines() {
-		LOG.info("countLine()");
+		LOG.trace("countLine()");
 		Long result = (Long) getSession().createQuery(HQL_COUNT).uniqueResult();
 		return result.intValue();
 	}
@@ -139,7 +139,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			+ "or company.name like :name ";
 	@Override
 	public int countFilteredLines(String name) {
-		LOG.info("countFilteredLines(" + name + ")");
+		LOG.trace("countFilteredLines(" + name + ")");
 		Long result = (Long) getSession().createQuery(HQL_COUNT_FILTERED)
 				.setString("name", '%' + name + '%')
 				.uniqueResult();
@@ -148,7 +148,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void create(Computer computer) {
-		LOG.info("create(" + computer + ")");         
+		LOG.trace("create(" + computer + ")");         
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
@@ -158,7 +158,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void update(Computer computer) {
-		LOG.info("update(" + computer + ")");
+		LOG.trace("update(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
@@ -173,7 +173,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private static final String HQL_DELETE = "delete from Computer where id= :id";
 	@Override
 	public void delete(Computer computer) {
-		LOG.info("delete(" + computer + ")");
+		LOG.trace("delete(" + computer + ")");
 		if (computer == null) {
 			LOG.error("computer est à null.");
 			throw new IllegalArgumentException("computer est à null.");
@@ -186,7 +186,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private static final String HQL_DELETE_BY_COMPANY_ID = "delete from Computer where company_id= :id";
 	@Override
 	public void deleteByCompanyId(Long companyId) {
-		LOG.info("deleteByCompanyId(" + companyId + ")");
+		LOG.trace("deleteByCompanyId(" + companyId + ")");
 		getSession().createQuery(HQL_DELETE_BY_COMPANY_ID)
 				.setLong("id", companyId)
 				.executeUpdate();

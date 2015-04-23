@@ -40,7 +40,7 @@ public class Page {
 	 * @param limit
 	 */
 	private Page(int limit, int offset) {
-		LOG.info(new StringBuilder("new Page(")
+		LOG.trace(new StringBuilder("new Page(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
@@ -62,7 +62,7 @@ public class Page {
 	 */
 	public Page() {
 		this(DEFAULT_LIMIT, DEFAULT_OFFSET);
-		LOG.info("new Page()");
+		LOG.trace("new Page()");
 	}
 
 	// Requetes
@@ -118,12 +118,12 @@ public class Page {
 	}
 	
     public int getStartingPage() {
-		LOG.info("getStartingPage()");
+		LOG.trace("getStartingPage()");
 		return Integer.max(1, getPageNum() - WIDTH);
 	}
     
 	public int getFinishingPage() {
-		LOG.info("getFinishingPage()");
+		LOG.trace("getFinishingPage()");
 		return Integer.min(getLastPageNb(), getPageNum() + WIDTH);
 	}
 	
@@ -146,7 +146,7 @@ public class Page {
 	 * @param maxNbItemsByPage
 	 */
 	public void setMaxNbItemsByPage(int maxNbItemsByPage) {
-		LOG.info("setMaxNbItemsByPage(" + maxNbItemsByPage + ")");
+		LOG.trace("setMaxNbItemsByPage(" + maxNbItemsByPage + ")");
 		if (maxNbItemsByPage < 0) {
 			LOG.error("maxNbItemsByPage est négatif.");
 			throw new IllegalArgumentException("maxNbItemsByPage est négatif.");
@@ -161,7 +161,7 @@ public class Page {
 	 * @param pageNum
 	 */
 	public void setPageNum(int pageNum) {
-		LOG.info("setPageNum(" + pageNum + ")");
+		LOG.trace("setPageNum(" + pageNum + ")");
 		if ((0 >= pageNum) || (pageNum > getLastPageNb())) {
 			LOG.error("pageNum est hors-limites.");
 			throw new IllegalArgumentException("pageNum est hors-limites.");
@@ -175,7 +175,7 @@ public class Page {
 	 *   de page ou du nombre d'objets par page.
 	 */
 	private List<ComputerDTO> reloadEntities() {
-		LOG.info("reloadEntities()");
+		LOG.trace("reloadEntities()");
 		List<ComputerDTO> entities;
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));

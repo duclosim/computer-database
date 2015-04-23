@@ -20,13 +20,13 @@ public class ComputerDTOValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		LOG.info(new StringBuilder("supports(" + clazz + ")").toString());
+		LOG.trace(new StringBuilder("supports(" + clazz + ")").toString());
         return ComputerDTO.class.isAssignableFrom(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		LOG.info(new StringBuilder("validate(" + target + ", "
+		LOG.trace(new StringBuilder("validate(" + target + ", "
 				+ errors + ")").toString());
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.computerDTO.name");
 		ComputerDTO computer = (ComputerDTO) target;

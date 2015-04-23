@@ -20,7 +20,7 @@ class Main {
 	private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String args[]) {
-		LOG.info("main(" + Arrays.toString(args) + ")");
+		LOG.trace("main(" + Arrays.toString(args) + ")");
 		Scanner sc = new Scanner(System.in);
 		boolean terminated = false;
 		@SuppressWarnings("resource")

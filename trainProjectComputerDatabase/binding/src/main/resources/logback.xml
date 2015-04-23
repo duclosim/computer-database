@@ -11,8 +11,6 @@
 		</filter>
 	</appender>
 
-
-
 	<appender name="dailyRollingFileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>logs/computerDatabaseLog.log</file>
@@ -43,13 +41,6 @@
 			<Pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</Pattern>
 		</encoder>
 	</appender>
-
-	<logger name="com.excilys.computerDatabase.controller" additivity="false">
-		<level value="DEBUG" />
-		<appender-ref ref="dailyRollingFileAppender" />
-		<appender-ref ref="minuteRollingFileAppender" />
-		<appender-ref ref="consoleAppender" />
-	</logger>
 
 	<root>
 		<level value="INFO" />

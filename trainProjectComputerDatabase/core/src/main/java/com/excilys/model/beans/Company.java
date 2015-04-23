@@ -29,11 +29,11 @@ public class Company implements Serializable {
 	private String name;
 	
 	public Company() {
-		LOG.info("new Company()");
+		LOG.trace("new Company()");
 	}
 	
 	public Company(Long id, String name) {
-		LOG.info(new StringBuilder("new Company(")
+		LOG.trace(new StringBuilder("new Company(")
 		.append(id).append(",")
 		.append(name).append(")")
 		.toString());
@@ -42,19 +42,19 @@ public class Company implements Serializable {
 	}
 
 	public Long getId() {
-		LOG.info("getId()");
+		LOG.trace("getId()");
 		return id;
 	}
 	public void setId(Long id) {
-		LOG.info("setId(" + id + ")");
+		LOG.trace("setId(" + id + ")");
 		this.id = id;
 	}
 	public String getName() {
-		LOG.info("getName()");
+		LOG.trace("getName()");
 		return name;
 	}
 	public void setName(String name) {
-		LOG.info("setName(" + id + ")");
+		LOG.trace("setName(" + id + ")");
 		this.name = name;
 	}
 

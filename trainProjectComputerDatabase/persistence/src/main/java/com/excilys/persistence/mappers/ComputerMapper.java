@@ -22,7 +22,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 
 	@Override
 	public Computer mapRow(ResultSet rs, int rowNum) {
-		LOG.info("mapRow(" + rs + ", " + rowNum + ")");
+		LOG.trace("mapRow(" + rs + ", " + rowNum + ")");
 		if (rs == null) {
 			return null;
 		}

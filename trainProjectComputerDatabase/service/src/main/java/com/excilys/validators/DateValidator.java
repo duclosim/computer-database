@@ -28,7 +28,7 @@ public class DateValidator {
 	 * @return <code>true</code> si la date est valide, <code>false</code> sinon.
 	 */
 	public boolean isValidDate(String date) {
-		LOG.info("isValidDate(" + date + ")");
+		LOG.trace("isValidDate(" + date + ")");
 		if (date == null) {
 			return true;
 		}
@@ -51,7 +51,7 @@ public class DateValidator {
 
 	// OUTILS
 	private boolean isWellFormedDate(String date, Locale locale) {
-		LOG.info("isWellFormedDate(" + date + ")");
+		LOG.trace("isWellFormedDate(" + date + ")");
 		String pattern = messageSource.getMessage(DATE_REGEX_MESSAGE_CODE, null, locale);
 		return Pattern.matches(pattern, date);
 	}
@@ -82,7 +82,7 @@ public class DateValidator {
 	}
 
 	private static boolean isBissextileYear(int y) {
-		LOG.info("isBissextileYear(" + y + ")");
+		LOG.trace("isBissextileYear(" + y + ")");
 		return (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0));
 	}
 

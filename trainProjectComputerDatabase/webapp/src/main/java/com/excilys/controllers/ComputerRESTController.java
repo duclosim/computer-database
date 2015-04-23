@@ -2,6 +2,8 @@ package com.excilys.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,8 @@ import com.excilys.persistence.daos.OrderingWay;
 @RestController
 @RequestMapping("/rest-api/")
 public class ComputerRESTController {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerRESTController.class);
+	
 	@Autowired
 	private Page page;
 	
@@ -25,6 +29,12 @@ public class ComputerRESTController {
     		@RequestParam(value = "col", defaultValue = "computer.id") String col,
     		@RequestParam(value = "way", defaultValue = "ASC") String way,
     		@RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
+		LOG.trace(new StringBuilder("getDashboard(")
+			.append(nbItem).append(", ")
+			.append(name).append(", ")
+			.append(col).append(", ")
+			.append(way).append(", ")
+			.append(pageNum).append(")").toString());
     	page.setMaxNbItemsByPage(nbItem);
     	page.setSearchedName(name);
 		page.setColumn(null);

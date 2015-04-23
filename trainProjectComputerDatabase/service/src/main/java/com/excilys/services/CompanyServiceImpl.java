@@ -30,7 +30,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	public Company getById(Long id) {
-		LOG.info("getById(" + id + ")");
+		LOG.trace("getById(" + id + ")");
 		if (id == null) {
 			LOG.error("id est à null.");
 			throw new IllegalArgumentException("id est à null.");
@@ -42,7 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	public List<Company> getAll() {
-		LOG.info("getAll()");
+		LOG.trace("getAll()");
 		List<Company> result;
 		result = companyDao.getAll();
 		return result;
@@ -72,7 +72,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	public int countAllLines() {
-		LOG.info("countLines()");
+		LOG.trace("countLines()");
 		int result;
 		result = companyDao.countLines();
 		return result;
@@ -86,7 +86,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Transactional
 	@Override
 	public void delete(Company company) {
-		LOG.info("delete(" + company + ")");
+		LOG.trace("delete(" + company + ")");
 		if (company == null) {
 			LOG.error("company est à null.");
 			throw new IllegalArgumentException("company est à null.");
