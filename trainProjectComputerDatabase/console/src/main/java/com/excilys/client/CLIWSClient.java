@@ -16,10 +16,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.excilys.binding.dtos.ComputerDTO;
-import com.excilys.model.beans.Company;
-import com.excilys.page.Page;
-import com.excilys.services.CompanyService;
-import com.excilys.services.ComputerService;
+import com.excilys.persistence.daos.ComputerColumn;
+import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.ws.ComputerDatabaseWS;
 
 /**
@@ -30,6 +28,7 @@ import com.excilys.ws.ComputerDatabaseWS;
 @Component
 class CLIWSClient {
 	private static final Logger LOG = LoggerFactory.getLogger(CLIWSClient.class);
+	
 	private final URL url;
     private final QName qname;
     private final Service service;
@@ -37,16 +36,10 @@ class CLIWSClient {
 
 	@Autowired
 	private MessageSource messageSource;
-	@Autowired
-	private Page page;
-	@Autowired
-	private CompanyService companyService;
-	@Autowired
-	private ComputerService computerService;
 	
 	public CLIWSClient() throws MalformedURLException {
 		url = new URL("http://localhost:9999/computer-database-ws/computers?wsdl");
-		qname = new QName("http://ws.excilys.com/", "ComputerDatabaseWSImpl");
+		qname = new QName("http://ws.excilys.com/", "ComputerDatabaseWSImplService");
         service = Service.create(url, qname);
         ws = service.getPort(ComputerDatabaseWS.class);
 	}
@@ -105,17 +98,37 @@ class CLIWSClient {
 	
 	private void getCompanies() {
 		LOG.info("getCompanies()");
-		for (Company cmpny : companyService.getAll()) {
-			System.out.println(cmpny);
-		}
+		System.out.println(ws.getCompanies());
 	}
 	
 	private void getComputers(Scanner sc) {
 		LOG.info("getComputers(" + sc + ")");
-		for (int k = 1; k <= page.getLastPageNb(); ++k) {
-			page.setPageNum(k);
-			System.out.println(page);
+		System.out.println(getMessage("console.detailComputer.limit"));
+		String args = sc.next();
+		int limit = Integer.parseInt(args);
+		System.out.println(getMessage("console.detailComputer.pageNum"));
+		args = sc.next();
+		int offset = Integer.parseInt(args);
+		System.out.println(getMessage("console.detailComputer.searched"));
+		args = sc.next();
+		String searchedName = args;
+		System.out.println(getMessage("console.detailComputer.column"));
+		args = sc.next();
+		ComputerColumn column = null;
+		for (ComputerColumn col : ComputerColumn.values()) {
+			if (col.getColumnName().equals(args)) {
+				column = col;
+			}
 		}
+		System.out.println(getMessage("console.detailComputer.way"));
+		args = sc.next();
+		OrderingWay way = null;
+		for (OrderingWay w : OrderingWay.values()) {
+			if (w.getWay().equals(args)) {
+				way = w;
+			}
+		}
+		System.out.println(ws.getComputers(limit, offset, searchedName, column, way));
 	}
 	
 	private void createComputer(Scanner sc) {
@@ -127,27 +140,27 @@ class CLIWSClient {
 			computer.setName(args);
 		}
 		System.out.println(getMessage("console.newComputer.intro"));
-		args = sc.nextLine();
+		args = sc.next();
 		try {
 			computer.setIntroducedDate(args);
 		} catch (DateTimeParseException e) {
 			LOG.error("Date impossible à reconnaître.");
 		}
 		System.out.println(getMessage("console.newComputer.dis"));
-		args = sc.nextLine();
+		args = sc.next();
 		try {
 			computer.setDiscontinuedDate(args);
 		} catch (DateTimeParseException e) {
 			LOG.error("Date impossible à reconnaître.");
 		}
 		System.out.println(getMessage("console.newComputer.companyId"));
-		args = sc.nextLine();
+		args = sc.next();
 		try {
 			computer.setCompanyId(args);
 		} catch (NumberFormatException e) {
 			LOG.error("Nombre impossible à reconnaître.");
 		}
-		computerService.create(computer);
+		System.out.println(ws.createComputer(computer));
 	}
 	
 	private void deleteCompany(Scanner sc) {
@@ -156,9 +169,8 @@ class CLIWSClient {
 			System.out.println(getMessage("console.delete.companyId"));
 			String args = sc.next();
 			Long companyId = Long.parseLong(args);
-			Company company = companyService.getById(companyId);
-			companyService.delete(company);
-			System.out.println(company + " " + getMessage("console.delete.companySucces"));
+			ws.deleteCompany(companyId);
+			System.out.println(companyId + " " + getMessage("console.delete.companySucces"));
 		} catch (NumberFormatException e) {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
@@ -170,9 +182,8 @@ class CLIWSClient {
 			System.out.println(getMessage("console.delete.computerId"));
 			String args = sc.next();
 			Long computerId = Long.parseLong(args);
-			ComputerDTO computer = computerService.getById(computerId);
-			computerService.delete(computer);
-			System.out.println(computer + " " + getMessage("console.delete.computerSucces"));
+			ws.deleteComputer(computerId);
+			System.out.println(computerId + " " + getMessage("console.delete.computerSucces"));
 		} catch (NumberFormatException e) {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
@@ -184,8 +195,7 @@ class CLIWSClient {
 			System.out.println(getMessage("console.detail.computerId"));
 			String args = sc.next();
 			Long computerId = Long.parseLong(args);
-			ComputerDTO computer = computerService.getById(computerId);
-			System.out.println(computer);
+			System.out.println(ws.detailComputer(computerId));
 		} catch (NumberFormatException e) {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
@@ -196,17 +206,17 @@ class CLIWSClient {
 		System.out.println(getMessage("console.edit.computerId"));
 		String args = sc.next();
 		try {
-			Long id = Long.parseLong(args);
-			ComputerDTO computer = computerService.getById(id);
+			ComputerDTO computer = new ComputerDTO();
+			computer.setId(args);
 			System.out.println(getMessage("console.edit.computerDetail"));
 			System.out.println(computer);
 			System.out.println(getMessage("console.edit.name"));
-			args = sc.nextLine();
+			args = sc.next();
 			if (!("").equals(args)) {
 				computer.setName(args);
 			}
 			System.out.println(getMessage("console.edit.intro"));
-			args = sc.nextLine();
+			args = sc.next();
 			if (!("").equals(args)) {
 				try {
 					computer.setIntroducedDate(args);
@@ -217,7 +227,7 @@ class CLIWSClient {
 				computer.setIntroducedDate(null);
 			}
 			System.out.println(getMessage("console.edit.dis"));
-			args = sc.nextLine();
+			args = sc.next();
 			if (!("").equals(args)) {
 				try {
 					computer.setDiscontinuedDate(args);
@@ -228,7 +238,7 @@ class CLIWSClient {
 				computer.setDiscontinuedDate(null);
 			}
 			System.out.println(getMessage("console.edit.companyId"));
-			args = sc.nextLine();
+			args = sc.next();
 			if (!("").equals(args)) {
 				try {
 					computer.setCompanyId(args);
@@ -238,7 +248,7 @@ class CLIWSClient {
 			} else {
 				computer.setCompanyId(null);
 			}
-			computerService.update(computer);
+			System.out.println(ws.updateComputer(computer));
 		} catch (NumberFormatException e) {
 			LOG.error("Nombre impossible à reconnaître");
 		}

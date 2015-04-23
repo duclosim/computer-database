@@ -5,6 +5,7 @@ import javax.jws.WebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.binding.dtos.ComputerDTO;
 import com.excilys.model.beans.Company;
@@ -15,6 +16,7 @@ import com.excilys.services.CompanyService;
 import com.excilys.services.ComputerService;
 
 // Service Implementation
+@Component
 @WebService(endpointInterface = "com.excilys.ws.ComputerDatabaseWS")
 public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabaseWSImpl.class);
@@ -31,7 +33,7 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 		LOG.info("getCompanies()");
 		StringBuilder sb = new StringBuilder();
 		for (Company cmpny : companyService.getAll()) {
-			sb.append(cmpny);
+			sb.append(cmpny).append('\n');
 		}
 		return sb.toString();
 	}
@@ -82,21 +84,21 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	}
 	
 	@Override
-	public void deleteCompany(Company company) {
-		LOG.info("deleteCompany(" + company + ")");
-		companyService.delete(company);
+	public void deleteCompany(Long id) {
+		LOG.info("deleteCompany(" + id + ")");
+		companyService.delete(companyService.getById(id));
 	}
 	
 	@Override
-	public void deleteComputer(ComputerDTO computer) {
-		LOG.info("deleteComputer(" + computer + ")");
-		computerService.delete(computer);
+	public void deleteComputer(Long id) {
+		LOG.info("deleteComputer(" + id + ")");
+		computerService.delete(computerService.getById(id));
 	}
 	
 	@Override
-	public String detailComputer(String str) {
-		LOG.info("detailComputer(" + str + ")");
-		return computerService.getById(Long.parseLong(str)).toString();
+	public String detailComputer(Long id) {
+		LOG.info("detailComputer(" + id + ")");
+		return computerService.getById(id).toString();
 	}
 	
 	@Override

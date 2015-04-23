@@ -1,8 +1,7 @@
-package com.excilys.cli;
+package com.excilys.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,10 +16,8 @@ import java.util.Scanner;
  * @author excilys
  *
  */
-class ComputerDatabaseCLI {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabaseCLI.class);
-	@Autowired
-	private MessageSource messageSource;
+class Main {
+	private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String args[]) {
 		LOG.info("main(" + Arrays.toString(args) + ")");
@@ -28,7 +25,7 @@ class ComputerDatabaseCLI {
 		boolean terminated = false;
 		@SuppressWarnings("resource")
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:console-context.xml");
-		CLIService cliService = ctx.getBean(CLIService.class);
+		CLIWSClient cliService = ctx.getBean(CLIWSClient.class);
 		MessageSource messageSource = ctx.getBean(MessageSource.class);
 		Locale locale = LocaleContextHolder.getLocale();
 		System.out.println(messageSource.getMessage("console.welcome", null, locale));
