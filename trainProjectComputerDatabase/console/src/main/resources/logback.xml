@@ -44,7 +44,8 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.excilys.computerDatabase.controller" additivity="false">
+	<logger name="com.excilys.computerDatabase.controller"
+		additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="dailyRollingFileAppender" />
 		<appender-ref ref="minuteRollingFileAppender" />
