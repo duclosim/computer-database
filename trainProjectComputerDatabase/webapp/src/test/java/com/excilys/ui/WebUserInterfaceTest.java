@@ -1,11 +1,13 @@
 package com.excilys.ui;
 
+import java.awt.AWTException;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -24,12 +26,11 @@ import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.services.ComputerService;
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:webapp-context.xml")
 public class WebUserInterfaceTest {
 	private static final Logger LOG = LoggerFactory.getLogger(WebUserInterfaceTest.class);
-	private static final String HOME_PAGE = "http://http://localhost:8080/computer-database/dashboard";
+	private static final String HOME_PAGE = "http://localhost:8080/computer-database/dashboard";
 	// Field ids/names
 	private static final String BEAN_NAME_FIELD = "computerName";
 	private static final String BEAN_INTRO_DATE_FIELD = "introduced";
@@ -42,31 +43,41 @@ public class WebUserInterfaceTest {
 	private static final String BEAN_DIS_DATE = "14/04/2015";
 	private static final String BEAN_COMPANY = "Commodore International";
 
-	private WebDriver driver;
+	private static WebDriver driver;
 	
 	@Autowired
 	ComputerService computerService;
 	
-	@Before
-	public void initDriver() {
+	@BeforeClass
+	public static void initDriver() throws AWTException {
 		LOG.debug("initDriver()");
-		ComputerDTO c = new ComputerDTO();
-		c.setName(BEAN_NAME);
-		computerService.create(c);
 		// Create a new instance of the Firefox driver
 		driver = new FirefoxDriver();
 	    driver.get(HOME_PAGE);
 	}
 	
-	@After
-	public void closeDriver() {
+	@AfterClass
+	public static void closeDriver() {
 		LOG.debug("closeDriver()");
 	    //Close the browser
 	    driver.quit();
+	}
+	
+	@Before
+	public void createTestBean() {
+		ComputerDTO c = new ComputerDTO();
+		c.setName(BEAN_NAME);
+		computerService.create(c);
+	}
+	
+	@After
+	public void goBackHome() {
+		// delete created beans.
 	    List<ComputerDTO> list = computerService.getFiltered(BEAN_NAME, 10, 0);
 	    for (ComputerDTO computer : list) {
 	    	computerService.delete(Long.parseLong(computer.getId()));
 	    }
+		driver.get(HOME_PAGE);
 	}
 
 	@Test

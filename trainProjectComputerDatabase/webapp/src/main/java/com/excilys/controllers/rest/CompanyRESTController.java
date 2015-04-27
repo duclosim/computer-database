@@ -16,7 +16,7 @@ import com.excilys.services.CompanyService;
 @RestController
 @RequestMapping("/rest-api/companies")
 public class CompanyRESTController {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerRESTController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyRESTController.class);
 
 	@Autowired
 	private CompanyService service;
@@ -31,11 +31,5 @@ public class CompanyRESTController {
     public List<Company> getList() {
 		LOG.trace("list()");
 		return service.getAll();
-    }
-    
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
-    public void delete(@RequestParam(value = "id") Long id) {
-    	LOG.trace("delete()");
-    	service.delete(id);
     }
 }

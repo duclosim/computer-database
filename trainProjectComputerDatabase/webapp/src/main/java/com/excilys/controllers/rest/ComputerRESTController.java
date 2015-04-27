@@ -74,10 +74,4 @@ public class ComputerRESTController {
 		LOG.trace("update(" + computer + ")");
 		service.update(computer);
     }
-
-	@RequestMapping(value = "delete", method = RequestMethod.DELETE)
-    public void delete(@RequestParam(value = "id") Long id) {
-    	LOG.trace("delete(" + id + ")");
-    	service.delete(id);
-    }
 }
