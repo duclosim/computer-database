@@ -65,7 +65,7 @@ public class WebUserInterfaceTest {
 	    driver.quit();
 	    List<ComputerDTO> list = computerService.getFiltered(BEAN_NAME, 10, 0);
 	    for (ComputerDTO computer : list) {
-	    	computerService.delete(computer);
+	    	computerService.delete(Long.parseLong(computer.getId()));
 	    }
 	}
 
