@@ -30,5 +30,5 @@
  	<mvc:annotation-driven />
 	<!-- Component scan -->
 	<context:annotation-config />
-	<context:component-scan base-package="com.excilys.controllers" />
+	<context:component-scan base-package="com.excilys.controllers.rest, com.excilys.controllers.rest" />
 </beans>

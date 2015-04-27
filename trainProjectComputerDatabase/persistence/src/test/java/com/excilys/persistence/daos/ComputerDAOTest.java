@@ -228,7 +228,7 @@ public class ComputerDAOTest {
 		// When
 		computerDAO.create(bean);
 		Computer expectedBean = computerDAO.getById(bean.getId());
-		computerDAO.delete(bean);
+		computerDAO.delete(bean.getId());
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -269,7 +269,7 @@ public class ComputerDAOTest {
 		bean.setCompany(companyDAO.getById(companyId));
 		computerDAO.create(bean);
 		// When
-		computerDAO.delete(bean);
+		computerDAO.delete(bean.getId());
 		bean = computerDAO.getById(bean.getId());
 		// Then
 		Assert.assertNull("Erreur sur le bean", bean);

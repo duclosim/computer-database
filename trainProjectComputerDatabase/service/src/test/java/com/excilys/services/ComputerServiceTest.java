@@ -140,7 +140,7 @@ public class ComputerServiceTest {
 		// When
 		computerService.create(bean);
 		ComputerDTO expectedBean = computerService.getById(Long.parseLong(bean.getId()));
-		computerService.delete(bean);
+		computerService.delete(Long.parseLong(bean.getId()));
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -181,7 +181,7 @@ public class ComputerServiceTest {
 		computerService.create(bean);
 		Long id = Long.parseLong(bean.getId());
 		// When
-		computerService.delete(bean);
+		computerService.delete(Long.parseLong(bean.getId()));
 		bean = computerService.getById(id);
 		// Then
 		Assert.assertNull("Erreur sur le bean", bean);

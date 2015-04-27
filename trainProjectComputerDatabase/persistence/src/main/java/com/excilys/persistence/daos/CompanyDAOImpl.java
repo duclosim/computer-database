@@ -95,14 +95,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	private static final String HQL_DELETE = "delete from Company where id= :id";
 	@Override
-	public void delete(Company company) {
-		LOG.trace("delete(" + company + ")");
-		if (company == null) {
-			LOG.error("company est à null.");
-			throw new IllegalArgumentException("company est à null.");
+	public void delete(Long id) {
+		LOG.trace("delete(" + id + ")");
+		if (id == null) {
+			LOG.error("id est à null.");
+			throw new IllegalArgumentException("id est à null.");
 		}
 		getSession().createQuery(HQL_DELETE)
-				.setLong("id", company.getId())
+				.setLong("id", id)
 				.executeUpdate();
 	}
 	

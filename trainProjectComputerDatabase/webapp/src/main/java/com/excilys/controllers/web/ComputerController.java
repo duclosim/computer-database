@@ -1,4 +1,4 @@
-package com.excilys.controllers;
+package com.excilys.controllers.web;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -123,7 +123,7 @@ public class ComputerController {
 			StringTokenizer st = new StringTokenizer(selectedComputersId, ",");
 			while (st.hasMoreTokens()) {
 				ComputerDTO deleteDTO = computerService.getById(Long.parseLong(st.nextToken()));
-				computerService.delete(deleteDTO);
+				computerService.delete(Long.parseLong(deleteDTO.getId()));
 			}
 		}
 		model.addObject("page", page);

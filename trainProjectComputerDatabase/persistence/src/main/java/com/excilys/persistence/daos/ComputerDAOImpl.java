@@ -172,14 +172,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	private static final String HQL_DELETE = "delete from Computer where id= :id";
 	@Override
-	public void delete(Computer computer) {
-		LOG.trace("delete(" + computer + ")");
-		if (computer == null) {
-			LOG.error("computer est à null.");
-			throw new IllegalArgumentException("computer est à null.");
+	public void delete(Long id) {
+		LOG.trace("delete(" + id + ")");
+		if (id == null) {
+			LOG.error("id est à null.");
+			throw new IllegalArgumentException("id est à null.");
 		}
 		getSession().createQuery(HQL_DELETE)
-				.setLong("id", computer.getId())
+				.setLong("id", id)
 				.executeUpdate();
 	}
 

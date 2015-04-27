@@ -1,4 +1,4 @@
-package com.excilys.controllers;
+package com.excilys.controllers.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/403")
-public class UnauthorizedServlet {
-	private static final Logger LOG = LoggerFactory.getLogger(UnauthorizedServlet.class);
+@RequestMapping("/404")
+public class NotFoundServlet {
+	private static final Logger LOG = LoggerFactory.getLogger(NotFoundServlet.class);
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String get() {
 		LOG.trace("get()");
-		return "403";
+		return "404";
 	}
 }

@@ -83,5 +83,5 @@ public interface CRUDDao<T> {
 	 * @param entity Le bean à supprimer.
 	 * @throws SQLException 
 	 */
-	void delete(T entity);
+	void delete(Long id);
 }

@@ -72,6 +72,6 @@ public interface CRUDService<T> {
 	 * 
 	 * @param computer
 	 */
-	void delete(T t);
+	void delete(Long id);
 
 }

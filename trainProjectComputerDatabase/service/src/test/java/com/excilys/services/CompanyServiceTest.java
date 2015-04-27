@@ -71,7 +71,7 @@ public class CompanyServiceTest {
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
 		// When
-		companyService.delete(bean);
+		companyService.delete(bean.getId());
 		bean = companyService.getById(bean.getId());
 		// Then
 		Assert.assertNull("Erreur sur le bean", bean);

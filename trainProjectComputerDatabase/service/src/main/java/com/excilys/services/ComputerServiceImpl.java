@@ -124,10 +124,10 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void delete(ComputerDTO computer) {
-		LOG.trace("delete(" + computer + ")");
-		if (computer != null) {
-			computerDao.delete(computerDTOMapper.DTOToBean(computer));
+	public void delete(Long id) {
+		LOG.trace("delete(" + id + ")");
+		if (id != null) {
+			computerDao.delete(id);
 		}
 	}
 	

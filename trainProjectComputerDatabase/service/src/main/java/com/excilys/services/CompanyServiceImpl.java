@@ -85,13 +85,13 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Transactional
 	@Override
-	public void delete(Company company) {
-		LOG.trace("delete(" + company + ")");
-		if (company == null) {
-			LOG.error("company est à null.");
-			throw new IllegalArgumentException("company est à null.");
+	public void delete(Long id) {
+		LOG.trace("delete(" + id + ")");
+		if (id == null) {
+			LOG.error("id est à null.");
+			throw new IllegalArgumentException("id est à null.");
 		}
-		computerDAO.deleteByCompanyId(company.getId());
-		companyDao.delete(company);
+		computerDAO.deleteByCompanyId(id);
+		companyDao.delete(id);
 	}
 }

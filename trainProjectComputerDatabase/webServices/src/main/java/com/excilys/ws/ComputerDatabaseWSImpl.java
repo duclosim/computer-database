@@ -86,13 +86,13 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	@Override
 	public void deleteCompany(Long id) {
 		LOG.trace("deleteCompany(" + id + ")");
-		companyService.delete(companyService.getById(id));
+		companyService.delete(id);
 	}
 	
 	@Override
 	public void deleteComputer(Long id) {
 		LOG.trace("deleteComputer(" + id + ")");
-		computerService.delete(computerService.getById(id));
+		computerService.delete(id);
 	}
 	
 	@Override
