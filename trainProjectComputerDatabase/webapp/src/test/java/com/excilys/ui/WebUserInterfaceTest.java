@@ -37,6 +37,8 @@ public class WebUserInterfaceTest {
 	private static final String BEAN_DIS_DATE_FIELD = "discontinued";
 	private static final String BEAN_COMPANY_FIELD = "companyId";
 	private static final String COMPUTER_COUNT_FIELD = "homeTitle";
+	private static final String UK_FLAG_ICON = "en_ic";
+	private static final String FR_FLAG_ICON = "fr_ic";
 	// Bean attributes
 	private static final String BEAN_NAME = "seleniumBean";
 	private static final String BEAN_INTRO_DATE = "15/02/2015";
@@ -78,6 +80,19 @@ public class WebUserInterfaceTest {
 	    	computerService.delete(Long.parseLong(computer.getId()));
 	    }
 		driver.get(HOME_PAGE);
+	}
+	
+	@Test
+	public void flagIconShouldChangeLanguage() {
+		LOG.debug("flagIconShouldChangeLanguage()");
+		// Given
+		String expectedText = "Add Computer";
+		driver.findElement(By.id(UK_FLAG_ICON)).click();
+		// When
+		String addButtonText = driver.findElement(By.id("addComputer")).getText();
+		// Then
+		driver.findElement(By.id(FR_FLAG_ICON)).click();
+		Assert.assertEquals("Erreur sur le changement de langue.", expectedText, addButtonText);
 	}
 
 	@Test
