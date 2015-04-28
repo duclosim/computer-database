@@ -2,6 +2,7 @@ package com.excilys.ui;
 
 import java.awt.AWTException;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,6 +19,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -41,8 +43,10 @@ public class WebUserInterfaceTest {
 	private static final String FR_FLAG_ICON = "fr_ic";
 	// Bean attributes
 	private static final String BEAN_NAME = "seleniumBean";
-	private static final String BEAN_INTRO_DATE = "15/02/2015";
-	private static final String BEAN_DIS_DATE = "14/04/2015";
+	private static final String BEAN_FR_INTRO_DATE = "15/02/2015";
+	private static final String BEAN_FR_DIS_DATE = "14/04/2015";
+	private static final String BEAN_EN_INTRO_DATE = "2015-02-15";
+	private static final String BEAN_EN_DIS_DATE = "2015-04-14";
 	private static final String BEAN_COMPANY = "Commodore International";
 
 	private static WebDriver driver;
@@ -87,14 +91,32 @@ public class WebUserInterfaceTest {
 		LOG.debug("flagIconShouldChangeLanguage()");
 		// Given
 		String expectedText = "Add Computer";
-		driver.findElement(By.id(UK_FLAG_ICON)).click();
+		setEnglish();
 		// When
 		String addButtonText = driver.findElement(By.id("addComputer")).getText();
 		// Then
 		driver.findElement(By.id(FR_FLAG_ICON)).click();
 		Assert.assertEquals("Erreur sur le changement de langue.", expectedText, addButtonText);
 	}
-
+	
+	@Test
+	public void addAComputerWithWrongDateFormatShouldNotBePossible() {
+		LOG.debug("addAComputerWithNullDateAndCompanyShouldSetFields()");
+		// Given
+		Long id = 4L;
+		ComputerDTO dto = new ComputerDTO();
+		dto.setName(BEAN_NAME);
+		setFrench();
+		dto.setIntroducedDate(BEAN_EN_INTRO_DATE);
+		dto.setDiscontinuedDate(null);
+		dto.setCompanyName(null);
+		// When
+		addBean(dto);
+		// Then
+	    ComputerDTO bean = computerService.getById(id);
+	    Assert.assertNull("Le bean ne devrait pas avoir de date.", bean.getIntroducedDate());
+	}
+	
 	@Test
 	public void addAComputerWithNullDateAndCompanyShouldSetFields() {
 		LOG.debug("addAComputerWithNullDateAndCompanyShouldSetFields()");
@@ -116,16 +138,17 @@ public class WebUserInterfaceTest {
 	}
 	
 	@Test
-	public void addAComputerShouldAddOneToCountAndSetFields() {
+	public void addAComputerInFrenchShouldAddOneToCountAndSetFields() {
 		LOG.debug("addAComputerShouldAddOneToCountAndSetFields()");
 		// Given
 		int expectedNbItems = computerService.countAllLines();
 		++expectedNbItems;
 		ComputerDTO dto = new ComputerDTO();
 		dto.setName(BEAN_NAME);
-		dto.setIntroducedDate(BEAN_INTRO_DATE);
-		dto.setDiscontinuedDate(BEAN_DIS_DATE);
+		dto.setIntroducedDate(BEAN_FR_INTRO_DATE);
+		dto.setDiscontinuedDate(BEAN_FR_DIS_DATE);
 		dto.setCompanyName(BEAN_COMPANY);
+		setFrench();
 	    // When
 		addBean(dto);
 	    driver.get(HOME_PAGE);
@@ -134,22 +157,70 @@ public class WebUserInterfaceTest {
 	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
 	    // Then
 	    Assert.assertEquals("Nom mal attribué.", bean.getName(),  BEAN_NAME);
-	    Assert.assertEquals("Date d'introduction mal attribuée.", BEAN_INTRO_DATE, bean.getIntroducedDate());
-	    Assert.assertEquals("Date de retrait mal attribuée.", BEAN_DIS_DATE, bean.getDiscontinuedDate());
+	    Assert.assertEquals("Date d'introduction mal attribuée.", BEAN_FR_INTRO_DATE, bean.getIntroducedDate());
+	    Assert.assertEquals("Date de retrait mal attribuée.", BEAN_FR_DIS_DATE, bean.getDiscontinuedDate());
 	    Assert.assertEquals("Nom d'entreprise mal attribué.", BEAN_COMPANY, bean.getCompanyName());
 	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", expectedNbItems, nbItems);
 	}
 	
 	@Test
-	public void editComputerShouldUpdateTheComputer() {
-		LOG.debug("editComputerShouldUpdateTheComputer()");
+	public void addAComputerInEnglishShouldAddOneToCountAndSetFields() {
+		LOG.debug("addAComputerShouldAddOneToCountAndSetFields()");
 		// Given
-		String editedItemId = "computer3";
+		int expectedNbItems = computerService.countAllLines();
+		++expectedNbItems;
+		ComputerDTO dto = new ComputerDTO();
+		dto.setName(BEAN_NAME);
+		dto.setIntroducedDate(BEAN_EN_INTRO_DATE);
+		dto.setDiscontinuedDate(BEAN_EN_DIS_DATE);
+		dto.setCompanyName(BEAN_COMPANY);
+		setEnglish();
+	    // When
+		addBean(dto);
+	    driver.get(HOME_PAGE);
+	    int nbItems = computerService.countAllLines();
+	    Locale locale = LocaleContextHolder.getLocale();
+	    LocaleContextHolder.setLocale(Locale.ENGLISH);
+	    ComputerDTO bean = computerService.getFilteredAndOrdered(1, 0, 
+	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
+	    LocaleContextHolder.setLocale(locale);
+	    // Then
+	    Assert.assertEquals("Nom mal attribué.", bean.getName(),  BEAN_NAME);
+	    Assert.assertEquals("Date d'introduction mal attribuée.", BEAN_EN_INTRO_DATE, bean.getIntroducedDate());
+	    Assert.assertEquals("Date de retrait mal attribuée.", BEAN_EN_DIS_DATE, bean.getDiscontinuedDate());
+	    Assert.assertEquals("Nom d'entreprise mal attribué.", BEAN_COMPANY, bean.getCompanyName());
+	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", expectedNbItems, nbItems);
+	}
+	
+	@Test
+	public void editAComputerWithWrongDateFormatShouldNotBePossible() {
+		LOG.debug("addAComputerWithNullDateAndCompanyShouldSetFields()");
+		// Given
+		String editedItemId = "computer4";
+		Long id = 4l;
+		setFrench();
 		WebElement element = driver.findElement(By.id(editedItemId));
 		element.click();
 		// When
 		element = driver.findElement(By.id(BEAN_INTRO_DATE_FIELD));
-		element.sendKeys(BEAN_INTRO_DATE);
+		element.sendKeys(BEAN_EN_INTRO_DATE);
+		element.submit();
+		// Then
+	    ComputerDTO bean = computerService.getById(id);
+	    Assert.assertNull("Le bean ne devrait pas avoir de date.", bean.getIntroducedDate());
+	}
+	
+	@Test
+	public void editComputerInFrenchShouldUpdateTheComputer() {
+		LOG.debug("editComputerShouldUpdateTheComputer()");
+		// Given
+		String editedItemId = "computer3";
+		setFrench();
+		WebElement element = driver.findElement(By.id(editedItemId));
+		element.click();
+		// When
+		element = driver.findElement(By.id(BEAN_INTRO_DATE_FIELD));
+		element.sendKeys(BEAN_FR_INTRO_DATE);
 		element.submit();
 		// Then
 		ComputerDTO editedBean = computerService.getById(new Long(3));
@@ -157,7 +228,7 @@ public class WebUserInterfaceTest {
 		editedBean.setIntroducedDate(null);
 		computerService.update(editedBean);
 		Assert.assertNotNull("introducedDate à null.", editedDate);
-		Assert.assertTrue("Bean non modifié correctement.", editedDate.contains(BEAN_INTRO_DATE));
+		Assert.assertTrue("Bean non modifié correctement.", editedDate.contains(BEAN_FR_INTRO_DATE));
 	}
 
 	@Test
@@ -333,5 +404,15 @@ public class WebUserInterfaceTest {
 		    }
 	    }
 	    element.submit();
+	}
+	
+	private void setFrench() {
+	    WebElement element = driver.findElement(By.id(FR_FLAG_ICON));
+	    element.click();
+	}
+	
+	private void setEnglish() {
+		WebElement element = driver.findElement(By.id(UK_FLAG_ICON));
+	    element.click();
 	}
 }
