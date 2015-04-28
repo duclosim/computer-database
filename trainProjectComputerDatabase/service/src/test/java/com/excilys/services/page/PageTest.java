@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.binding.dtos.ComputerDTO;
 import com.excilys.page.Page;
-import com.excilys.services.ComputerServiceImpl;
+import com.excilys.services.ComputerService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:service-context.xml")
@@ -26,7 +26,7 @@ public class PageTest {
 	private static final int DEFAULT_OFFSET = 2;
 	
 	@Autowired
-	private ComputerServiceImpl service;
+	private ComputerService service;
 	@Autowired
 	private Page page;
 	
