@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.model.beans.Computer;
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.services.ComputerService;
@@ -69,7 +69,7 @@ public class Page {
 	public ComputerService getService() {
 		return service;
 	}
-	public List<ComputerDTO> getEntities() {
+	public List<Computer> getEntities() {
 		return reloadEntities();
 	}
 	public String getSearchedName() {
@@ -174,9 +174,9 @@ public class Page {
 	 * Cette méthode recharge les entités en raison de changements 
 	 *   de page ou du nombre d'objets par page.
 	 */
-	private List<ComputerDTO> reloadEntities() {
+	private List<Computer> reloadEntities() {
 		LOG.trace("reloadEntities()");
-		List<ComputerDTO> entities;
+		List<Computer> entities;
 		boolean research = UserInputsValidator.isValidString(searchedName);
 		boolean ordering = ((column != null) && (way != null));
 		int offset = (getPageNum() - 1) * getMaxNbItemsByPage();
@@ -207,7 +207,7 @@ public class Page {
 	@Override
 	public String toString() {
 		StringBuilder res = new StringBuilder();
-		for (ComputerDTO entity : getEntities()) {
+		for (Computer entity : getEntities()) {
 			res.append(entity).append('\n');
 		}
 		return res.toString();

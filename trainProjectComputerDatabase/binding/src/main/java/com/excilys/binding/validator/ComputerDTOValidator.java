@@ -1,4 +1,4 @@
-package com.excilys.validators;
+package com.excilys.binding.validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +9,9 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.validators.DateValidator;
 
-@Component
+@Component(value = "computerValidator")
 public class ComputerDTOValidator implements Validator {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOValidator.class);
 	private static final String DATE_ERROR_MESSAGE_CODE = "DateTimeFormat.computerDTO";

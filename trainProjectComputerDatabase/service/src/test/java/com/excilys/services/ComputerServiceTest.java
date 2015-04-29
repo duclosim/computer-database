@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.binding.dtos.ComputerDTO;
-import com.excilys.binding.dtos.ComputerDTOMapper;
 import com.excilys.model.beans.Company;
 import com.excilys.model.beans.Computer;
 import com.excilys.persistence.daos.ComputerColumn;
@@ -29,8 +27,6 @@ public class ComputerServiceTest {
 	private CompanyService companyService;
 	@Autowired
 	private ComputerDAO computerDao;
-	@Autowired
-	private ComputerDTOMapper computerMapper;
 	
 	@Test
 	public void getById() {
@@ -39,7 +35,7 @@ public class ComputerServiceTest {
 		Long id = new Long(3);
 		Computer expectedComputer = computerDao.getById(id);
 		// When
-		Computer result = computerMapper.DTOToBean(computerService.getById(id));
+		Computer result = computerService.getById(id);
 		// Then
 		Assert.assertEquals("Mauvais bean récupéré.", expectedComputer, result);
 	}
@@ -49,9 +45,9 @@ public class ComputerServiceTest {
 		LOG.debug("getAll()");
 		// Given
 		int limit = 3;
-		List<ComputerDTO> expectedComputers = computerMapper.BeansToDTOs(computerDao.getAll(limit, 0));
+		List<Computer> expectedComputers = computerDao.getAll(limit, 0);
 		// When
-		List<ComputerDTO> result =  computerService.getAll(limit, 0);
+		List<Computer> result =  computerService.getAll(limit, 0);
 		// Then
 		Assert.assertEquals("Mauvais beans récupérés.", expectedComputers, result);
 	}
@@ -62,10 +58,9 @@ public class ComputerServiceTest {
 		// Given
 		int limit = 3;
 		String searchedName = "ass";
-		List<ComputerDTO> expectedComputers = computerMapper.BeansToDTOs(computerDao
-				.getFiltered(limit, 0, searchedName));
+		List<Computer> expectedComputers = computerDao.getFiltered(limit, 0, searchedName);
 		// When
-		List<ComputerDTO> result =  computerService.getFiltered(searchedName, limit, 0);
+		List<Computer> result =  computerService.getFiltered(searchedName, limit, 0);
 		// Then
 		Assert.assertEquals("Mauvais beans récupérés.", expectedComputers, result);
 	}
@@ -77,10 +72,9 @@ public class ComputerServiceTest {
 		int limit = 3;
 		ComputerColumn column = ComputerColumn.COMPANY_NAME_COLUMN_LABEL;
 		OrderingWay way = OrderingWay.ASC;
-		List<ComputerDTO> expectedComputers = computerMapper.BeansToDTOs(computerDao
-				.getOrdered(limit, 0, column, way));
+		List<Computer> expectedComputers = computerDao.getOrdered(limit, 0, column, way);
 		// When
-		List<ComputerDTO> result =  computerService.getOrdered(limit, 0, column, way);
+		List<Computer> result =  computerService.getOrdered(limit, 0, column, way);
 		// Then
 		Assert.assertEquals("Mauvais beans récupérés.", expectedComputers, result);
 	}
@@ -93,10 +87,9 @@ public class ComputerServiceTest {
 		String searchedName = "ass";
 		ComputerColumn column = ComputerColumn.COMPANY_NAME_COLUMN_LABEL;
 		OrderingWay way = OrderingWay.ASC;
-		List<ComputerDTO> expectedComputers = computerMapper.BeansToDTOs(computerDao
-				.getFilteredAndOrdered(limit, 0, searchedName, column, way));
+		List<Computer> expectedComputers = computerDao.getFilteredAndOrdered(limit, 0, searchedName, column, way);
 		// When
-		List<ComputerDTO> result =  computerService
+		List<Computer> result =  computerService
 				.getFilteredAndOrdered(limit, 0, searchedName, column, way);
 		// Then
 		Assert.assertEquals("Mauvais beans récupérés.", expectedComputers, result);
@@ -129,18 +122,17 @@ public class ComputerServiceTest {
 	public void create() {
 		LOG.debug("create()");
 		// Given
-		ComputerDTO bean = new ComputerDTO();
+		Computer bean = new Computer();
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
-		bean.setIntroducedDate(null);
-		bean.setDiscontinuedDate(null);
+		bean.setIntroduced(null);
+		bean.setDiscontinued(null);
 		Company company = companyService.getById(new Long(7));
-		bean.setCompanyId(company.getId().toString());
-		bean.setCompanyName(company.getName().toString());
+		bean.setCompany(company);
 		// When
 		computerService.create(bean);
-		ComputerDTO expectedBean = computerService.getById(Long.parseLong(bean.getId()));
-		computerService.delete(Long.parseLong(bean.getId()));
+		Computer expectedBean = computerService.getById(bean.getId());
+		computerService.delete(bean.getId());
 		// Then
 		Assert.assertEquals("Erreur sur le bean", expectedBean, bean);
 	}
@@ -150,8 +142,8 @@ public class ComputerServiceTest {
 		LOG.debug("update()");
 		// Given
 		Long id = new Long(7);
-		ComputerDTO bean = computerService.getById(id);
-		ComputerDTO expectedBean = computerService.getById(id);
+		Computer bean = computerService.getById(id);
+		Computer expectedBean = computerService.getById(id);
 		String name = bean.getName();
 		String newName = "new" + name;
 		bean.setName(newName);
@@ -170,18 +162,17 @@ public class ComputerServiceTest {
 	public void delete() {
 		LOG.debug("delete()");
 		// Given
-		ComputerDTO bean = new ComputerDTO();
+		Computer bean = new Computer();
 		String newBeanName = "newBean";
 		bean.setName(newBeanName);
-		bean.setIntroducedDate(null);
-		bean.setDiscontinuedDate(null);
+		bean.setIntroduced(null);
+		bean.setDiscontinued(null);
 		Company company = companyService.getById(new Long(7));
-		bean.setCompanyId(company.getId().toString());
-		bean.setCompanyName(company.getName().toString());
+		bean.setCompany(company);
 		computerService.create(bean);
-		Long id = Long.parseLong(bean.getId());
+		Long id = bean.getId();
 		// When
-		computerService.delete(Long.parseLong(bean.getId()));
+		computerService.delete(bean.getId());
 		bean = computerService.getById(id);
 		// Then
 		Assert.assertNull("Erreur sur le bean", bean);

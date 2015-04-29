@@ -1,4 +1,4 @@
-package com.excilys.controllers.rest;
+package com.excilys.controllers;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.binding.dtos.ComputerDTOMapper;
 import com.excilys.page.Page;
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
@@ -23,6 +24,8 @@ public class ComputerRESTController {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerRESTController.class);
 	
 	@Autowired
+	private ComputerDTOMapper mapper;
+	@Autowired
 	private ComputerService service;
 	@Autowired
 	private Page page;
@@ -30,13 +33,13 @@ public class ComputerRESTController {
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public void create(@RequestBody ComputerDTO computer) {
     	LOG.trace("create(" + computer + ")");
-    	service.create(computer);
+    	service.create(mapper.DTOToBean(computer));
     }
 	
 	@RequestMapping(value = "getById", method = RequestMethod.GET)
 	public ComputerDTO getById(@RequestParam(value = "id") Long id) {
 		LOG.trace("getById(" + id + ")");
-		return service.getById(id);
+		return mapper.BeanToDTO(service.getById(id));
 	}
 	
     @RequestMapping(value = "list",  method = RequestMethod.GET)
@@ -66,12 +69,12 @@ public class ComputerRESTController {
     		}
     	}
     	page.setPageNum(pageNum);
-    	return page.getEntities();
+    	return mapper.BeansToDTOs(page.getEntities());
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void update(@RequestBody ComputerDTO computer) {
 		LOG.trace("update(" + computer + ")");
-		service.update(computer);
+		service.update(mapper.DTOToBean(computer));
     }
 }

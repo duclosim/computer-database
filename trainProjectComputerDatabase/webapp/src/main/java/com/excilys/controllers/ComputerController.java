@@ -1,4 +1,4 @@
-package com.excilys.controllers.web;
+package com.excilys.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.binding.dtos.ComputerDTOMapper;
+import com.excilys.binding.dtos.PageDTO;
 import com.excilys.model.beans.Company;
+import com.excilys.model.beans.Computer;
 import com.excilys.page.Page;
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
@@ -31,12 +35,15 @@ public class ComputerController {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerController.class);
 	
 	@Autowired
+	private ComputerDTOMapper mapper;
+	@Autowired
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
 	@Autowired
-	private Page page; 
+	private PageDTO page; 
     @Autowired
+    @Qualifier(value = "computerValidator")
     private Validator computerDTOValidator;
     
     // --- REDIRECT ---
@@ -122,8 +129,8 @@ public class ComputerController {
 		if (selectedComputersId != null) {
 			StringTokenizer st = new StringTokenizer(selectedComputersId, ",");
 			while (st.hasMoreTokens()) {
-				ComputerDTO deleteDTO = computerService.getById(Long.parseLong(st.nextToken()));
-				computerService.delete(Long.parseLong(deleteDTO.getId()));
+				Computer deleteDTO = computerService.getById(Long.parseLong(st.nextToken()));
+				computerService.delete(deleteDTO.getId());
 			}
 		}
 		model.addObject("page", page);
@@ -203,10 +210,10 @@ public class ComputerController {
 			}
 			switch (method) {
 			case SAVE :
-				computerService.create(computer);
+				computerService.create(mapper.DTOToBean(computer));
 				return new ModelAndView("redirect:dashboard");
 			case UPDATE :
-				computerService.update(computer);
+				computerService.update(mapper.DTOToBean(computer));
 				return new ModelAndView("redirect:dashboard");
 			}
 		}

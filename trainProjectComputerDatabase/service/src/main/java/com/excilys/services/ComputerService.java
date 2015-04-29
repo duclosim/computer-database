@@ -1,23 +1,23 @@
 package com.excilys.services;
 
-import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.model.beans.Computer;
 
 /**
  * 
  * @author excilys
  *
  */
-public interface ComputerService extends CRUDService<ComputerDTO> {
+public interface ComputerService extends CRUDService<Computer> {
 	
 	/**
 	 * 
 	 * @param computer
 	 */
-	void create(ComputerDTO computer);
+	void create(Computer computer);
 	
 	/**
 	 * 
 	 * @param computer
 	 */
-	void update(ComputerDTO computer);
+	void update(Computer computer);
 }

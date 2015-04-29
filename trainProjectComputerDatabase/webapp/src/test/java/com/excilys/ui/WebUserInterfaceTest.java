@@ -24,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.model.beans.Computer;
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.services.ComputerService;
@@ -71,7 +72,7 @@ public class WebUserInterfaceTest {
 	
 	@Before
 	public void createTestBean() {
-		ComputerDTO c = new ComputerDTO();
+		Computer c = new Computer();
 		c.setName(BEAN_NAME);
 		computerService.create(c);
 	}
@@ -79,9 +80,9 @@ public class WebUserInterfaceTest {
 	@After
 	public void goBackHome() {
 		// delete created beans.
-	    List<ComputerDTO> list = computerService.getFiltered(BEAN_NAME, 10, 0);
-	    for (ComputerDTO computer : list) {
-	    	computerService.delete(Long.parseLong(computer.getId()));
+	    List<Computer> list = computerService.getFiltered(BEAN_NAME, 10, 0);
+	    for (Computer computer : list) {
+	    	computerService.delete(computer.getId());
 	    }
 		driver.get(HOME_PAGE);
 	}
@@ -96,7 +97,8 @@ public class WebUserInterfaceTest {
 		String addButtonText = driver.findElement(By.id("addComputer")).getText();
 		// Then
 		driver.findElement(By.id(FR_FLAG_ICON)).click();
-		Assert.assertEquals("Erreur sur le changement de langue.", expectedText, addButtonText);
+		Assert.assertEquals("Erreur sur le changement de langue.", 
+				expectedText, addButtonText);
 	}
 	
 	@Test
@@ -113,8 +115,8 @@ public class WebUserInterfaceTest {
 		// When
 		addBean(dto);
 		// Then
-	    ComputerDTO bean = computerService.getById(id);
-	    Assert.assertNull("Le bean ne devrait pas avoir de date.", bean.getIntroducedDate());
+		Computer bean = computerService.getById(id);
+	    Assert.assertNull("Le bean ne devrait pas avoir de date.", bean.getIntroduced());
 	}
 	
 	@Test
@@ -129,12 +131,12 @@ public class WebUserInterfaceTest {
 		// When
 		addBean(dto);
 		// Then
-	    ComputerDTO bean = computerService.getFilteredAndOrdered(1, 0, 
+		Computer bean = computerService.getFilteredAndOrdered(1, 0, 
 	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
 	    Assert.assertEquals("Nom mal attribué.", BEAN_NAME, bean.getName());
-	    Assert.assertNull("Date d'introduction mal attribuée.", bean.getIntroducedDate());
-	    Assert.assertNull("Date de retrait mal attribuée.", bean.getDiscontinuedDate());
-	    Assert.assertNull("Nom d'entreprise mal attribué.", bean.getCompanyName());
+	    Assert.assertNull("Date d'introduction mal attribuée.", bean.getIntroduced());
+	    Assert.assertNull("Date de retrait mal attribuée.", bean.getDiscontinued());
+	    Assert.assertNull("Nom d'entreprise mal attribué.", bean.getCompany());
 	}
 	
 	@Test
@@ -153,14 +155,18 @@ public class WebUserInterfaceTest {
 		addBean(dto);
 	    driver.get(HOME_PAGE);
 	    int nbItems = computerService.countAllLines();
-	    ComputerDTO bean = computerService.getFilteredAndOrdered(1, 0, 
+	    Computer bean = computerService.getFilteredAndOrdered(1, 0, 
 	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
 	    // Then
 	    Assert.assertEquals("Nom mal attribué.", bean.getName(),  BEAN_NAME);
-	    Assert.assertEquals("Date d'introduction mal attribuée.", BEAN_FR_INTRO_DATE, bean.getIntroducedDate());
-	    Assert.assertEquals("Date de retrait mal attribuée.", BEAN_FR_DIS_DATE, bean.getDiscontinuedDate());
-	    Assert.assertEquals("Nom d'entreprise mal attribué.", BEAN_COMPANY, bean.getCompanyName());
-	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", expectedNbItems, nbItems);
+	    Assert.assertEquals("Date d'introduction mal attribuée.", 
+	    		BEAN_FR_INTRO_DATE, bean.getIntroduced().toString());
+	    Assert.assertEquals("Date de retrait mal attribuée.", 
+	    		BEAN_FR_DIS_DATE, bean.getDiscontinued().toString());
+	    Assert.assertEquals("Nom d'entreprise mal attribué.", 
+	    		BEAN_COMPANY, bean.getCompany().getName());
+	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", 
+	    		expectedNbItems, nbItems);
 	}
 	
 	@Test
@@ -181,15 +187,19 @@ public class WebUserInterfaceTest {
 	    int nbItems = computerService.countAllLines();
 	    Locale locale = LocaleContextHolder.getLocale();
 	    LocaleContextHolder.setLocale(Locale.ENGLISH);
-	    ComputerDTO bean = computerService.getFilteredAndOrdered(1, 0, 
+	    Computer bean = computerService.getFilteredAndOrdered(1, 0, 
 	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
 	    LocaleContextHolder.setLocale(locale);
 	    // Then
 	    Assert.assertEquals("Nom mal attribué.", bean.getName(),  BEAN_NAME);
-	    Assert.assertEquals("Date d'introduction mal attribuée.", BEAN_EN_INTRO_DATE, bean.getIntroducedDate());
-	    Assert.assertEquals("Date de retrait mal attribuée.", BEAN_EN_DIS_DATE, bean.getDiscontinuedDate());
-	    Assert.assertEquals("Nom d'entreprise mal attribué.", BEAN_COMPANY, bean.getCompanyName());
-	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", expectedNbItems, nbItems);
+	    Assert.assertEquals("Date d'introduction mal attribuée.", 
+	    		BEAN_EN_INTRO_DATE, bean.getIntroduced().toString());
+	    Assert.assertEquals("Date de retrait mal attribuée.", 
+	    		BEAN_EN_DIS_DATE, bean.getDiscontinued().toString());
+	    Assert.assertEquals("Nom d'entreprise mal attribué.", 
+	    		BEAN_COMPANY, bean.getCompany().getName());
+	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", 
+	    		expectedNbItems, nbItems);
 	}
 	
 	@Test
@@ -206,8 +216,8 @@ public class WebUserInterfaceTest {
 		element.sendKeys(BEAN_EN_INTRO_DATE);
 		element.submit();
 		// Then
-	    ComputerDTO bean = computerService.getById(id);
-	    Assert.assertNull("Le bean ne devrait pas avoir de date.", bean.getIntroducedDate());
+		Computer bean = computerService.getById(id);
+	    Assert.assertNull("Le bean ne devrait pas avoir de date.", bean.getIntroduced());
 	}
 	
 	@Test
@@ -223,9 +233,9 @@ public class WebUserInterfaceTest {
 		element.sendKeys(BEAN_FR_INTRO_DATE);
 		element.submit();
 		// Then
-		ComputerDTO editedBean = computerService.getById(new Long(3));
-		String editedDate = editedBean.getIntroducedDate();
-		editedBean.setIntroducedDate(null);
+		Computer editedBean = computerService.getById(3l);
+		String editedDate = editedBean.getIntroduced().toString();
+		editedBean.setIntroduced(null);
 		computerService.update(editedBean);
 		Assert.assertNotNull("introducedDate à null.", editedDate);
 		Assert.assertTrue("Bean non modifié correctement.", editedDate.contains(BEAN_FR_INTRO_DATE));
@@ -235,7 +245,7 @@ public class WebUserInterfaceTest {
 	public void deleteAComputerShouldRemoveOneToCount() {
 		LOG.debug("deleteAComputerShouldRemoveOneToCount()");
 		// Given
-		ComputerDTO newBean = new ComputerDTO();
+		Computer newBean = new Computer();
 		newBean.setName(BEAN_NAME);
 		computerService.create(newBean);
 		driver.get(HOME_PAGE);

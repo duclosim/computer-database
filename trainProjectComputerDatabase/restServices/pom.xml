@@ -7,30 +7,16 @@
 		<artifactId>computer-database</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>webapp</artifactId>
+	<artifactId>restServices</artifactId>
 	<packaging>war</packaging>
 
-	<name>Computer Database - Webapp API</name>
+	<name>Computer Database - Rest Services API</name>
 
 	<dependencies>
 		<!-- Modules -->
 		<dependency>
 			<groupId>${groupId}</groupId>
 			<artifactId>binding</artifactId>
-		</dependency>
-		<!-- Views -->
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-		<!-- Servlet -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		<!-- Spring -->
 		<dependency>
@@ -75,12 +61,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Test -->
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -117,7 +117,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach var="item" items="${page.entities}">
+					<c:forEach var="item" items="${page.dtos}">
 						<tr>
 							<td class="editMode"><sec:authorize
 									access="hasRole('ADMIN')">

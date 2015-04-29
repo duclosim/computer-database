@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.binding.dtos.ComputerDTOMapper;
 import com.excilys.model.beans.Company;
 import com.excilys.page.Page;
 import com.excilys.persistence.daos.ComputerColumn;
@@ -21,6 +22,8 @@ import com.excilys.services.ComputerService;
 public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabaseWSImpl.class);
 
+	@Autowired
+	private ComputerDTOMapper mapper;
 	@Autowired
 	private Page page;
 	@Autowired
@@ -79,7 +82,7 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	@Override
 	public String createComputer(ComputerDTO computer) {
 		LOG.trace("createComputer(" + computer + ")");
-		computerService.create(computer);
+		computerService.create(mapper.DTOToBean(computer));
 		return computer.toString();
 	}
 	
@@ -104,7 +107,7 @@ public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
 	@Override
 	public String updateComputer(ComputerDTO computer) {
 		LOG.trace("updateComputer(" + computer + ")");
-		computerService.update(computer);
+		computerService.update(mapper.DTOToBean(computer));
 		return computerService.getById(
 				Long.parseLong(computer.getId()))
 				.toString();

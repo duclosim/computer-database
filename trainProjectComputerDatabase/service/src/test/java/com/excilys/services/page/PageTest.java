@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.binding.dtos.ComputerDTO;
+import com.excilys.model.beans.Computer;
 import com.excilys.page.Page;
 import com.excilys.services.ComputerService;
 
@@ -39,7 +39,7 @@ public class PageTest {
 		// GIVEN
 		int expectedCurrentPageNum = DEFAULT_OFFSET / DEFAULT_LIMIT + 1;
 		int offset = (expectedCurrentPageNum - 1) * DEFAULT_LIMIT;
-		List<ComputerDTO> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, offset));
+		List<Computer> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, offset));
 		int expectedLastPageNb = service.countAllLines() / DEFAULT_LIMIT + 1;
 		if (expectedEntities.size() % DEFAULT_LIMIT != 0) {
 			++expectedLastPageNb;
@@ -59,7 +59,7 @@ public class PageTest {
 		int newLimit = 10;
 		int newOffset = (page.getPageNum() - 1) * newLimit;
 		int expectedLastPageNb = service.countAllLines() / newLimit + 1;
-		List<ComputerDTO> expectedEntities = new ArrayList<>(service.getAll(newLimit, newOffset));
+		List<Computer> expectedEntities = new ArrayList<>(service.getAll(newLimit, newOffset));
 		if (expectedEntities.size() % newLimit != 0) {
 			++expectedLastPageNb;
 		}
@@ -89,7 +89,7 @@ public class PageTest {
 		// GIVEN
 		int newPageNum = 2;
 		int newOffset = (newPageNum - 1) * DEFAULT_LIMIT;
-		List<ComputerDTO> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, newOffset));
+		List<Computer> expectedEntities = new ArrayList<>(service.getAll(DEFAULT_LIMIT, newOffset));
 		int expectedLastPageNb = service.countAllLines() / DEFAULT_LIMIT + 1;
 		if (expectedEntities.size() % DEFAULT_LIMIT != 0) {
 			++expectedLastPageNb;

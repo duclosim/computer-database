@@ -7,7 +7,8 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<import resource="classpath:/binding-context.xml" />
+	<import resource="classpath:/persistence-context.xml" />
+	<import resource="messageContext.xml" />
 	<!-- Component scan -->
 	<context:annotation-config />
 	<context:component-scan base-package="

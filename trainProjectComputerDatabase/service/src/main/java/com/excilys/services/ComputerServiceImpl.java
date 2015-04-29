@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.binding.dtos.ComputerDTO;
-import com.excilys.binding.dtos.ComputerDTOMapper;
 import com.excilys.model.beans.Computer;
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.ComputerDAO;
@@ -28,39 +26,37 @@ public class ComputerServiceImpl implements ComputerService {
 	@Autowired
 	private ComputerDAO computerDao;
 	@Autowired
-	private ComputerDTOMapper computerDTOMapper;
-	@Autowired
 	private DateValidator dateValidator;
 	
 	@Override
-	public ComputerDTO getById(Long id) {
+	public Computer getById(Long id) {
 		LOG.trace("getById(" + id + ")");
-		ComputerDTO result;
-		result = computerDTOMapper.BeanToDTO(computerDao.getById(id));
+		Computer result;
+		result = computerDao.getById(id);
 		return result;
 	}
 
 	@Override
-	public List<ComputerDTO> getAll(int limit, int offset) {
+	public List<Computer> getAll(int limit, int offset) {
 		LOG.trace(new StringBuilder("getAll(")
 			.append(limit).append(", ")
 			.append(offset).append(")")
 			.toString());
-		List<ComputerDTO> result;
-		result = computerDTOMapper.BeansToDTOs((computerDao.getAll(limit, offset)));
+		List<Computer> result;
+		result = computerDao.getAll(limit, offset);
 		return result;
 	}
 
 	@Override
-	public List<ComputerDTO> getFiltered(String name, int limit, int offset) {
+	public List<Computer> getFiltered(String name, int limit, int offset) {
 		LOG.trace("getByNameOrCompanyName(" + name + ")");
-		List<ComputerDTO> result;
-		result = computerDTOMapper.BeansToDTOs(computerDao.getFiltered(limit, offset, name));
+		List<Computer> result;
+		result = computerDao.getFiltered(limit, offset, name);
 		return result;
 	}
 	
 	@Override
-	public List<ComputerDTO> getOrdered(int limit, int offset, 
+	public List<Computer> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way) {
 		LOG.trace(new StringBuilder("getAll(")
 			.append(limit).append(", ")
@@ -68,14 +64,13 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		List<ComputerDTO> result;
-		result = computerDTOMapper.BeansToDTOs((computerDao.getOrdered(limit, offset,
-				column, way)));
+		List<Computer> result;
+		result = computerDao.getOrdered(limit, offset, column, way);
 		return result;
 	}
 
 	@Override
-	public List<ComputerDTO> getFilteredAndOrdered(int limit, int offset,
+	public List<Computer> getFilteredAndOrdered(int limit, int offset,
 			String name, ComputerColumn column, OrderingWay way) {
 		LOG.trace(new StringBuilder("getAll(")
 			.append(limit).append(", ")
@@ -84,9 +79,9 @@ public class ComputerServiceImpl implements ComputerService {
 			.append(column).append(",")
 			.append(way).append(")")
 			.toString());
-		List<ComputerDTO> result;
-		result = computerDTOMapper.BeansToDTOs((computerDao.getFilteredAndOrdered(
-				limit, offset, name, column, way)));
+		List<Computer> result;
+		result = computerDao.getFilteredAndOrdered(limit, offset, name,
+				column, way);
 		return result;
 	}
 	
@@ -107,20 +102,17 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void create(ComputerDTO computer) {
+	public void create(Computer computer) {
 		LOG.trace("create(" + computer + ")");
 		checkComputerDTO(computer);
-		Computer cmptrBean = computerDTOMapper.DTOToBean(computer);
-		computerDao.create(cmptrBean);
-		computer.setId(cmptrBean.getId().toString());
+		computerDao.create(computer);
 	}
 
 	@Override
-	public void update(ComputerDTO computer) {
+	public void update(Computer computer) {
 		LOG.trace("update(" + computer + ")");
 		checkComputerDTO(computer);
-		Computer cmptrBean = computerDTOMapper.DTOToBean(computer);
-		computerDao.update(cmptrBean);
+		computerDao.update(computer);
 	}
 
 	@Override
@@ -131,15 +123,15 @@ public class ComputerServiceImpl implements ComputerService {
 		}
 	}
 	
-	private void checkComputerDTO(ComputerDTO computer) {
+	private void checkComputerDTO(Computer computer) {
 		LOG.trace("checkComputerDTO(" + computer + ")");
 		if (computer == null) {
 			throw new IllegalArgumentException("computer est à null.");
 		}
 		String name = computer.getName();
-		String introDate = computer.getIntroducedDate();
-		String disDate = computer.getDiscontinuedDate();
-		String companyIdStr = computer.getCompanyId();
+		String introDate = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
+		String disDate = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
+		String companyIdStr = computer.getCompany() == null ? null : computer.getCompany().getId().toString();
 		// Test de l'objet.
 		if ((name == null) || (!UserInputsValidator.isValidString(name))) {
 			LOG.error("Nom non valide.\n");

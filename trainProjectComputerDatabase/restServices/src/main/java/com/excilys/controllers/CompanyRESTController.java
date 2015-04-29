@@ -1,4 +1,4 @@
-package com.excilys.controllers.rest;
+package com.excilys.controllers;
 
 import java.util.List;
 

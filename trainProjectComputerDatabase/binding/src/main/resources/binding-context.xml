@@ -7,9 +7,8 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<import resource="classpath:/persistence-context.xml" />
-	<import resource="messageContext.xml" />
+	<import resource="classpath:/service-context.xml" />
 	<!-- Component scan -->
 	<context:annotation-config />
-	<context:component-scan base-package="com.excilys.binding.dtos" />
+	<context:component-scan base-package="com.excilys.binding.dtos, com.excilys.binding.validator" />
 </beans>
