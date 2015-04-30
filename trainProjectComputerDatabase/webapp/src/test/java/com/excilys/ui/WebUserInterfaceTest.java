@@ -1,6 +1,7 @@
 package com.excilys.ui;
 
 import java.awt.AWTException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,6 +20,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,6 +34,8 @@ import com.excilys.services.ComputerService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:webapp-context.xml")
 public class WebUserInterfaceTest {
+	// The local DateTimeFormatter pattern.
+	private static final String DATE_FORMAT_MESSAGE_CODE = "date.format";
 	private static final Logger LOG = LoggerFactory.getLogger(WebUserInterfaceTest.class);
 	private static final String HOME_PAGE = "http://localhost:8080/computer-database/dashboard";
 	// Field ids/names
@@ -51,9 +55,11 @@ public class WebUserInterfaceTest {
 	private static final String BEAN_COMPANY = "Commodore International";
 
 	private static WebDriver driver;
-	
+
 	@Autowired
-	ComputerService computerService;
+	private MessageSource messageSource;
+	@Autowired
+	private ComputerService computerService;
 	
 	@BeforeClass
 	public static void initDriver() throws AWTException {
@@ -158,11 +164,13 @@ public class WebUserInterfaceTest {
 	    Computer bean = computerService.getFilteredAndOrdered(1, 0, 
 	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
 	    // Then
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(messageSource
+				.getMessage(DATE_FORMAT_MESSAGE_CODE, null, LocaleContextHolder.getLocale()));
 	    Assert.assertEquals("Nom mal attribué.", bean.getName(),  BEAN_NAME);
 	    Assert.assertEquals("Date d'introduction mal attribuée.", 
-	    		BEAN_FR_INTRO_DATE, bean.getIntroduced().toString());
+	    		BEAN_FR_INTRO_DATE, bean.getIntroduced().toLocalDate().format(dateFormatter));
 	    Assert.assertEquals("Date de retrait mal attribuée.", 
-	    		BEAN_FR_DIS_DATE, bean.getDiscontinued().toString());
+	    		BEAN_FR_DIS_DATE, bean.getDiscontinued().toLocalDate().format(dateFormatter));
 	    Assert.assertEquals("Nom d'entreprise mal attribué.", 
 	    		BEAN_COMPANY, bean.getCompany().getName());
 	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", 
@@ -189,13 +197,15 @@ public class WebUserInterfaceTest {
 	    LocaleContextHolder.setLocale(Locale.ENGLISH);
 	    Computer bean = computerService.getFilteredAndOrdered(1, 0, 
 	    		BEAN_NAME, ComputerColumn.ID_COLUMN_LABEL, OrderingWay.DESC).get(0);
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(messageSource
+				.getMessage(DATE_FORMAT_MESSAGE_CODE, null, LocaleContextHolder.getLocale()));
 	    LocaleContextHolder.setLocale(locale);
 	    // Then
 	    Assert.assertEquals("Nom mal attribué.", bean.getName(),  BEAN_NAME);
 	    Assert.assertEquals("Date d'introduction mal attribuée.", 
-	    		BEAN_EN_INTRO_DATE, bean.getIntroduced().toString());
+	    		BEAN_EN_INTRO_DATE, bean.getIntroduced().toLocalDate().format(dateFormatter));
 	    Assert.assertEquals("Date de retrait mal attribuée.", 
-	    		BEAN_EN_DIS_DATE, bean.getDiscontinued().toString());
+	    		BEAN_EN_DIS_DATE, bean.getDiscontinued().toLocalDate().format(dateFormatter));
 	    Assert.assertEquals("Nom d'entreprise mal attribué.", 
 	    		BEAN_COMPANY, bean.getCompany().getName());
 	    Assert.assertEquals("Erreur sur le nouveau nombre d'items", 
@@ -234,7 +244,9 @@ public class WebUserInterfaceTest {
 		element.submit();
 		// Then
 		Computer editedBean = computerService.getById(3l);
-		String editedDate = editedBean.getIntroduced().toString();
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(messageSource
+				.getMessage(DATE_FORMAT_MESSAGE_CODE, null, LocaleContextHolder.getLocale()));
+		String editedDate = editedBean.getIntroduced().format(dateFormatter);
 		editedBean.setIntroduced(null);
 		computerService.update(editedBean);
 		Assert.assertNotNull("introducedDate à null.", editedDate);

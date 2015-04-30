@@ -1,10 +1,13 @@
 package com.excilys.services;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.excilys.model.beans.Computer;
@@ -22,11 +25,15 @@ import com.excilys.validators.UserInputsValidator;
 @Service
 public class ComputerServiceImpl implements ComputerService {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
+	// The local DateTimeFormatter pattern.
+	private static final String DATE_FORMAT_MESSAGE_CODE = "date.format";
 	
 	@Autowired
 	private ComputerDAO computerDao;
 	@Autowired
 	private DateValidator dateValidator;
+	@Autowired
+	private MessageSource messageSource;
 	
 	@Override
 	public Computer getById(Long id) {
@@ -131,9 +138,12 @@ public class ComputerServiceImpl implements ComputerService {
 		if (computer == null) {
 			throw new IllegalArgumentException("computer est à null.");
 		}
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(messageSource
+						.getMessage(DATE_FORMAT_MESSAGE_CODE, null, LocaleContextHolder.getLocale()));
 		String name = computer.getName();
-		String introDate = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
-		String disDate = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
+		// Get the locals values of the dates, null if they are not set.
+		String introDate = computer.getIntroduced() == null ? null : computer.getIntroduced().toLocalDate().format(dateFormatter);
+		String disDate = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toLocalDate().format(dateFormatter);
 		String companyIdStr = computer.getCompany() == null ? null : computer.getCompany().getId().toString();
 		// Test de l'objet.
 		if ((name == null) || (!UserInputsValidator.isValidString(name))) {
