@@ -14,20 +14,20 @@ import com.excilys.model.beans.Company;
 import com.excilys.services.CompanyService;
 
 @RestController
-@RequestMapping("/rest-api/companies")
+@RequestMapping("/companies")
 public class CompanyRESTController {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyRESTController.class);
 
 	@Autowired
 	private CompanyService service;
 	
-	@RequestMapping(value = "getById", method = RequestMethod.GET)
+	@RequestMapping(value = "/getById", method = RequestMethod.GET)
 	public Company getById(@RequestParam(value = "id") Long id) {
 		LOG.trace("getById(" + id + ")");
 		return service.getById(id);
 	}
 	
-    @RequestMapping(value = "list",  method = RequestMethod.GET)
+    @RequestMapping(value = "/list",  method = RequestMethod.GET)
     public List<Company> getList() {
 		LOG.trace("list()");
 		return service.getAll();

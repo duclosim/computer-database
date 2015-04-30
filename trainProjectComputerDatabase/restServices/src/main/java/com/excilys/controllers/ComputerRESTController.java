@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.binding.dtos.ComputerDTO;
 import com.excilys.binding.dtos.ComputerDTOMapper;
-import com.excilys.page.Page;
+import com.excilys.binding.dtos.PageDTO;
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.services.ComputerService;
 
 @RestController
-@RequestMapping("/rest-api/computers")
+@RequestMapping("/computers")
 public class ComputerRESTController {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerRESTController.class);
 	
@@ -28,21 +28,21 @@ public class ComputerRESTController {
 	@Autowired
 	private ComputerService service;
 	@Autowired
-	private Page page;
+	private PageDTO page;
     
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public void create(@RequestBody ComputerDTO computer) {
     	LOG.trace("create(" + computer + ")");
     	service.create(mapper.DTOToBean(computer));
     }
 	
-	@RequestMapping(value = "getById", method = RequestMethod.GET)
+	@RequestMapping(value = "/getById", method = RequestMethod.GET)
 	public ComputerDTO getById(@RequestParam(value = "id") Long id) {
 		LOG.trace("getById(" + id + ")");
 		return mapper.BeanToDTO(service.getById(id));
 	}
 	
-    @RequestMapping(value = "list",  method = RequestMethod.GET)
+    @RequestMapping(value = "/list",  method = RequestMethod.GET)
     public List<ComputerDTO> getList(@RequestParam(value = "nbItem", defaultValue = "10") int nbItem,
     		@RequestParam(value = "name", defaultValue = "") String name,
     		@RequestParam(value = "col", defaultValue = "computer.id") String col,
@@ -69,10 +69,10 @@ public class ComputerRESTController {
     		}
     	}
     	page.setPageNum(pageNum);
-    	return mapper.BeansToDTOs(page.getEntities());
+    	return page.getDtos();
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public void update(@RequestBody ComputerDTO computer) {
 		LOG.trace("update(" + computer + ")");
 		service.update(mapper.DTOToBean(computer));
