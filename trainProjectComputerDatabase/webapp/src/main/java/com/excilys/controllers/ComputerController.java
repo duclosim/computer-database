@@ -29,6 +29,11 @@ import com.excilys.services.CompanyService;
 import com.excilys.services.ComputerService;
 import com.excilys.validators.UserInputsValidator;
 
+/**
+ * This controller manage the access to the Computer manager pages.
+ * @author excilys
+ *
+ */
 @Controller
 @RequestMapping("/")
 public class ComputerController {
@@ -47,12 +52,28 @@ public class ComputerController {
     private Validator computerDTOValidator;
     
     // --- REDIRECT ---
+    /**
+     * This method redirect the default URL to dashboard.
+     * @return The ModelAndView to redirect to dashboard jsp.
+     */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView redirect() {
     	return new ModelAndView("redirect:dashboard");
     }
  
 	// --- DASHBOARD ---
+    /**
+     * This method load the parameters for PageDTO object, 
+     *   performs requests and finally put it into the model.
+     * @param numParam The number of the page to load.
+     * @param maxItemPageParam The maximum of objects to load.
+     * @param computerColumnStr The column of the computer table 
+     *   to order Computer objects by.
+     * @param orderWayStr The way to order Computer objects by.
+     * @param searchedName The name to filter Computer objects.
+     * @return The ModelAndView containing the PageDTO object 
+     *   and reloading dashboard jsp.
+     */
 	@RequestMapping(value = "dashboard", method = RequestMethod.GET)
 	public ModelAndView getDashboard(@RequestParam(value = "pageNum", required = false) Integer numParam,
 			@RequestParam(value = "itemByPage", required = false) Integer maxItemPageParam,
@@ -121,6 +142,13 @@ public class ComputerController {
 		return model;
 	}
 	
+	/**
+	 * This method performs the deletion of selected computers, 
+	 *   only if the user has the role admin.
+	 * @param selectedComputersId A String containing the 
+	 *   comma separated ids of the Computer objects to be deleted 
+	 * @return A ModelAndView which reload dashboard jsp.
+	 */
 	@RequestMapping(value = "dashboard", method = RequestMethod.POST)
 	public ModelAndView delete(@RequestParam("selection") String selectedComputersId) {
 		LOG.trace(new StringBuilder("delete(")
@@ -137,6 +165,10 @@ public class ComputerController {
 		return model;
 	}
 	// --- ADD COMPUTER ---
+	/**
+	 * This method goes on the addComputer jsp.
+	 * @return A ModelAndView to redirect to addComputer.
+	 */
 	@RequestMapping(value = "addComputer", method = RequestMethod.GET)
 	public ModelAndView getAddComputer() {
 		LOG.trace("getAddComputer()");
@@ -146,6 +178,14 @@ public class ComputerController {
 		return model;
 	}
 
+	/**
+	 * This method performs the creation of a Computer object in the 
+	 *   database and redirect to dashboard.
+	 * @param computer The computer to be created.
+	 * @param bindingResult It contains the results of the validation 
+	 *   of the computer via ComputerDTOValidator.
+	 * @return A ModelAndView to redirect to dashboard.
+	 */
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
 	public ModelAndView createComputer(@ModelAttribute("computerForm") ComputerDTO computer, 
 			BindingResult bindingResult) {
@@ -156,7 +196,14 @@ public class ComputerController {
 		model.addObject("companies", mapCompanies());
 		return saveOrUpdateComputer(SaveOrUpdate.SAVE, computer, bindingResult);
 	}
+	
 	// --- EDIT COMPUTER ---
+	/**
+	 * This method goes on the editComputer with data of 
+	 *   a Computer object jsp.
+	 * @param id The id of the edited Computer.
+	 * @return A ModelAndView to redirect to addComputer.
+	 */
 	@RequestMapping(value = "editComputer", method = RequestMethod.GET)
 	public ModelAndView getEditComputer(@RequestParam("beanId") Long id) {
 		LOG.trace(new StringBuilder("getEditComputer(")
@@ -167,6 +214,14 @@ public class ComputerController {
 		return model;
 	}
 	
+	/**
+	 * This method performs the updating of a Computer object in the 
+	 *   database and redirect to dashboard.
+	 * @param computer The computer to be updated.
+	 * @param bindingResult It contains the results of the validation 
+	 *   of the computer via ComputerDTOValidator.
+	 * @return A ModelAndView to redirect to dashboard.
+	 */
 	@RequestMapping(value = "editComputer", method = RequestMethod.POST)
 	public ModelAndView editComputer(@ModelAttribute("computerForm") ComputerDTO computer, 
 			BindingResult bindingResult) {
@@ -176,10 +231,10 @@ public class ComputerController {
 		return saveOrUpdateComputer(SaveOrUpdate.UPDATE, computer, bindingResult)
 				.addObject("companies", mapCompanies());
 	}
-	// --- OUTILS ---
+	
+	// --- TOOLS ---
 	/*
 	 * Fill up a Map<Long, String> with companies ids and names.
-	 * @return
 	 */
 	private Map<Long, String> mapCompanies() {
 		LOG.trace("mapCompanies()");
@@ -190,8 +245,15 @@ public class ComputerController {
 		return companies;
 	}
 	
+	/*
+	 * This enum is used to indicates if the method run is create 
+	 *   or update a Computer object.
+	 */
 	private enum SaveOrUpdate {SAVE, UPDATE};
 	
+	/*
+	 * This method contains shared code between add and edit methods.
+	 */
 	private ModelAndView saveOrUpdateComputer(SaveOrUpdate method, 
 			ComputerDTO computer, 
 			BindingResult bindingResult) {
@@ -211,11 +273,12 @@ public class ComputerController {
 			switch (method) {
 			case SAVE :
 				computerService.create(mapper.DTOToBean(computer));
-				return new ModelAndView("redirect:dashboard");
+				break;
 			case UPDATE :
 				computerService.update(mapper.DTOToBean(computer));
-				return new ModelAndView("redirect:dashboard");
+				break;
 			}
+			return new ModelAndView("redirect:dashboard");
 		}
 		switch (method) {
 		case SAVE :
@@ -227,6 +290,9 @@ public class ComputerController {
 		}
 	}
 	
+	/*
+	 * This method applies nullifyEmptyStrings on all the fields of computer.
+	 */
 	private static void nullifyEmptyStrings(ComputerDTO computer) {
 		LOG.trace("nullifyEmptyStrings(" + computer + ")");
 		computer.setId(nullifyEmptyString(computer.getId()));
@@ -235,6 +301,9 @@ public class ComputerController {
 		computer.setCompanyId(nullifyEmptyString(computer.getCompanyId()));
 	}
 
+	/*
+	 * This method returns null if str is empty or null.
+	 */
 	private static String nullifyEmptyString(String str) {
 		LOG.trace("nullifyEmptyStrings(" + str + ")");
 		if ((str == null) || (str.trim().isEmpty())) {
