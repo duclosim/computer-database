@@ -40,7 +40,7 @@ class CLIWSClient {
 	private MessageSource messageSource;
 	
 	public CLIWSClient() throws MalformedURLException {
-		url = new URL("http://localhost:9999/computer-database-ws/computers?wsdl");
+		url = new URL(ComputerDatabaseWS.ENDPOINT + "?wsdl");
 		qname = new QName("http://ws.excilys.com/", "ComputerDatabaseWSImplService");
         service = Service.create(url, qname);
         ws = service.getPort(ComputerDatabaseWS.class);

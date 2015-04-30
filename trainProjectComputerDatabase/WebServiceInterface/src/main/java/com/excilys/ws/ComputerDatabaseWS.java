@@ -12,6 +12,8 @@ import com.excilys.persistence.daos.OrderingWay;
 @WebService
 @SOAPBinding
 public interface ComputerDatabaseWS {
+	String ENDPOINT = "http://localhost:9999/computer-database-ws/computers";
+	
 	@WebMethod
 	String getCompanies();
 	

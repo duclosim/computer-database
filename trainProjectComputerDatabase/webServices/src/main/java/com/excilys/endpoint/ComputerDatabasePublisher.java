@@ -18,6 +18,6 @@ public class ComputerDatabasePublisher {
 		@SuppressWarnings("resource")
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:ws-context.xml");
 		ComputerDatabaseWS ws = ctx.getBean(ComputerDatabaseWS.class);
-		Endpoint.publish("http://localhost:9999/computer-database-ws/computers", ws);
+		Endpoint.publish(ComputerDatabaseWS.ENDPOINT, ws);
 	}
 }
