@@ -210,7 +210,7 @@ public class ComputerController {
 			.append(id).append(")").toString());
 		ModelAndView model = new ModelAndView("editComputer");
 		model.addObject("companies", mapCompanies());
-		model.addObject("computerForm", computerService.getById(id));
+		model.addObject("computerForm", mapper.BeanToDTO(computerService.getById(id)));
 		return model;
 	}
 	
