@@ -11,9 +11,16 @@ import org.springframework.validation.Validator;
 import com.excilys.binding.dtos.ComputerDTO;
 import com.excilys.validators.DateValidator;
 
+/**
+ * This class implements the Spring Validator interface 
+ *   in order to validate the ComputerDTO objects.
+ * @author excilys
+ *
+ */
 @Component(value = "computerValidator")
 public class ComputerDTOValidator implements Validator {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOValidator.class);
+	// This contains the code in the message.properties for the error message for a wrong local date.
 	private static final String DATE_ERROR_MESSAGE_CODE = "DateTimeFormat.computerDTO";
 	
 	@Autowired

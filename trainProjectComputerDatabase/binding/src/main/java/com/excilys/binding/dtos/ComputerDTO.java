@@ -5,6 +5,12 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class contains the data in a Computer object but designed 
+ *   in a more easy to read way for web applications.
+ * @author excilys
+ *
+ */
 public class ComputerDTO implements Serializable {
 	private static final long serialVersionUID = 7606362106353485291L;
 

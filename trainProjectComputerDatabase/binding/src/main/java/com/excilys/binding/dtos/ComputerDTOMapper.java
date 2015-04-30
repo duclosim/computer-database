@@ -1,102 +1,35 @@
 package com.excilys.binding.dtos;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
-
-import com.excilys.model.beans.Company;
 import com.excilys.model.beans.Computer;
 
 /**
- * 
+ * This class is a way of presenting the data contained in a Computer object
+ *   in order to make it easy to read from a web application.
  * @author excilys
  *
  */
-@Component
-public class ComputerDTOMapper {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerDTOMapper.class);
-	private static final String DATE_FORMAT_MESSAGE_CODE = "date.format";
-	
-	@Autowired
-	private MessageSource messageSource;
-	
+public interface ComputerDTOMapper {
+
 	/**
-	 * Transforme un DTO en bean.
-	 * @param dto Le dto à transformer.
-	 * @return Le bean tel qu'utilisable par la couche dao.
+	 * Takes a ComputerDTO object and make a Computer object.
+	 * @param dto The ComputerDTO object to base upon to make a Computer object.
+	 * @return A Computer containing the data of dto.
 	 */
-	public Computer DTOToBean(ComputerDTO dto) {
-		LOG.trace("DTOToBean(" + dto + ")");
-		Computer bean = new Computer();
-		bean.setId(null);
-		bean.setName(dto.getName());
-		bean.setIntroduced(null);
-		bean.setDiscontinued(null);
-		bean.setCompany(null);
-		if (dto.getId() != null) {
-			bean.setId(Long.parseLong(dto.getId()));
-		}
-		LocalDate lDate;
-		if (dto.getIntroducedDate() != null) {
-			lDate = LocalDate.parse(dto.getIntroducedDate(), getFormatter());
-			bean.setIntroduced(lDate.atStartOfDay());
-		}
-		if (dto.getDiscontinuedDate() != null) {
-			lDate = LocalDate.parse(dto.getDiscontinuedDate(), getFormatter());
-			bean.setDiscontinued(lDate.atStartOfDay());
-		}
-		if ((dto.getCompanyId() != null) && (dto.getCompanyName() != null)) {
-			bean.setCompany(new Company(Long.parseLong(dto.getCompanyId()), dto.getCompanyName()));
-		}
-		return bean;
-	}
+	Computer DTOToBean(ComputerDTO dto);
 
     /**
-	 * 
-	 * @param bean
-	 * @return
+	 * Takes a Computer object and make a ComputerDTO object.
+	 * @param bean The Computer object to base upon to make a ComputerDTO object.
+	 * @return A ComputerDTO containing the data of bean.
 	 */
-	public ComputerDTO BeanToDTO(Computer bean) {
-		LOG.trace("BeanToDTO(" + bean + ")");
-		if (bean == null) {
-			return null;
-		}
-		ComputerDTO dto = new ComputerDTO();
-		dto.setId(bean.getId().toString());
-		dto.setName(bean.getName());
-		dto.setIntroducedDate(null);
-		dto.setDiscontinuedDate(null);
-		dto.setCompanyId(null);
-		dto.setCompanyName(null);
-		if (bean.getIntroduced() != null) {
-			dto.setIntroducedDate(bean.getIntroduced().format(getFormatter()));
-		}
-		if (bean.getDiscontinued() != null) {
-			dto.setDiscontinuedDate(bean.getDiscontinued().format(getFormatter()));
-		}
-		if (bean.getCompany() != null) {
-			dto.setCompanyId(bean.getCompany().getId().toString());
-			dto.setCompanyName(bean.getCompany().getName());
-		}
-		return dto;
-	}
+	ComputerDTO BeanToDTO(Computer bean);
 	
-	public List<ComputerDTO> BeansToDTOs(List<Computer> beans) {
-        return beans.stream().map(this::BeanToDTO).collect(Collectors.toList());
-	}
-	
-	private DateTimeFormatter getFormatter() {
-		Locale locale = LocaleContextHolder.getLocale();
-		String dateFormat = messageSource.getMessage(DATE_FORMAT_MESSAGE_CODE, null, locale);
-		return DateTimeFormatter.ofPattern(dateFormat);
-	}
+	/**
+	 * This methods applies the BeanToDto method on a List of Computer objects.
+	 * @param beans A List of Computer.
+	 * @return A List of ComputerDTO containing the data of beans.
+	 */
+	List<ComputerDTO> BeansToDTOs(List<Computer> beans);
 }
