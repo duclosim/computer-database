@@ -1,77 +1,81 @@
 package com.excilys.services;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.persistence.daos.ComputerColumn;
 import com.excilys.persistence.daos.OrderingWay;
 
+/**
+ * @author excilys
+ * 
+ * This interface contains the methods used by all the services of this application.
+ * @param <T> The type of object to be retrieved from the database.
+ */
 public interface CRUDService<T> {
 
 	/**
-	 * 
-	 * @param id
-	 * @return
+	 * This method gets an object basing upon its id from the database.
+	 * @param id The id of the object.
+	 * @return An object with matching id, null otherwise.
 	 */
 	T getById(Long id);
 	
 	/**
-	 * Cette méthode retourne tout le contenu de la table 
-	 *   sous forme de liste de bean.
-	 * @param limit Le nombre de beans à récupérer.
-	 * @param offset Le numéro du bean à partir duquel commencer à lire.
-	 * @return La List de tous les beans.
-	 * @throws SQLException 
+	 * This method gets several objects from the database.
+	 * @param limit The number of objects to get.
+	 * @param offset The number of beans ignored when reading the database.
+	 * @return The list of the first limit objects, starting form offset.
 	 */
 	List<T> getAll(int limit, int offset);
 
 	/**
-	 * 
-	 * @param name
-	 * @return
+	 * This method gets several objects from the database, filtered by name.
+	 * @param limit The number of objects to get.
+	 * @param offset The number of beans ignored when reading the database.
+	 * @param name The name of the beans searched.
+	 * @return A list of objects with matching names.
 	 */
 	List<T> getFiltered(String name, int limit, int offset);
 	
 	/**
-	 * 
-	 * @param limit
-	 * @param offset
-	 * @param column
-	 * @param way
-	 * @return
+	 * This method gets several objects from the database, filtered by name.
+	 * @param limit The number of objects to get.
+	 * @param offset The number of beans ignored when reading the database.
+	 * @param column The column to order by.
+	 * @param way The way to order by.
+	 * @return A list of objects ordered by column ascending or descending.
 	 */
 	List<T> getOrdered(int limit, int offset, 
 			ComputerColumn column, OrderingWay way);
 
 	/**
-	 * 
-	 * @param limit
-	 * @param offset
-	 * @param name
-	 * @param column
-	 * @param way
-	 * @return
+	 * This method gets several objects from the database, filtered by name and ordered.
+	 * @param limit The number of objects to get.
+	 * @param offset The number of beans ignored when reading the database.
+	 * @param name The name of the beans searched.
+	 * @param column The column to order by.
+	 * @param way The way to order by.
+	 * @return A list of objects filtered by name and ordered by column ascending or descending.
 	 */
 	List<T> getFilteredAndOrdered(int limit, int offset, String name,
 			ComputerColumn column, OrderingWay way);
 	
 	/**
-	 * Retourne le nombre de lignes dans la table.
-	 * @return Le nombre total de lignes dans la table.
-	 * @throws SQLException 
+	 * Returns the total number of the rows in the database.
+	 * @return An int representing the total number of rows of the database.
 	 */
 	int countAllLines();
 	
 	/**
-	 * Retourne le nombre de lignes dans la table, filtrée sur le nom.
-	 * @return
+	 * Return the number of rows in the database with matching name.
+	 * @param name The name of the beans searched.
+	 * @return An int representing the number of rows with matching names in the database.
 	 */
 	int countFilteredLines(String name);
 	
 	/**
-	 * 
-	 * @param computer
+	 * Delete one or zero object from the database with the mathing id.
+	 * @param id The id of the object to be removed from the database.
 	 */
 	void delete(Long id);
-
 }

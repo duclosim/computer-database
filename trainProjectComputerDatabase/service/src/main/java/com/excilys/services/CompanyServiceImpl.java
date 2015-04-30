@@ -94,4 +94,14 @@ public class CompanyServiceImpl implements CompanyService {
 		computerDAO.deleteByCompanyId(id);
 		companyDao.delete(id);
 	}
+
+	@Override
+	public void setCompanyDao(CompanyDAO dao) {
+		this.companyDao = dao;
+	}
+
+	@Override
+	public void setComputerDao(ComputerDAO dao) {
+		this.computerDAO = dao;
+	}
 }

@@ -7,18 +7,21 @@
         http://www.springframework.org/schema/mvc 
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
+	<!-- Set where are stored the localized messages -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="messages" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
+	<!-- Allow to remember the language preferences of the users -->
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="cookieName" value="myAppLocaleCookie" />
 		<property name="cookieMaxAge" value="3600" />
 	</bean>
 
+	<!-- Allow to intercept the locale changes -->
 	<mvc:interceptors>
 		<bean id="localeChangeInterceptor"
 			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">

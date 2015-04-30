@@ -104,14 +104,14 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public void create(Computer computer) {
 		LOG.trace("create(" + computer + ")");
-		checkComputerDTO(computer);
+		checkComputer(computer);
 		computerDao.create(computer);
 	}
 
 	@Override
 	public void update(Computer computer) {
 		LOG.trace("update(" + computer + ")");
-		checkComputerDTO(computer);
+		checkComputer(computer);
 		computerDao.update(computer);
 	}
 
@@ -123,7 +123,10 @@ public class ComputerServiceImpl implements ComputerService {
 		}
 	}
 	
-	private void checkComputerDTO(Computer computer) {
+	/*
+	 * Checks if this is  a well formed Computer object.
+	 */
+	private void checkComputer(Computer computer) {
 		LOG.trace("checkComputerDTO(" + computer + ")");
 		if (computer == null) {
 			throw new IllegalArgumentException("computer est à null.");
@@ -150,5 +153,10 @@ public class ComputerServiceImpl implements ComputerService {
 			LOG.error("Numéro de companie non valide.\n");
 			throw new IllegalArgumentException("Numéro de companie non valide.\n");
 		}
+	}
+
+	@Override
+	public void setComputerDao(ComputerDAO dao) {
+		this.computerDao = dao;
 	}
 }

@@ -14,18 +14,26 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
+/**
+ * 
+ * @author excilys
+ * This class contains a method to validate dates, 
+ *   basing upon the local format.
+ */
 public class DateValidator {
 	private static final Logger LOG = LoggerFactory.getLogger(DateValidator.class);
+	// The message.properties code for local date regex.
 	private static final String DATE_REGEX_MESSAGE_CODE = "date.regex";
+	// The local DateTimeFormatter pattern.
 	private static final String DATE_FORMAT_MESSAGE_CODE = "date.format";
 	
 	@Autowired
 	private MessageSource messageSource;
 	
 	/**
-	 * Teste si une date est valide ou pas selon le format local.
-	 * @param date La date à valider.
-	 * @return <code>true</code> si la date est valide, <code>false</code> sinon.
+	 * Tests whether a date is valid or not, using local criteria.
+	 * @param date A String containing the date to check.
+	 * @return <code>true</code> if it is a valid date, <code>false</code> otherwise.
 	 */
 	public boolean isValidDate(String date) {
 		LOG.trace("isValidDate(" + date + ")");
@@ -50,12 +58,19 @@ public class DateValidator {
 	}
 
 	// OUTILS
+	/*
+	 * Test if the String matches the local regex.
+	 */
 	private boolean isWellFormedDate(String date, Locale locale) {
 		LOG.trace("isWellFormedDate(" + date + ")");
 		String pattern = messageSource.getMessage(DATE_REGEX_MESSAGE_CODE, null, locale);
 		return Pattern.matches(pattern, date);
 	}
 
+	/*
+	 * Check if the date is an existing date, basing upon the leap years 
+	 *   or the 30/31 months.
+	 */
 	private static boolean isExistingDate(int year, int month, int day) {
 		boolean result = false;
 		if ((day <= 0) || (month > 12) || (month <= 0) || (year <= 0)) {
@@ -81,6 +96,9 @@ public class DateValidator {
 		return result;
 	}
 
+	/*
+	 * Return true if the given year is a leapYear, false otherwise.
+	 */
 	private static boolean isBissextileYear(int y) {
 		LOG.trace("isBissextileYear(" + y + ")");
 		return (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0));
