@@ -31,20 +31,6 @@ public class ComputerDAOTest {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-//    @BeforeClass
-//    public static void setUpDB() {
-//    	try {
-//    		DBUtils.executeSqlFiles();
-//    	} catch (SQLException | IOException e) {
-//			e.printStackTrace();
-//		}
-//    }
-//
-//    @AfterClass
-//    public static void tearDown() throws Exception {
-//        DBUtils.databaseTester.onTearDown();
-//    }
-	
 	@Test
 	public void getByIdShouldReturnABean() throws SQLException {
 		LOG.debug("getByIdShouldReturnABean()");
