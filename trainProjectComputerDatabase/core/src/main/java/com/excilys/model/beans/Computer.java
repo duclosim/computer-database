@@ -15,8 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Cette classe contient les informations contenue dans une ligne de 
- *   la table computer.
+ * This class represents a Computer object as it is stored in the database.
  * @author excilys
  *
  */

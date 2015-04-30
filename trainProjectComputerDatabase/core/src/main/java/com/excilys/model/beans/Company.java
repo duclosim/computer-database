@@ -12,10 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Cette classe contient les informations contenue dans une ligne de 
- *   la table company.
+ * 
  * @author excilys
- *
+ * This class represents a Company object, as it is stored in the database.
  */
 @Entity
 @Table(name = "company")
