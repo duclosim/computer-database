@@ -16,7 +16,7 @@
 		<!-- Modules -->
 		<dependency>
 			<groupId>${groupId}</groupId>
-			<artifactId>WebServiceInterface</artifactId>
+			<artifactId>webServiceInterface</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

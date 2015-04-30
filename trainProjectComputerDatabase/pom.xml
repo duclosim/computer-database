@@ -18,7 +18,7 @@
 		<module>service</module>
 		<module>webapp</module>
 		<module>webServices</module>
-		<module>WebServiceInterface</module>
+		<module>webServiceInterface</module>
 	</modules>
 
 	<properties>
@@ -44,7 +44,7 @@
 		<modules.core.version>1.0</modules.core.version>
 		<modules.persistence.version>1.0</modules.persistence.version>
 		<modules.service.version>1.0</modules.service.version>
-		<modules.WebServiceInterface.version>1.0</modules.WebServiceInterface.version>
+		<modules.webServiceInterface.version>1.0</modules.webServiceInterface.version>
 		<mockito.version>1.10.19</mockito.version>
 		<mysql.version>5.1.34</mysql.version>
 		<selenium.version>2.45.0</selenium.version>
@@ -106,8 +106,8 @@
 			</dependency>
 			<dependency>
 				<groupId>${groupId}</groupId>
-				<artifactId>WebServiceInterface</artifactId>
-				<version>${modules.WebServiceInterface.version}</version>
+				<artifactId>webServiceInterface</artifactId>
+				<version>${modules.webServiceInterface.version}</version>
 			</dependency>
 			<!-- Views -->
 			<dependency>

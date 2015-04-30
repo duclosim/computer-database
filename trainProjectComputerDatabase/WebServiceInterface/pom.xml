@@ -8,7 +8,7 @@
 		<artifactId>computer-database</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>WebServiceInterface</artifactId>
+	<artifactId>webServiceInterface</artifactId>
 	<packaging>jar</packaging>
 	<name>Computer Database - WebServiceInterface API</name>
 
