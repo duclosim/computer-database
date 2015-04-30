@@ -9,7 +9,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.ws.ComputerDatabaseWS;
 
-// Endpoint publisher
+/**
+ * This class publish a Jax-WS web service at a given endpoint.
+ * @author excilys
+ *
+ */
 public class ComputerDatabasePublisher {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabasePublisher.class);
 	

@@ -16,7 +16,12 @@ import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.services.CompanyService;
 import com.excilys.services.ComputerService;
 
-// Service Implementation
+/**
+ * This class implements the Jax-WS web service for 
+ *   Computer and Company management.
+ * @author excilys
+ *
+ */
 @Component
 @WebService(endpointInterface = "com.excilys.ws.ComputerDatabaseWS")
 public class ComputerDatabaseWSImpl implements ComputerDatabaseWS {
