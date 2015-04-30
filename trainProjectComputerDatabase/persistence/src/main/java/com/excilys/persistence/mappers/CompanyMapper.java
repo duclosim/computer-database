@@ -12,6 +12,12 @@ import com.excilys.model.beans.Company;
 import com.excilys.persistence.PersistenceException;
 import com.excilys.persistence.daos.CompanyDAO;
 
+/**
+ * This class implements the RowMapper interface 
+ *   for jdbcTemplate mapping purpose.
+ * @author excilys
+ *
+ */
 @Component
 public class CompanyMapper implements RowMapper<Company> {
 	

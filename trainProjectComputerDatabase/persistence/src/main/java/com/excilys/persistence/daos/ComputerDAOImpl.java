@@ -14,7 +14,6 @@ import com.excilys.model.beans.Computer;
 import com.excilys.persistence.mappers.ComputerMapper;
 
 /**
- * Cette classe implémente ComputerDAO et utilise le design pattern Singleton.
  * @author excilys
  */
 @Repository
@@ -192,6 +191,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 				.executeUpdate();
 	}
 	
+	/*
+	 * Returns the current Hibernate Session.
+	 */
 	private Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}

@@ -1,29 +1,28 @@
 package com.excilys.persistence.daos;
 
-import java.sql.SQLException;
-
 import com.excilys.model.beans.Computer;
 
 /**
- * Cette interface rassemble des méthodes d'accès à la table computer.
+ * This interface represents a dao accessing to the Computer table 
+ *   in the database.
  * @author excilys
- *
  */
 public interface ComputerDAO extends CRUDDao<Computer> {
 
 	/**
-	 * 
-	 * @param name
-	 * @return
-	 * @throws SQLException 
+	 * This method return the number of Computer object with matching name.
+	 * @param name The name searched in Computer objects 
+	 *   stored in the database.
+	 * @return An int representing the count of all Computer objects 
+	 *   with matching names.
 	 */
 	int countFilteredLines(String name);
 	
 	/**
-	 * Cette méthode supprime tous les computer avec un certain company_id.
-	 * @param companyId L'id de company dont les computers qui l'ont 
-	 *   comme company seront supprimés.
-	 * @throws SQLException 
+	 * This methods deletes all the Computer objects 
+	 *   with company_id matching.
+	 * @param companyId The id of the company the related computers 
+	 *   are to be deleted.
 	 */
 	void deleteByCompanyId(Long companyId);
 }

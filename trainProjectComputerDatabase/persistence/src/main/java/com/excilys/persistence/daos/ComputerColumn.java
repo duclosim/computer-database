@@ -1,5 +1,10 @@
 package com.excilys.persistence.daos;
 
+/**
+ * This class contains a list of all the columns of the Computer table.
+ * @author excilys
+ *
+ */
 public enum ComputerColumn {
 	ID_COLUMN_LABEL("computer.id"),
 	NAME_COLUMN_LABEL("computer.name"),
@@ -13,7 +18,11 @@ public enum ComputerColumn {
 	ComputerColumn(String columnName) {
 		this.columnName = columnName;
 	}
-	
+
+	/**
+	 * Returns a String containing the column name.
+	 * @param columnName A String containig the column name.
+	 */
 	public String getColumnName() {
 		return columnName;
 	}

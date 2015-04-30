@@ -1,87 +1,87 @@
 package com.excilys.persistence.daos;
 
-import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * This interface contains shared database management methods.
+ * @author excilys
+ *
+ * @param <T> The type of the objects to be managed by these dao.
+ */
 public interface CRUDDao<T> {
 	/**
-	 * Cette méthode enregistre un nouveau bean dans la table.
-	 * @param entity Le nouveau bean à enregsitrer.
-	 * @throws SQLException 
+	 * This method add a new object in the database.
+	 * @param entity The new object to add in the database.
 	 */
 	void create(T entity);
 	
 	/**
-	 * Cette méthode retourne un bean dont on a donné 
-	 *   l'identifiant en paramètre.
-	 * @param id L'identifiant du bean recherché.
-	 * @return Un bean contenant les informations de la ligne 
-	 *   correspondant à l'id donné en paramètre, null s'il ne correspond 
-	 *   à aucune ligne.
-	 * @throws SQLException 
+	 * This method return an object with matching id, null 
+	 *   if no objects have been found.
+	 * @param id The id of the object searched.
+	 * @return A object filled with the content of the row of the database, 
+	 *   null if there was no matching row.
 	 */
 	T getById(Long id);
 	
 	/**
-	 * Cette méthode retourne tout le contenu de la table 
-	 *   sous forme de liste de bean.
-	 * @param limit Le nombre de beans à récupérer.
-	 * @param offset Le numéro du bean à partir duquel commencer à lire.
-	 * @return La List de tous les beans.
-	 * @throws SQLException 
+	 * This method returns a part of the objects contained in the database.
+	 * @param limit The number of objects to retrieve.
+	 * @param offset The number of the row to start retrieving with.
+	 * @return A list containing the objects.
 	 */
 	List<T> getAll(int limit, int offset);
+	
 	/**
-	 * 
-	 * @param limit
-	 * @param offset
-	 * @param name
-	 * @return
-	 * @throws SQLException
+	 * This method works the same way getAll(int, int) works, except it 
+	 *   filters the objects basing upon its names.
+	 * @param limit The number of objects to retrieve.
+	 * @param offset The number of the row to start retrieving with.
+	 * @param name The name to filter the objects.
+	 * @return A filtered list containing the objects.
 	 */
 	List<T> getFiltered(int limit, int offset, String name);
 
 	/**
-	 * 
-	 * @param limit
-	 * @param offset
-	 * @param column
-	 * @param way
-	 * @param con
-	 * @return
-	 * @throws SQLException
+	 * This method works the same way getAll(int, int) works, except it 
+	 *   orders the objects basing upon a column name and an ordering way.
+	 * @param limit The number of objects to retrieve.
+	 * @param offset The number of the row to start retrieving with.
+	 * @param column The column to order by.
+	 * @param way The way to order (ASC or DESC).
+	 * @return An ordered list containing the objects.
 	 */
 	List<T> getOrdered(int limit, int offset, ComputerColumn column,
 			OrderingWay way);
 	
 	/**
-	 * 
-	 * @param limit
-	 * @param offset
-	 * @param column
-	 * @param way
+	 * This method works the same way getAll(int, int) works, except it 
+	 *   filters the objects basing upon its names and it orders these objects, 
+	 *   basing upon a column name and an ordering way.
+	 * @param limit The number of objects to retrieve.
+	 * @param offset The number of the row to start retrieving with.
+	 * @param name The name to filter the objects.
+	 * @param column The column to order by.
+	 * @param way The way to order (ASC or DESC).
 	 * @return
-	 * @throws SQLException
 	 */
 	List<T> getFilteredAndOrdered(int limit, int offset, String name,
 			ComputerColumn column, OrderingWay way);
 	/**
-	 * Retourne le nombre de lignes dans la table.
-	 * @return Le nombre total de lignes dans la table.
-	 * @throws SQLException 
+	 * Returns the total number of rows in the table.
+	 * @return An int representing the total number of rows in the table.
 	 */
 	int countLines();
+	
 	/**
-	 * Cette méthode enregistre les modifications apportées à un 
-	 *   bean dans la table.
-	 * @param entity Le bean dont on doit enregistrer les modifications.
-	 * @throws SQLException 
+	 * This method updates an object in the database.
+	 * @param entity The object to be updated.
 	 */
 	void update(T entity);
+	
 	/**
-	 * Cette méthode supprime un bean de la table.
-	 * @param entity Le bean à supprimer.
-	 * @throws SQLException 
+	 * This method delete an object from the database.
+	 * @param id The id of the object to be deleted.
 	 */
 	void delete(Long id);
 }

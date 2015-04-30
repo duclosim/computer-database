@@ -14,7 +14,7 @@ import com.excilys.model.beans.Company;
 import com.excilys.persistence.mappers.CompanyMapper;
 
 /**
- * Cette classe implémente CompanyDAO et utilise le design pattern Singleton.
+ * 
  * @author excilys
  *
  */
@@ -106,6 +106,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 				.executeUpdate();
 	}
 	
+	/*
+	 * Returns the current Hibernate session.
+	 */
 	private Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}

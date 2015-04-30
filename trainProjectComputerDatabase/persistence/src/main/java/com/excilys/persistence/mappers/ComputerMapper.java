@@ -15,6 +15,12 @@ import com.excilys.model.beans.Computer;
 import com.excilys.persistence.PersistenceException;
 import com.excilys.persistence.daos.ComputerColumn;
 
+/**
+ * This class implements the RowMapper interface 
+ *   for jdbcTemplate mapping purpose.
+ * @author excilys
+ *
+ */
 @Component
 public class ComputerMapper implements RowMapper<Computer> {
 	
