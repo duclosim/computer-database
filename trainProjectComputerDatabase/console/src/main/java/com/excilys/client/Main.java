@@ -12,7 +12,8 @@ import java.util.Locale;
 import java.util.Scanner;
 
 /**
- * Cette classe lit les commandes entrées en ligne de commande et les exécute.
+ * This method launches the Computer Database CLI which uses 
+ *   a Jax-WS to get data.
  * @author excilys
  *
  */

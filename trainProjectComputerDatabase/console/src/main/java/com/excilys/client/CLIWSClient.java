@@ -23,7 +23,7 @@ import com.excilys.persistence.daos.OrderingWay;
 import com.excilys.ws.ComputerDatabaseWS;
 
 /**
- * Cette classe représente l'interpréteur et invocateur de commandes.
+ * This class contains the methods run by the CLI and which call the service .
  * @author excilys
  *
  */
@@ -39,6 +39,10 @@ class CLIWSClient {
 	@Autowired
 	private MessageSource messageSource;
 	
+	/**
+	 * This creates a new CLI with default endpoint and WSInterface.
+	 * @throws MalformedURLException if the url cannot be create.
+	 */
 	public CLIWSClient() throws MalformedURLException {
 		url = new URL(ComputerDatabaseWS.ENDPOINT + "?wsdl");
 		qname = new QName("http://ws.excilys.com/", "ComputerDatabaseWSImplService");
@@ -47,10 +51,11 @@ class CLIWSClient {
 	}
 	
 	/**
-	 * Cette méthode interpète la chaîne écrite sur l'entrée standard 
-	 * 		et tente d'exécuter l'instruction correspondante.
-	 * @param command
-	 * @return true if the program is over.
+	 * This method interpret the String written on the standard input
+	 *   and try to execute the matching instruction.
+	 * @param command A String containing the name of the command.
+	 * @param sc The scanner which will read the standard input.
+	 * @return true if the program has been stopped correctly.
 	 */
 	public boolean interpretCommand(String command, Scanner sc) {
 		LOG.trace(new StringBuilder("interpretCommand(")
@@ -98,11 +103,17 @@ class CLIWSClient {
 		return isExit;
 	}
 	
+	/*
+	 * Prints all the companies on standard output.
+	 */
 	private void getCompanies() {
 		LOG.trace("getCompanies()");
 		System.out.println(ws.getCompanies());
 	}
-	
+
+	/*
+	 * Asks for paging data and prints the computers on standard output.
+	 */
 	private void getComputers(Scanner sc) {
 		LOG.trace("getComputers(" + sc + ")");
 		System.out.println(getMessage("console.detailComputer.limit"));
@@ -121,7 +132,7 @@ class CLIWSClient {
 		} catch (NumberFormatException e) {
 			LOG.error("Le numéro de page passé n'est pas un nombre.");
 		}
-		System.out.println("Entrez 'y' pour indiquer un nom à rechercher : ");
+		System.out.println(getMessage("console.getComputers.searchNameConfirm"));
 		String searchedName = null;
 		if (sc.next().equals("y")) {
 			System.out.println(getMessage("console.detailComputer.searched"));
@@ -130,7 +141,7 @@ class CLIWSClient {
 		}
 		ComputerColumn column = null;
 		OrderingWay way = null;
-		System.out.println("Entrez 'y' pour indiquer une colonne et un sens de tri : ");
+		System.out.println(getMessage("console.getComputers.orderByConfirm"));
 		if (sc.next().equals("y")) {
 			System.out.println(getMessage("console.detailComputer.column"));
 			args = sc.next();
@@ -150,6 +161,9 @@ class CLIWSClient {
 		System.out.println(ws.getComputers(limit, offset, searchedName, column, way));
 	}
 	
+	/*
+	 * Asks for computer data and add it to the database.
+	 */
 	private void createComputer(Scanner sc) {
 		LOG.trace("createComputer(" + sc + ")");
 		ComputerDTO computer = new ComputerDTO();
@@ -159,7 +173,7 @@ class CLIWSClient {
 		if (!("").equals(args)) {
 			computer.setName(args);
 		}
-		System.out.println("Entrez 'y' pour indiquer une date d'introduction : ");
+		System.out.println(getMessage("console.newComputer.introConfirm"));
 		if (sc.next().equals("y")) {
 			System.out.println(getMessage("console.newComputer.intro"));
 			args = sc.next();
@@ -170,7 +184,7 @@ class CLIWSClient {
 				LOG.error("Date impossible à reconnaître.");
 			}
 		}
-		System.out.println("Entrez 'y' pour indiquer une date de retrait : ");
+		System.out.println(getMessage("console.newComputer.disConfirm"));
 		if (sc.next().equals("y")) {
 			System.out.println(getMessage("console.newComputer.dis"));
 			args = sc.next();
@@ -181,7 +195,7 @@ class CLIWSClient {
 				LOG.error("Date impossible à reconnaître.");
 			}
 		}
-		System.out.println("Entrez 'y' pour indiquer un numéro d'entreprise : ");
+		System.out.println(getMessage("console.newComputer.companyConfirm"));
 		if (sc.next().equals("y")) {
 			System.out.println(getMessage("console.newComputer.companyId"));
 			args = sc.next();
@@ -193,7 +207,10 @@ class CLIWSClient {
 		}
 		System.out.println(ws.createComputer(computer));
 	}
-	
+
+	/*
+	 * Asks for id data and delete the company from the database.
+	 */
 	private void deleteCompany(Scanner sc) {
 		LOG.trace("deleteCompany(" + sc + ")");
 		try {
@@ -206,7 +223,10 @@ class CLIWSClient {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
 	}
-	
+
+	/*
+	 * Asks for id data and delete the computer from the database.
+	 */
 	private void deleteComputer(Scanner sc) {
 		LOG.trace("deleteComputer(" + sc + ")");
 		try {
@@ -219,7 +239,10 @@ class CLIWSClient {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
 	}
-	
+
+	/*
+	 * Asks for id data and details the computer from the database.
+	 */
 	private void detailComputer(Scanner sc) {
 		LOG.trace("detailComputer(" + sc + ")");
 		try {
@@ -231,7 +254,10 @@ class CLIWSClient {
 			LOG.error("L'id passé n'est pas un nombre.");
 		}
 	}
-	
+
+	/*
+	 * Asks for computer data and updates it in the database.
+	 */
 	private void updateComputer(Scanner sc) {
 		LOG.trace("updateComputer(" + sc + ")");
 		System.out.println(getMessage("console.edit.computerId"));
@@ -241,7 +267,7 @@ class CLIWSClient {
 			computer.setId(args);
 			System.out.println(getMessage("console.edit.computerDetail"));
 			System.out.println(ws.detailComputer(Long.parseLong(args)));
-			System.out.println("Entrez 'y' pour indiquer un nouveau nom : ");
+			System.out.println(getMessage("console.edit.nameConfirm"));
 			if (sc.next().equals("y")) {
 				System.out.println(getMessage("console.edit.name"));
 				args = sc.next();
@@ -249,7 +275,7 @@ class CLIWSClient {
 					computer.setName(args);
 				}
 			}
-			System.out.println("Entrez 'y' pour indiquer une nouvelle date d'introduction : ");
+			System.out.println(getMessage("console.edit.introConfirm"));
 			if (sc.next().equals("y")) {
 				try {
 					System.out.println(getMessage("console.edit.intro"));
@@ -260,7 +286,7 @@ class CLIWSClient {
 					LOG.error("Date impossible à reconnaître.");
 				}
 			}
-			System.out.println("Entrez 'y' pour indiquer une nouvelle date de retrait : ");
+			System.out.println(getMessage("console.edit.disConfirm"));
 			if (sc.next().equals("y")) {
 				try {
 					System.out.println(getMessage("console.edit.dis"));
@@ -271,7 +297,7 @@ class CLIWSClient {
 					LOG.error("Date impossible à reconnaître.");
 				}
 			}
-			System.out.println("Entrez 'y' pour indiquer un nouveau numéro d'entreprise : ");
+			System.out.println(getMessage("console.edit.companyConfirm"));
 			if (sc.next().equals("y")) {
 				System.out.println(getMessage("console.edit.companyId"));
 				args = sc.next();
@@ -287,16 +313,25 @@ class CLIWSClient {
 		}
     }
 	
+	/*
+	 * Stops the program.
+	 */
 	private void exit() {
 		LOG.trace("exit()");
 		System.out.println(getMessage("console.exit"));
 	}
 	
+	/*
+	 * Returns the message.properties corresponding to code.
+	 */
 	private String getMessage(String code) {
 		return messageSource
 				.getMessage(code, null, LocaleContextHolder.getLocale());
 	}
 	
+	/*
+	 * Returns the current DateTimeFormatter, basing upon the local pattern.
+	 */
 	private DateTimeFormatter getFormatter() {
 		String dateFormat = getMessage("date.format");
 		return DateTimeFormatter.ofPattern(dateFormat);
