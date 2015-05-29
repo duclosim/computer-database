@@ -14,7 +14,7 @@ import com.excilys.ws.ComputerDatabaseWS;
  * @author excilys
  *
  */
-public class ComputerDatabasePublisher {
+class ComputerDatabasePublisher {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDatabasePublisher.class);
 	
 	public static void main(String[] args) {

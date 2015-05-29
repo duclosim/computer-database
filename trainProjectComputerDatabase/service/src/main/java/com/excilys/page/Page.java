@@ -27,7 +27,7 @@ public class Page {
 	/**
 	 * The number of the pages reachable backward or forward for navigation purposes.
 	 */
-	public static final int WIDTH = 3;
+	private static final int WIDTH = 3;
 	
 	/**
 	 * The default maximum number of objects presented by the Page.
@@ -37,7 +37,7 @@ public class Page {
 	/**
 	 * The default number of ignored rows presented by the Page.
 	 */
-	public static final int DEFAULT_OFFSET = 0;
+	private static final int DEFAULT_OFFSET = 0;
 	
 	/**
 	 * The default starting page of Page objects.

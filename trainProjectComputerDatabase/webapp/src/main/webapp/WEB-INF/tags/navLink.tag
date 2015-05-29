@@ -13,5 +13,5 @@
 	<c:param name="itemByPage" value="${itemByPage}"/>
 	<c:param name="column" value="${column}"/>
 	<c:param name="orderWay" value="${orderWay}"/>
-	<c:param name="search" value="${search}"></c:param>
+	<c:param name="search" value="${search}"/>
 </c:url>

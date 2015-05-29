@@ -71,24 +71,24 @@
 							href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.name" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>"
-							onclick=""><i class="fa fa-long-arrow-up" /></i></a> <a
+							onclick=""><i class="fa fa-long-arrow-up" /></a> <a
 							id="orderByComputerNameDesc"
 							href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.name" orderWay="DESC" search="${page.searchedName}">
 							</p:navLink>"
-							onclick=""><i class="fa fa-long-arrow-down" /></i></a></th>
+							onclick=""><i class="fa fa-long-arrow-down" /></a></th>
 						<!-- Table header for Introduced date -->
 						<th><spring:message code="column.introduced" /> <a
 							id="orderByIntroducedAsc"
 							href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.introduced" orderWay="ASC" search="${page.searchedName}">
 							</p:navLink>"
-							onclick=""><i class="fa fa-long-arrow-up" /></i></a> <a
+							onclick=""><i class="fa fa-long-arrow-up" /></a> <a
 							id="orderByIntroducedDesc"
 							href="<p:navLink pageNum="${page.pageNum}" itemByPage="${page.maxNbItemsByPage}" 
 								column="computer.introduced" orderWay="DESC" search="${page.searchedName}">
 							</p:navLink>"
-							onclick=""><i class="fa fa-long-arrow-down" /></i></a></th>
+							onclick=""><i class="fa fa-long-arrow-down" /></a></th>
 						<!-- Table header for Discontinued Date -->
 						<th><spring:message code="column.discontinued" /> <a
 							id="orderByDiscontinuedAsc"

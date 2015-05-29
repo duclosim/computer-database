@@ -30,7 +30,7 @@ public class Company implements Serializable {
 	public Company() {
 		LOG.trace("new Company()");
 	}
-	
+
 	public Company(Long id, String name) {
 		LOG.trace(new StringBuilder("new Company(")
 		.append(id).append(",")

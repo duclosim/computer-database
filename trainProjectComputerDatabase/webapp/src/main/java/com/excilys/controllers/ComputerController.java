@@ -249,11 +249,11 @@ public class ComputerController {
 	 * This enum is used to indicates if the method run is create 
 	 *   or update a Computer object.
 	 */
-	private enum SaveOrUpdate {SAVE, UPDATE};
-	
-	/*
-	 * This method contains shared code between add and edit methods.
-	 */
+	private enum SaveOrUpdate {SAVE, UPDATE}
+
+    /*
+     * This method contains shared code between add and edit methods.
+     */
 	private ModelAndView saveOrUpdateComputer(SaveOrUpdate method, 
 			ComputerDTO computer, 
 			BindingResult bindingResult) {

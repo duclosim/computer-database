@@ -13,7 +13,7 @@ import javax.persistence.Converter;
  *   for ORM compatibility purpose.
  */
 @Converter(autoApply = true)
-public class LocalDateTimeToTimestampConverter implements AttributeConverter<LocalDateTime, Timestamp> {
+class LocalDateTimeToTimestampConverter implements AttributeConverter<LocalDateTime, Timestamp> {
 
 	@Override
 	public Timestamp convertToDatabaseColumn(LocalDateTime entityAttribute) {

@@ -419,11 +419,8 @@ public class WebUserInterfaceTest {
 		    element = driver.findElement(By.id(BEAN_COMPANY_FIELD));
 		    Select dropDown = new Select(element);           
 		    List<WebElement> options = dropDown.getOptions();
-		    for(WebElement option : options){
-			    if(option.getText().equals(bean.getCompanyName())) {
-			    	option.click(); //select option here;       
-			    }               
-		    }
+            //select option here;
+            options.stream().filter(option -> option.getText().equals(bean.getCompanyName())).forEach(org.openqa.selenium.WebElement::click);
 	    }
 	    element.submit();
 	}
